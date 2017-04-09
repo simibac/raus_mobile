@@ -1,0 +1,3 @@
+rootProject.name = 'raus_mobile'
+
+include ':app'
