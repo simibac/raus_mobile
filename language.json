@@ -1,0 +1,16 @@
+{
+  "en":{
+    "settings":"Settings",
+    "profile":"Profile",
+    "farm":"Farm",
+    "notifications":"Notifications",
+    "first-name-beginning":"First name",
+    "last-name-beginning":"Last name",
+    "email":"Email",
+    "language":"Language",
+    "password":"Passowrd",
+    "farm-id": "Farm ID",
+    "about-raus":"About RAUS",
+    "version":"version"
+  }
+}
