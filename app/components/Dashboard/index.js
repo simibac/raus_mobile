@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import DashboardHome from './DashboardHome.js'
-import AddJournal from './AddJournal'
+import AddJournal from './AddJournal/TimePicker'
 
 
 class Dashboard extends Component {

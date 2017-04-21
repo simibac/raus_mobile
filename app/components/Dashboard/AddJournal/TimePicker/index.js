@@ -8,7 +8,7 @@ import {
 
 import Svg, { G, Path } from 'react-native-svg';
 
-import CircularSlider from 'react-native-circular-slider';
+import CircularSlider from './CircularSlider';
 import TimerText from './TimerText';
 
 
