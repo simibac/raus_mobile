@@ -11,20 +11,19 @@ import {
   Text,
   View
 } from 'react-native';
-import Profile from './app/components/Profile'
 import Skeleton from './app/components'
 
 export default class raus_mobile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      success: true
+      "os":"android"
     }
   }
 
   render() {
     return (
-      <Skeleton></Skeleton>
+      <Skeleton os={this.state.os}></Skeleton>
     );
   }
 }

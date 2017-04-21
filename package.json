@@ -12,7 +12,10 @@
     "native-base": "^2.1.1",
     "react": "16.0.0-alpha.6",
     "react-native": "0.43.2",
-    "react-native-popup-dialog": "^0.7.22"
+    "react-native-circular-slider": "^1.0.1",
+    "react-native-datepicker": "^1.4.7",
+    "react-native-popup-dialog": "^0.7.22",
+    "react-native-svg": "^5.1.7"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",

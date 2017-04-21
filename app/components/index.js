@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-import Profile from './Profile'
+import Dashboard from './Dashboard'
 import Settings from './Settings'
 
 class Skeleton extends Component {
@@ -31,14 +31,14 @@ class Skeleton extends Component {
     let AppComponent = null;
 
     if (this.state.index == 0) {
-      AppComponent = Profile
+      AppComponent = Dashboard
     } else {
       AppComponent = Settings
     }
 
     return (
       <Container>
-        <AppComponent/>
+        <AppComponent os={this.props.os}/>
           <Footer >
             <FooterTab>
               <Button onPress={() => this.switchScreen(0)}>

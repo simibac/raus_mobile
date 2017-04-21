@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import Api from './app/utilities/api';
 //import Entry from './app/components/index.js';
-import Profile from './app/components/Profile'
 import Skeleton from './app/components'
 
 
@@ -22,13 +21,13 @@ export default class raus_mobile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      success: true
+      "os": "ios"
     }
   }
 
   render() {
     return (
-      <Skeleton></Skeleton>
+      <Skeleton os={this.state.os}></Skeleton>
     );
   }
 }
