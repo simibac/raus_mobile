@@ -14,7 +14,7 @@ export default class TimerText extends Component {
       <View {...rest}>
         <View style={styles.timerContainer}>
           <Text style={styles.time}>{hours}</Text>
-          <Text style={styles.text}>HR</Text>
+          <Text style={styles.text}>H</Text>
           <Text style={[styles.time, styles.span]}>{minutes}</Text>
           <Text style={styles.text}>MIN</Text>
         </View>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   time: {
     color: 'white',
-    fontSize: 35,
+    fontSize: 30,
     fontWeight: "300",
   },
   span: {

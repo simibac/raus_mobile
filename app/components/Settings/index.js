@@ -31,7 +31,7 @@ class Settings extends Component {
 
   render() {
     return (
-      <Container>
+      <Container >
         <Header>
           <Left/>
           <Body>
@@ -122,19 +122,21 @@ class Settings extends Component {
                 </Body>
               </CardItem>
               </Card>
-
-
           </Content>
+
         </Container>
       );
     }
   }
 
   const styles = StyleSheet.create({
-    title: {
-      paddingTop: 30,
-      fontSize: 20
-    }
+    wrapper: {
+      flex:1,
+      backgroundColor: 'white',
+    },
+    container: {
+      backgroundColor: 'rgba(0, 77, 0, 0.6)',
+    },
   });
 
   module.exports = Settings;

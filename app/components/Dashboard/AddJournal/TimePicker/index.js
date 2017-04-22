@@ -7,9 +7,12 @@ import {
 } from 'react-native';
 
 import Svg, { G, Path } from 'react-native-svg';
+import {Header, Title, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
 
 import CircularSlider from './CircularSlider';
 import TimerText from './TimerText';
+import Dimensions from 'Dimensions';
+
 
 
 const WAKE_ICON = (
@@ -33,6 +36,7 @@ const BEDTIME_ICON = (
 
 const rauscolor = "rgb(38, 38, 38)"
 const reincolor = "rgb(0, 102, 34)"
+const windowWidth = Dimensions.get('window').width
 
 function calculateMinutesFromAngle(angle) {
   return Math.round(angle / (Math.PI / (12 * 12))) * 5;
@@ -62,8 +66,8 @@ function padMinutes(min) {
 
 class AddJournal extends Component {
   state = {
-    startAngle: Math.PI * 10/6,
-    angleLength: Math.PI * 8/6,
+    startAngle: Math.PI * 4/6,
+    angleLength: Math.PI * 5/6,
   }
 
   onTimeUpdate = (fromTimeInMinutes, minutesLong) => {
@@ -82,14 +86,22 @@ class AddJournal extends Component {
     const bedtime = calculateTimeFromAngle(startAngle);
     const waketime = calculateTimeFromAngle((startAngle + angleLength) % (2 * Math.PI));
 
-
     return (
+
+      <View style={styles.wrapper}>
+        <Header>
+        <Left/>
+        <Body>
+          <Title>Zeit</Title>
+        </Body>
+        <Right />
+      </Header>
       <View style={styles.container}>
         <View style={styles.timeContainer}>
           <View style={styles.time}>
             <View style={styles.timeHeader}>
               <Svg height={16} width={16}>
-                <G fill={rauscolor}>{BEDTIME_ICON}</G>
+                <G fill={rauscolor}>{WAKE_ICON}</G>
               </Svg>
               <Text style={styles.bedtimeText}>RAUS</Text>
             </View>
@@ -98,7 +110,7 @@ class AddJournal extends Component {
           <View style={styles.time}>
             <View style={styles.timeHeader}>
               <Svg height={16} width={16}>
-                <G fill={reincolor}>{WAKE_ICON}</G>
+                <G fill={reincolor}>{BEDTIME_ICON}</G>
               </Svg>
               <Text style={styles.wakeText}>REIN</Text>
             </View>
@@ -120,7 +132,7 @@ class AddJournal extends Component {
             onUpdate={this.onUpdate}
             segments={30}
             strokeWidth={40}
-            radius={145}
+            radius={(windowWidth-90)/2}
             gradientColorFrom={rauscolor}
             gradientColorTo={reincolor}
             showClockFace
@@ -131,17 +143,21 @@ class AddJournal extends Component {
           />
         </View>
       </View>
+    </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex:1,
+    backgroundColor: 'white',
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 77, 0, 0.6)'
-,
+    backgroundColor: 'rgba(0, 77, 0, 0.6)',
   },
   bedtimeText: {
     color: rauscolor,
@@ -156,7 +172,7 @@ const styles = StyleSheet.create({
   timeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   time: {
     alignItems: 'center',
