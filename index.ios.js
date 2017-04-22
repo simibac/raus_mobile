@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 import Api from './app/utilities/api';
 //import Entry from './app/components/index.js';
-import Skeleton from './app/components'
-
+//import Skeleton from './app/components'
+import Home from './app/Screens/Home'
 
 
 export default class raus_mobile extends Component {
@@ -27,7 +27,8 @@ export default class raus_mobile extends Component {
 
   render() {
     return (
-      <Skeleton os={this.state.os}></Skeleton>
+      //<Skeleton os={this.state.os}></Skeleton>
+      <Home></Home>
     );
   }
 }

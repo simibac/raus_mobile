@@ -9,8 +9,8 @@ import {
 import Svg, { G, Path } from 'react-native-svg';
 import {Header, Title, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
 
-import CircularSlider from './CircularSlider';
-import TimerText from './TimerText';
+import CircularSlider from '../../../TimePicker/CircularSlider';
+import TimerText from '../../../TimePicker/TimerText';
 import Dimensions from 'Dimensions';
 
 
