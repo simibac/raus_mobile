@@ -4,7 +4,7 @@ import {
   View,
   StyleSheet,
   Text,
-  ListView,
+  TouchableHighlight
 } from 'react-native';
 import {Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
 
@@ -13,7 +13,6 @@ import {Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, 
 class SelectCows extends Component {
   constructor(props) {
     super(props);
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     let animals = this.props.animals
     let relevantCows = []
     for (var i = animals.length - 1; i >= 0; i--) {
@@ -22,7 +21,7 @@ class SelectCows extends Component {
       }
     }
     this.state = {
-      relevantCows: ds.cloneWithRows(relevantCows)
+      relevantCows: relevantCows
     };
   }
   back(){
@@ -31,13 +30,12 @@ class SelectCows extends Component {
 
   switch(tvd){
     let newRelevantCows = this.state.relevantCows
-    console.log(newRelevantCows[0]);
-
+    console.log(newRelevantCows)
     for (var i = newRelevantCows.length - 1; i >= 0; i--) {
       if(newRelevantCows[i].tvd === tvd){
         newRelevantCows[i].selected = !newRelevantCows[i].selected
         this.setState({
-          relevantCows: newRelevantCows
+          relevantCows:newRelevantCows
         })
       }
     }
@@ -60,22 +58,17 @@ class SelectCows extends Component {
           <Right/>
         </Header>
         <Content>
-
-
-          <ListView contentContainerStyle={styles.list}
-            dataSource={this.state.relevantCows}
-            renderRow={(cow, i) =>
-              <ListItem icon key={cow.selected}>
-                <Body>
-                  <Text>{cow.tvd}</Text>
-                </Body>
-                <Right>
-                  <Switch value={cow.selected} onChange={this.switch.bind(this, cow.tvd)}/>
-                </Right>
-              </ListItem>
-            }
-          />
-
+          {this.state.relevantCows.map(cow =>
+            <ListItem icon key={cow.tvd}>
+              <Body>
+                <Text>{cow.tvd}</Text>
+              </Body>
+              <Right>
+                <Switch value={cow.selected} onChange={this.switch.bind(this, cow.tvd)}/>
+              </Right>
+            </ListItem>
+          )}
+          <Text>{this.state.relevantCows[0].selected}</Text>
 
         </Content>
 
