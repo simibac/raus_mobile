@@ -3,18 +3,83 @@ import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
-  Text
+  Text,
+  TouchableHighlight,
+  ListView
 } from 'react-native';
 
-import Svg, { G, Path } from 'react-native-svg';
 import {Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
-
-const rauscolor = "rgb(38, 38, 38)"
-const reincolor = "rgb(0, 102, 34)"
+import Dimensions from 'Dimensions';
 
 class Categories extends Component {
-  state = {
-
+  constructor(props) {
+    super(props);
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var data = [
+      {
+        category: "A1",
+        selected: false,
+        cows:[
+          "123",
+          "234",
+          "345",
+          "456",
+          "567",
+          "789",
+          "876",
+          "765",
+          "654",
+        ]
+      },
+      {
+        category: "A2",
+        selected: false,
+        cows:[
+          "123",
+          "234",
+          "345",
+          "456",
+          "567",
+          "789",
+          "876",
+          "765",
+          "654",
+        ]
+      },
+      {
+        category: "A4",
+        selected: false,
+        cows:[
+          "123",
+          "234",
+          "345",
+          "456",
+          "567",
+          "789",
+          "876",
+          "765",
+          "654",
+        ]
+      },
+      {
+        category: "A9",
+        selected: false,
+        cows:[
+          "123",
+          "234",
+          "345",
+          "456",
+          "567",
+          "789",
+          "876",
+          "765",
+          "654",
+        ]
+      },
+    ]
+    this.state = {
+      dataSource: ds.cloneWithRows(data),
+    };
   }
 
   navigate(routeName){
@@ -22,6 +87,7 @@ class Categories extends Component {
       name:routeName,
     });
   }
+
   back(){
     this.props.navigator.pop()
   }
@@ -36,13 +102,28 @@ class Categories extends Component {
     }
   }
 
+  openCategory(message){
+    console.log(message)
+  }
+
   next(){
 
   }
 
+  categoryButtonStyle(){
+    return {
+      width: (Dimensions.get('window').width-50)/2,
+      height:100,
+      borderWidth: 2,
+      borderRadius:5,
+      borderColor: 'white',
+      margin:10
+    }
+  }
+
   render() {
     return (
-      <Container>
+      <View style={styles.wrapper}>
 
         <Header>
           <Left>
@@ -55,44 +136,89 @@ class Categories extends Component {
           </Body>
           <Right>
             <Button transparent onPress={this.close.bind(this)}>
-              <Text>Cancel</Text>
+              <Text>Abbrechen</Text>
             </Button>
           </Right>
         </Header>
 
-        <Container>
 
-
-
-        </Container>
+        <View style={styles.container}>
+          <ListView contentContainerStyle={styles.list}
+            dataSource={this.state.dataSource}
+            renderRow={(category) =>
+              {
+              return <CategoryButton
+                categoryButtonStyle={this.categoryButtonStyle.bind()}
+                openCategory={this.openCategory.bind(this)}
+                category={category.category}
+                selected={category.selected}>{category}
+              </CategoryButton>}
+              }
+          />
+        </View>
 
 
         <Footer>
           <FooterTab>
             <Button full onPress={this.next.bind(this)}>
-              <Text>Weiter</Text>
+              <Text>Fertig</Text>
             </Button>
           </FooterTab>
         </Footer>
-      </Container>
+      </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  wrapper: {
-    flex:1,
-    backgroundColor: 'white',
-  },
-  innerWrapper:{
-    backgroundColor: 'rgba(0, 77, 0, 0.6)',
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 77, 0, 0.6)',
-  }
-});
+const CategoryButton = (props) =>
+<TouchableHighlight style={props.categoryButtonStyle()}
+  onPress={() => props.openCategory(props.category)}
+  >
+    <View style={styles.container2}>
+      <Text style={styles.title}>
+        {props.category}
+      </Text>
+    </View>
+  </TouchableHighlight>
 
-module.exports = Categories;
+  const styles = StyleSheet.create({
+    wrapper:{
+      flex:1,
+      backgroundColor: 'white',
+    },
+    container:{
+      backgroundColor: 'rgba(0, 77, 0, 0.6)',
+      flex:1,
+      flexDirection: 'column',
+      padding:5
+
+    },
+    category:{
+      height:100,
+      width:100,
+      borderWidth: 2,
+      borderRadius:5,
+      borderColor: 'white',
+      margin: 20
+    },
+
+    container2: {
+      flex: 1,
+      marginTop: 30,
+      marginBottom: 30,
+      justifyContent: 'center',
+    },
+
+    title: {
+      fontSize: 36,
+      textAlign: 'center',
+      color: '#fff',
+
+    },
+    list: {
+      flexDirection: 'row',
+      flexWrap: 'wrap'
+    },
+  });
+
+  module.exports = Categories;

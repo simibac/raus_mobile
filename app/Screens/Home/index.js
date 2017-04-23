@@ -13,6 +13,8 @@ import Settings from '../Settings'
 import Dashboard from './Dashboard.js'
 import Time from './AddJournalEntry/Time'
 import Categories from './AddJournalEntry/Categories'
+import SelectCows from './AddJournalEntry/Categories/SelectCows.js'
+
 
 class Home extends Component {
 
@@ -47,6 +49,13 @@ class Home extends Component {
           <Container>
             <Categories os={this.props.os}
               navigator={navigator}></Categories>
+          </Container>)
+      }
+      if(route.name == 'SelectCows'){
+        return (
+          <Container>
+            <SelectCows os={this.props.os}
+              navigator={navigator}></SelectCows>
           </Container>)
       }
     }
