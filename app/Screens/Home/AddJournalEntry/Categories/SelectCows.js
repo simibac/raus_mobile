@@ -21,7 +21,9 @@ class SelectCows extends Component {
       }
     }
     this.state = {
-      relevantCows: relevantCows
+      relevantCows: relevantCows,
+      numSelectedCows: 0,
+      numTotalCows: relevantCows.length
     };
   }
   back(){
@@ -30,7 +32,6 @@ class SelectCows extends Component {
 
   switch(tvd){
     let newRelevantCows = this.state.relevantCows
-    console.log(newRelevantCows)
     for (var i = newRelevantCows.length - 1; i >= 0; i--) {
       if(newRelevantCows[i].tvd === tvd){
         newRelevantCows[i].selected = !newRelevantCows[i].selected
@@ -39,10 +40,37 @@ class SelectCows extends Component {
         })
       }
     }
+    this.countSelectedCows.bind(this)(this)
+  }
+  countSelectedCows(){
+    let counter = 0
+    for (var i = this.state.relevantCows.length - 1; i >= 0; i--) {
+      var toCompare = this.state.relevantCows[i].selected
+      if(toCompare == true){
+        counter = counter + 1
+      }
+    }
+    this.setState({
+      numSelectedCows:counter
+    })
+  }
+  selectAll(option){
+    let newRelevantCows = this.state.relevantCows
+    for (var i = newRelevantCows.length - 1; i >= 0; i--) {
+        newRelevantCows[i].selected = option
+        this.setState({
+          relevantCows: newRelevantCows
+        })
+      }
+    this.countSelectedCows.bind(this)(this)
+  }
+  next(){
+    this.props.updateCategory(this.props.selectedCategory, this.state.numSelectedCows, this.state.relevantCows)
+    this.props.navigator.pop()
+
   }
 
   render() {
-    console.log(this.state.relevantCows)
     return (
       <Container style={{backgroundColor:'white'}}>
         <Header>
@@ -53,10 +81,20 @@ class SelectCows extends Component {
           </Left>
           <Body>
             <Title>{this.props.selectedCategory}</Title>
-            <Subtitle>16/23</Subtitle>
+            <Subtitle>{this.state.numSelectedCows}/{this.state.numTotalCows}</Subtitle>
           </Body>
           <Right/>
         </Header>
+
+        <View style={styles.container}>
+          <TouchableHighlight style={styles.boxBelowHeader} onPress={this.selectAll.bind(this, true)}>
+            <Text style={styles.textBelowHeader}>Alle auswäheln</Text>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.boxBelowHeader} onPress={this.selectAll.bind(this, false)}>
+            <Text style={styles.textBelowHeader}>Alle abwählen</Text>
+          </TouchableHighlight>
+        </View>
+
         <Content>
           {this.state.relevantCows.map(cow =>
             <ListItem icon key={cow.tvd}>
@@ -74,9 +112,7 @@ class SelectCows extends Component {
 
         <Footer>
           <FooterTab>
-            <Button full
-              // onPress={this.next.bind(this)}
-              >
+            <Button full onPress={this.next.bind(this)}>
                 <Text>Übernehmen</Text>
               </Button>
             </FooterTab>
@@ -87,9 +123,21 @@ class SelectCows extends Component {
   }
 
   const styles = StyleSheet.create({
-    wrapper: {
+    container: {
+      flexDirection:'row',
+
+    },
+    boxBelowHeader:{
       flex:1,
-      backgroundColor: 'white',
+      height:40,
+      justifyContent: 'center',
+      backgroundColor: '#F8F8F8',
+      borderColor: '#a7a6ab',
+      borderBottomWidth:0.5,
+    },
+    textBelowHeader:{
+      textAlign: 'center',
+      color:'blue'
     }
   });
 

@@ -49,23 +49,34 @@ class Categories extends Component {
   }
 
   next(){
+
   }
 
-  categoryButtonStyle(){
-    return {
-      width: (Dimensions.get('window').width-50)/2,
-      height:100,
-      borderWidth: 2,
-      borderRadius:5,
-      borderColor: 'white',
-      margin:10
+  categoryButtonStyle(selected){
+    if(selected){
+      return {
+        width: (Dimensions.get('window').width-50)/2,
+        height:100,
+        borderWidth: 2,
+        borderRadius:5,
+        borderColor: 'black',
+        margin:10
+      }
+    }else{
+      return {
+        width: (Dimensions.get('window').width-50)/2,
+        height:100,
+        borderWidth: 2,
+        borderRadius:5,
+        borderColor: 'white',
+        margin:10
+      }
     }
   }
 
   render() {
     return (
       <View style={styles.wrapper}>
-
         <Header>
           <Left>
             <Button transparent onPress={this.back.bind(this)}>
@@ -82,13 +93,12 @@ class Categories extends Component {
           </Right>
         </Header>
 
-
         <View style={styles.container}>
           <ListView contentContainerStyle={styles.list}
             dataSource={this.state.dataSource}
             renderRow={(category) =>
               <TouchableHighlight
-                style={this.categoryButtonStyle.bind()()}
+                style={this.categoryButtonStyle.bind(this)(category.selected)}
                 key={category.category}
                 onPress={this.navigate.bind(this, "SelectCows", category.category)}>
                 <View style={styles.container2}>
@@ -100,8 +110,6 @@ class Categories extends Component {
             }
           />
         </View>
-
-
 
         <Footer>
           <FooterTab>
@@ -137,14 +145,6 @@ const styles = StyleSheet.create({
     padding:5
 
   },
-  category:{
-    height:100,
-    width:100,
-    borderWidth: 2,
-    borderRadius:5,
-    borderColor: 'white',
-    margin: 20
-  },
 
   container2: {
     flex: 1,
@@ -157,7 +157,6 @@ const styles = StyleSheet.create({
     fontSize: 36,
     textAlign: 'center',
     color: '#fff',
-
   },
   list: {
     flexDirection: 'row',

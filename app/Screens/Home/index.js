@@ -26,6 +26,7 @@ class Home extends Component {
         {
           category: "A1",
           selected: false,
+          numSelectedCows:0,
           cows:[
             {
               tvd: "111",
@@ -52,6 +53,7 @@ class Home extends Component {
         {
           category: "A2",
           selected: false,
+          numSelectedCows:0,
           cows:[
             {
               tvd: "222",
@@ -78,6 +80,7 @@ class Home extends Component {
         {
           category: "A4",
           selected: false,
+          numSelectedCows:0,
           cows:[
             {
               tvd: "444",
@@ -104,6 +107,7 @@ class Home extends Component {
         {
           category: "A9",
           selected: false,
+          numSelectedCows:0,
           cows:[
             {
               tvd: "000",
@@ -130,6 +134,7 @@ class Home extends Component {
         {
           category: "A11",
           selected: false,
+          numSelectedCows:0,
           cows:[
             {
               tvd: "011",
@@ -157,6 +162,29 @@ class Home extends Component {
     }
   }
 
+  updateCategory(category, numSelectedCows, cows){
+    var newAnimals = this.state.animals
+    for (var i = newAnimals.length - 1; i >= 0; i--) {
+      if(newAnimals[i].category === category){
+        newAnimals[i].cows = cows
+        newAnimals[i].numSelectedCows = numSelectedCows
+        if(numSelectedCows > 0){
+          newAnimals[i].selected = true
+        }
+        else{
+          newAnimals[i].selected = true
+        }
+      }
+    }
+    console.log(this.state.animals)
+    console.log(this.state.totalTime)
+  }
+  setTotalTime(time){
+    this.setState({
+      totalTime:time
+    })
+  }
+
   renderScene(route, navigator) {
     if(route.name == 'Dashboard') {
       return (
@@ -179,6 +207,7 @@ class Home extends Component {
             <Time
               os={this.props.os}
               navigator={navigator}
+              setTotalTime={this.setTotalTime.bind(this)}
             />
           </Container>)
       }
@@ -200,6 +229,7 @@ class Home extends Component {
               navigator={navigator}
               animals={this.state.animals}
               selectedCategory={route.selectedCategory}
+              updateCategory={this.updateCategory.bind(this)}
             />
           </Container>)
       }

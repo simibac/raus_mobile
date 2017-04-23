@@ -108,6 +108,7 @@ const WAKE_ICON = (
             totalTime: calculateMinutesFromAngle(angleLength)
           })
         }
+        this.props.setTotalTime(this.state.totalTime)
         this.props.navigator.push({
           name:"Categories"
         })

@@ -11,7 +11,7 @@ import {
   Text,
   View
 } from 'react-native';
-import Skeleton from './app/components'
+import Home from './app/Screens/Home'
 
 export default class raus_mobile extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ export default class raus_mobile extends Component {
 
   render() {
     return (
-      <Skeleton os={this.state.os}></Skeleton>
+      <Home></Home>
     );
   }
 }
