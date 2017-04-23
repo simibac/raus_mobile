@@ -21,80 +21,136 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      totalTime : 0,
       animals: [
         {
           category: "A1",
           selected: false,
           cows:[
-            "111",
-            "234",
-            "345",
-            "456",
-            "567",
-            "789",
-            "876",
-            "765",
-            "654",
+            {
+              tvd: "111",
+              selected: false,
+            },
+            {
+              tvd: "123",
+              selected: false,
+            },
+            {
+              tvd: "234",
+              selected: false,
+            },
+            {
+              tvd: "345",
+              selected: false,
+            },
+            {
+              tvd: "456",
+              selected: false,
+            }
           ]
         },
         {
           category: "A2",
           selected: false,
           cows:[
-            "222",
-            "234",
-            "345",
-            "456",
-            "567",
-            "789",
-            "876",
-            "765",
-            "654",
+            {
+              tvd: "222",
+              selected: false,
+            },
+            {
+              tvd: "123",
+              selected: false,
+            },
+            {
+              tvd: "234",
+              selected: false,
+            },
+            {
+              tvd: "345",
+              selected: false,
+            },
+            {
+              tvd: "456",
+              selected: false,
+            }
           ]
         },
         {
           category: "A4",
           selected: false,
           cows:[
-            "444",
-            "234",
-            "345",
-            "456",
-            "567",
-            "789",
-            "876",
-            "765",
-            "654",
+            {
+              tvd: "444",
+              selected: false,
+            },
+            {
+              tvd: "123",
+              selected: false,
+            },
+            {
+              tvd: "234",
+              selected: false,
+            },
+            {
+              tvd: "345",
+              selected: false,
+            },
+            {
+              tvd: "456",
+              selected: false,
+            }
           ]
         },
         {
           category: "A9",
           selected: false,
           cows:[
-            "999",
-            "234",
-            "345",
-            "456",
-            "567",
-            "789",
-            "876",
-            "765",
-            "654",
+            {
+              tvd: "000",
+              selected: false,
+            },
+            {
+              tvd: "123",
+              selected: false,
+            },
+            {
+              tvd: "234",
+              selected: false,
+            },
+            {
+              tvd: "345",
+              selected: false,
+            },
+            {
+              tvd: "456",
+              selected: false,
+            }
           ]
         },
         {
           category: "A11",
           selected: false,
           cows:[
-            "011",
-            "234",
-            "345",
-            "456",
-            "567",
-            "789",
-            "876",
-            "765",
-            "654",
+            {
+              tvd: "011",
+              selected: false,
+            },
+            {
+              tvd: "123",
+              selected: false,
+            },
+            {
+              tvd: "234",
+              selected: false,
+            },
+            {
+              tvd: "345",
+              selected: false,
+            },
+            {
+              tvd: "456",
+              selected: false,
+            }
           ]
         },
       ]
@@ -102,7 +158,6 @@ class Home extends Component {
   }
 
   renderScene(route, navigator) {
-    console.log(navigator)
     if(route.name == 'Dashboard') {
       return (
         <Container>
