@@ -47,29 +47,27 @@ class Categories extends Component {
 
   }
 
-  next(){
-
+  finish(){
+    console.log(this.props.totalTime, this.props.animals)
   }
 
   categoryButtonStyle(selected){
     if(selected){
-      return {
-        width: (Dimensions.get('window').width-50)/2,
-        height:100,
-        borderWidth: 2,
-        borderRadius:5,
-        borderColor: 'black',
-        margin:10
-      }
-    }else{
-      return {
-        width: (Dimensions.get('window').width-50)/2,
-        height:100,
-        borderWidth: 2,
-        borderRadius:5,
-        borderColor: 'white',
-        margin:10
-      }
+      var backgroundColor = 'rgba(255, 255, 255, 0.3)'
+      var borderColor = 'rgba(255, 255, 255, 0.05)'
+    }
+    else{
+      var backgroundColor = 'rgba(255, 255, 255, 0)'
+      var borderColor = 'white'
+    }
+    return {
+      width: (Dimensions.get('window').width-50)/2,
+      height: 100,
+      borderWidth: 2,
+      borderRadius: 5,
+      borderColor: borderColor,
+      margin: 10,
+      backgroundColor: backgroundColor
     }
   }
 
@@ -94,7 +92,7 @@ class Categories extends Component {
 
         <View style={styles.container}>
           <View style={styles.list}>
-            {this.state.animals.map(category =>
+            {this.state.animals.map((category) => {return(
               <TouchableHighlight
                 style={this.categoryButtonStyle.bind(this)(category.selected)}
                 key={category.category}
@@ -103,62 +101,63 @@ class Categories extends Component {
                   <Text style={styles.title}>
                     {category.category}
                   </Text>
+                  {category.selected &&
+                    <Text
+                      style={styles.numSelectedCows}>
+                      {category.numSelectedCows}/{category.cows.length}
+                    </Text>
+                  }
+
                 </View>
-              </TouchableHighlight>)}
-        </View>
-        </View>
+              </TouchableHighlight>)})}
+            </View>
+          </View>
 
-        <Footer>
-          <FooterTab>
-            <Button full onPress={this.next.bind(this)}>
-              <Text>Fertig</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-      </View>
-    );
+          <Footer>
+            <FooterTab>
+              <Button full onPress={this.finish.bind(this)}>
+                <Text>Fertig</Text>
+              </Button>
+            </FooterTab>
+          </Footer>
+        </View>
+      );
+    }
   }
-}
 
-const CategoryButton = (props) =>
-<TouchableHighlight style={props.categoryButtonStyle()}
-  onPress={() => props.openCategory(props.category)}>
-  <View style={styles.container2}>
-    <Text style={styles.title}>
-      {props.category}
-    </Text>
-  </View>
-</TouchableHighlight>
+  const styles = StyleSheet.create({
+    wrapper:{
+      flex:1,
+      backgroundColor: 'white',
+    },
+    container:{
+      backgroundColor: 'rgba(0, 77, 0, 0.6)',
+      flex:1,
+      flexDirection: 'column',
+      padding:5
 
-const styles = StyleSheet.create({
-  wrapper:{
-    flex:1,
-    backgroundColor: 'white',
-  },
-  container:{
-    backgroundColor: 'rgba(0, 77, 0, 0.6)',
-    flex:1,
-    flexDirection: 'column',
-    padding:5
+    },
 
-  },
+    container2: {
+      flex: 1,
+      marginTop: 30,
+      marginBottom: 30,
+      justifyContent: 'center',
+    },
 
-  container2: {
-    flex: 1,
-    marginTop: 30,
-    marginBottom: 30,
-    justifyContent: 'center',
-  },
+    title: {
+      fontSize: 36,
+      textAlign: 'center',
+      color: '#fff',
+    },
+    numSelectedCows:{
+      color: '#fff',
+      textAlign: 'center',
+    },
+    list: {
+      flexDirection: 'row',
+      flexWrap: 'wrap'
+    },
+  });
 
-  title: {
-    fontSize: 36,
-    textAlign: 'center',
-    color: '#fff',
-  },
-  list: {
-    flexDirection: 'row',
-    flexWrap: 'wrap'
-  },
-});
-
-module.exports = Categories;
+  module.exports = Categories;

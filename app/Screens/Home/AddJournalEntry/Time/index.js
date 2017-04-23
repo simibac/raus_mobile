@@ -67,7 +67,6 @@ const WAKE_ICON = (
       state = {
         startAngle: Math.PI * 4/6,
         angleLength: Math.PI * 5/6,
-        totalTime:0,
         allDay:false,
       }
 
@@ -100,15 +99,11 @@ const WAKE_ICON = (
 
       next(angleLength){
         if(this.state.allDay == true){
-          this.setState({
-            totalTime: 1440,
-          })
+          var minutes = 1440
         }else{
-          this.setState({
-            totalTime: calculateMinutesFromAngle(angleLength)
-          })
+          var minutes = calculateMinutesFromAngle(angleLength)
         }
-        this.props.setTotalTime(this.state.totalTime)
+        this.props.setTotalTime(minutes)
         this.props.navigator.push({
           name:"Categories"
         })

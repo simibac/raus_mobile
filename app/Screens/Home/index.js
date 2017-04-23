@@ -21,7 +21,7 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      totalTime : 0,
+      totalTime : 600,
       animals: [
         {
           category: "A1",
@@ -181,7 +181,7 @@ class Home extends Component {
   }
   setTotalTime(time){
     this.setState({
-      totalTime:time
+      totalTime: time
     })
   }
 
@@ -218,6 +218,7 @@ class Home extends Component {
               os={this.props.os}
               navigator={navigator}
               animals={this.state.animals}
+              totalTime={this.state.totalTime}
             />
           </Container>)
       }
@@ -236,6 +237,7 @@ class Home extends Component {
     }
 
   render() {
+    console.log(this.state);
     return (
         <Container>
           <Navigator
