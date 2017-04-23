@@ -14,10 +14,9 @@ import Dimensions from 'Dimensions';
 class Categories extends Component {
   constructor(props) {
     super(props);
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var data = this.props.animals
+    var animals = this.props.animals
     this.state = {
-      dataSource: ds.cloneWithRows(data),
+      animals: animals,
     };
   }
 
@@ -94,9 +93,8 @@ class Categories extends Component {
         </Header>
 
         <View style={styles.container}>
-          <ListView contentContainerStyle={styles.list}
-            dataSource={this.state.dataSource}
-            renderRow={(category) =>
+          <View style={styles.list}>
+            {this.state.animals.map(category =>
               <TouchableHighlight
                 style={this.categoryButtonStyle.bind(this)(category.selected)}
                 key={category.category}
@@ -106,9 +104,8 @@ class Categories extends Component {
                     {category.category}
                   </Text>
                 </View>
-              </TouchableHighlight>
-            }
-          />
+              </TouchableHighlight>)}
+        </View>
         </View>
 
         <Footer>
