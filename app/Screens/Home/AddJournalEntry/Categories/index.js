@@ -15,76 +15,16 @@ class Categories extends Component {
   constructor(props) {
     super(props);
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var data = [
-      {
-        category: "A1",
-        selected: false,
-        cows:[
-          "123",
-          "234",
-          "345",
-          "456",
-          "567",
-          "789",
-          "876",
-          "765",
-          "654",
-        ]
-      },
-      {
-        category: "A2",
-        selected: false,
-        cows:[
-          "123",
-          "234",
-          "345",
-          "456",
-          "567",
-          "789",
-          "876",
-          "765",
-          "654",
-        ]
-      },
-      {
-        category: "A4",
-        selected: false,
-        cows:[
-          "123",
-          "234",
-          "345",
-          "456",
-          "567",
-          "789",
-          "876",
-          "765",
-          "654",
-        ]
-      },
-      {
-        category: "A9",
-        selected: false,
-        cows:[
-          "123",
-          "234",
-          "345",
-          "456",
-          "567",
-          "789",
-          "876",
-          "765",
-          "654",
-        ]
-      },
-    ]
+    var data = this.props.animals
     this.state = {
       dataSource: ds.cloneWithRows(data),
     };
   }
 
-  navigate(routeName){
+  navigate(routeName, selectedCategory){
     this.props.navigator.push({
-      name:routeName,
+      name: routeName,
+      selectedCategory: selectedCategory
     });
   }
 
@@ -104,10 +44,11 @@ class Categories extends Component {
 
   openCategory(message){
     console.log(message)
+    this.navigate.bind("SelectCows")
+
   }
 
   next(){
-
   }
 
   categoryButtonStyle(){
@@ -146,16 +87,20 @@ class Categories extends Component {
           <ListView contentContainerStyle={styles.list}
             dataSource={this.state.dataSource}
             renderRow={(category) =>
-              {
-              return <CategoryButton
-                categoryButtonStyle={this.categoryButtonStyle.bind()}
-                openCategory={this.openCategory.bind(this)}
-                category={category.category}
-                selected={category.selected}>{category}
-              </CategoryButton>}
-              }
+              <TouchableHighlight
+                style={this.categoryButtonStyle.bind()()}
+                key={category.category}
+                onPress={this.navigate.bind(this, "SelectCows", category.category)}>
+                <View style={styles.container2}>
+                  <Text style={styles.title}>
+                    {category.category}
+                  </Text>
+                </View>
+              </TouchableHighlight>
+            }
           />
         </View>
+
 
 
         <Footer>
@@ -172,53 +117,52 @@ class Categories extends Component {
 
 const CategoryButton = (props) =>
 <TouchableHighlight style={props.categoryButtonStyle()}
-  onPress={() => props.openCategory(props.category)}
-  >
-    <View style={styles.container2}>
-      <Text style={styles.title}>
-        {props.category}
-      </Text>
-    </View>
-  </TouchableHighlight>
+  onPress={() => props.openCategory(props.category)}>
+  <View style={styles.container2}>
+    <Text style={styles.title}>
+      {props.category}
+    </Text>
+  </View>
+</TouchableHighlight>
 
-  const styles = StyleSheet.create({
-    wrapper:{
-      flex:1,
-      backgroundColor: 'white',
-    },
-    container:{
-      backgroundColor: 'rgba(0, 77, 0, 0.6)',
-      flex:1,
-      flexDirection: 'column',
-      padding:5
+const styles = StyleSheet.create({
+  wrapper:{
+    flex:1,
+    backgroundColor: 'white',
+  },
+  container:{
+    backgroundColor: 'rgba(0, 77, 0, 0.6)',
+    flex:1,
+    flexDirection: 'column',
+    padding:5
 
-    },
-    category:{
-      height:100,
-      width:100,
-      borderWidth: 2,
-      borderRadius:5,
-      borderColor: 'white',
-      margin: 20
-    },
+  },
+  category:{
+    height:100,
+    width:100,
+    borderWidth: 2,
+    borderRadius:5,
+    borderColor: 'white',
+    margin: 20
+  },
 
-    container2: {
-      flex: 1,
-      marginTop: 30,
-      marginBottom: 30,
-      justifyContent: 'center',
-    },
+  container2: {
+    flex: 1,
+    marginTop: 30,
+    marginBottom: 30,
+    justifyContent: 'center',
+  },
 
-    title: {
-      fontSize: 36,
-      textAlign: 'center',
-      color: '#fff',
+  title: {
+    fontSize: 36,
+    textAlign: 'center',
+    color: '#fff',
 
-    },
-    list: {
-      flexDirection: 'row',
-      flexWrap: 'wrap'
-    },
-  });
+  },
+  list: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+});
 
-  module.exports = Categories;
+module.exports = Categories;
