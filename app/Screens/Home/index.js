@@ -168,17 +168,12 @@ class Home extends Component {
       if(newAnimals[i].category === category){
         newAnimals[i].cows = cows
         newAnimals[i].numSelectedCows = numSelectedCows
-        if(numSelectedCows > 0){
-          newAnimals[i].selected = true
-        }
-        else{
-          newAnimals[i].selected = true
+        newAnimals[i].selected = true
         }
       }
     }
-    console.log(this.state.animals)
-    console.log(this.state.totalTime)
-  }
+  
+
   setTotalTime(time){
     this.setState({
       totalTime: time

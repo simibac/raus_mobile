@@ -7,13 +7,13 @@ import {
 } from 'react-native';
 
 import Svg, { G, Path } from 'react-native-svg';
-import {Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
+import {StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
 
+import getTheme from '../../../../../native-base-theme/components';
+import platform from '../../../../../native-base-theme/variables/platform';
 import CircularSlider from '../../../../components/TimePicker/CircularSlider';
 import TimerText from '../../../../components/TimePicker/TimerText';
 import Dimensions from 'Dimensions';
-
-
 
 const WAKE_ICON = (
   <G>
@@ -121,6 +121,7 @@ const WAKE_ICON = (
         const waketime = calculateTimeFromAngle((startAngle + angleLength) % (2 * Math.PI));
 
         return (
+          <StyleProvider style={getTheme(platform)}>
           <View style={styles.wrapper}>
 
             <Header>
@@ -203,6 +204,7 @@ const WAKE_ICON = (
               </FooterTab>
             </Footer>
           </View>
+        </StyleProvider>
         );
       }
     }

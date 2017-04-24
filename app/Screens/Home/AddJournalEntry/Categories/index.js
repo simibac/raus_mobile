@@ -8,8 +8,10 @@ import {
   ListView
 } from 'react-native';
 
-import {Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
+import {StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
 import Dimensions from 'Dimensions';
+import getTheme from '../../../../../native-base-theme/components';
+import platform from '../../../../../native-base-theme/variables/platform';
 
 class Categories extends Component {
   constructor(props) {
@@ -73,54 +75,56 @@ class Categories extends Component {
 
   render() {
     return (
-      <View style={styles.wrapper}>
-        <Header>
-          <Left>
-            <Button transparent onPress={this.back.bind(this)}>
-              <Icon name={'arrow-back'}/>
-            </Button>
-          </Left>
-          <Body>
-            <Title>Kategorien</Title>
-          </Body>
-          <Right>
-            <Button transparent onPress={this.close.bind(this)}>
-              <Text>Abbrechen</Text>
-            </Button>
-          </Right>
-        </Header>
-
-        <View style={styles.container}>
-          <View style={styles.list}>
-            {this.state.animals.map((category) => {return(
-              <TouchableHighlight
-                style={this.categoryButtonStyle.bind(this)(category.selected)}
-                key={category.category}
-                onPress={this.navigate.bind(this, "SelectCows", category.category)}>
-                <View style={styles.container2}>
-                  <Text style={styles.title}>
-                    {category.category}
-                  </Text>
-                  {category.selected &&
-                    <Text
-                      style={styles.numSelectedCows}>
-                      {category.numSelectedCows}/{category.cows.length}
-                    </Text>
-                  }
-
-                </View>
-              </TouchableHighlight>)})}
-            </View>
-          </View>
-
-          <Footer>
-            <FooterTab>
-              <Button full onPress={this.finish.bind(this)}>
-                <Text>Fertig</Text>
+      <StyleProvider style={getTheme(platform)}>
+        <View style={styles.wrapper}>
+          <Header>
+            <Left>
+              <Button transparent onPress={this.back.bind(this)}>
+                <Icon name={'arrow-back'}/>
               </Button>
-            </FooterTab>
-          </Footer>
-        </View>
+            </Left>
+            <Body>
+              <Title>Kategorien</Title>
+            </Body>
+            <Right>
+              <Button transparent onPress={this.close.bind(this)}>
+                <Text>Abbrechen</Text>
+              </Button>
+            </Right>
+          </Header>
+
+          <View style={styles.container}>
+            <View style={styles.list}>
+              {this.state.animals.map((category) => {return(
+                <TouchableHighlight
+                  style={this.categoryButtonStyle.bind(this)(category.selected)}
+                  key={category.category}
+                  onPress={this.navigate.bind(this, "SelectCows", category.category)}>
+                  <View style={styles.container2}>
+                    <Text style={styles.title}>
+                      {category.category}
+                    </Text>
+                    {category.selected &&
+                      <Text
+                        style={styles.numSelectedCows}>
+                        {category.numSelectedCows}/{category.cows.length}
+                      </Text>
+                    }
+
+                  </View>
+                </TouchableHighlight>)})}
+              </View>
+            </View>
+
+            <Footer>
+              <FooterTab>
+                <Button full onPress={this.finish.bind(this)}>
+                  <Text>Fertig</Text>
+                </Button>
+              </FooterTab>
+            </Footer>
+          </View>
+        </StyleProvider>
       );
     }
   }
@@ -140,8 +144,6 @@ class Categories extends Component {
 
     container2: {
       flex: 1,
-      marginTop: 30,
-      marginBottom: 30,
       justifyContent: 'center',
     },
 

@@ -1,10 +1,13 @@
 'use strict'
 import React, { Component } from 'react';
-import { Container,Thumbnail, Icon, Switch, Header,ListItem, Left, Right, Body, Title, Button, Content, Form, Item, Input, Label, Fab, View } from 'native-base';
+import { StyleProvider,Container,Thumbnail, Icon, Switch, Header,ListItem, Left, Right, Body, Title, Button, Content, Form, Item, Input, Label, Fab, View } from 'native-base';
 import {
   StyleSheet,
   Text
 } from 'react-native';
+
+import getTheme from '../../../native-base-theme/components';
+import platform from '../../../native-base-theme/variables/platform';
 
 
 class Dashboard extends Component {
@@ -24,8 +27,9 @@ class Dashboard extends Component {
   }
   render() {
     return (
-      <Container>
-        <Header>
+      <StyleProvider style={getTheme(platform)}>
+      <Container >
+        <Header provider>
             <Left/>
             <Body>
                 <Title>Dashboard</Title>
@@ -38,11 +42,12 @@ class Dashboard extends Component {
         </Header>
           <Fab
             position="bottomRight"
-            style={{ backgroundColor: 'rgb(0, 77, 0)' }}
+            style={{ backgroundColor: '#006622' }}
             onPress={this.navigate.bind(this, "AddJournalEntry")}>
               <Icon name="md-add" />
             </Fab>
         </Container>
+      </StyleProvider>
     );
   }
 }
