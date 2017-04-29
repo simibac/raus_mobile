@@ -11,8 +11,10 @@ import {
 
 import Settings from './components/Settings'
 import Dashboard from './components/Home'
-import Categories from './components/Categories'
+import SelectCategories from './components/SelectCategories'
 import SelectCows from './components/SelectCows'
+import Categories from './components/Categories'
+import CreateCategory from './components/CreateCategory'
 
 
 class Home extends Component {
@@ -55,6 +57,7 @@ class Home extends Component {
           cows:[
             {
               tvd: "222",
+              categories:[1,2,3],
               selected: false,
             },
             {
@@ -172,7 +175,58 @@ class Home extends Component {
             }
           ]
         },
+      ],
+      cows:[
+        {
+          tvd:"#dkejr633jf",
+          categories:[
+            "A1",
+            "Custom1",
+            "Custom2"
+          ]
+        },
+        {
+          tvd:"#kpdpk436",
+          categories:[
+            "A1",
+            "Custom1",
+            "Custom2"
+          ]
+        },
+        {
+          tvd:"#ase34dfdf",
+          categories:[
+            "A1",
+            "Custom1",
+            "Custom2"
+          ]
+        },
+        {
+          tvd:"#67ztugfg",
+          categories:[
+            "A1",
+            "Custom1",
+            "Custom2"
+          ]
+        },
+        {
+          tvd:"#234fgdfsrer",
+          categories:[
+            "A1",
+            "Custom1",
+            "Custom2"
+          ]
+        },
+        {
+          tvd:"#00tgjk4ooi",
+          categories:[
+            "A1",
+            "Custom1",
+            "Custom2"
+          ]
+        }
       ]
+
     }
   }
 
@@ -183,67 +237,39 @@ class Home extends Component {
         newAnimals[i].cows = cows
         newAnimals[i].numSelectedCows = numSelectedCows
         newAnimals[i].selected = true
-        }
       }
     }
-    
+  }
+  configureScene(route){
+    if (route.name == 'SelectCows' || route.name=='CreateCategory') {
+      return Navigator.SceneConfigs.FloatFromBottom;
+    } else {
+      return Navigator.SceneConfigs.PushFromRight;
+    }
+  }
+
   renderScene(route, navigator) {
-    if(route.name == 'Dashboard') {
-      return (
-        <Container>
-          <Dashboard
-            os={this.props.os}
-            navigator={navigator}/>
-        </Container>)
-      }
-      if(route.name == 'Settings') {
-        return (
-          <Container>
-            <Settings os={this.props.os}
-              navigator={navigator}></Settings>
-          </Container>)
-        }
-      if(route.name == 'Categories'){
-        return (
-          <Container>
-            <Categories
-              os={this.props.os}
-              navigator={navigator}
-              animals={this.state.animals}
-              totalTime={this.state.totalTime}
-            />
-          </Container>)
-      }
-      if(route.name == 'SelectCows'){
-        return (
-          <Container>
-            <SelectCows
-              os={this.props.os}
-              navigator={navigator}
-              animals={this.state.animals}
-              selectedCategory={route.selectedCategory}
-              updateCategory={this.updateCategory.bind(this)}
-            />
-          </Container>)
-      }
+    switch(route.name){
+      case 'Dashboard': return <Dashboard navigator={navigator}/>
+      case 'Settings': return <Settings navigator={navigator}/>
+      case 'SelectCategories': return <SelectCategories navigator={navigator} animals={this.state.animals} totalTime={this.state.totalTime}/>
+      case 'SelectCows': return <SelectCows navigator={navigator} animals={this.state.animals} selectedCategory={route.selectedCategory} updateCategory={this.updateCategory.bind(this)}/>
+      case 'Categories': return <Categories navigator={navigator} cows={this.state.cows}/>
+      case 'CreateCategory': return <CreateCategory navigator={navigator} cows={this.state.cows}/>
     }
+  }
+
 
   render() {
     console.log(this.state);
     return (
-        <Container>
-          <Navigator
-            initialRoute={{name: 'Dashboard'}}
-            renderScene={this.renderScene.bind(this)}
-            configureScene={(route) => {
-              if (route.name == 'SelectCows') {
-                return Navigator.SceneConfigs.FloatFromBottom;
-              } else {
-                return Navigator.SceneConfigs.PushFromRight;
-              }
-            }}
-          />
-        </Container>
+      <Container>
+        <Navigator
+          initialRoute={{name: 'Dashboard'}}
+          renderScene={this.renderScene.bind(this)}
+          configureScene={this.configureScene.bind(this)}
+        />
+      </Container>
     )
   }
 }

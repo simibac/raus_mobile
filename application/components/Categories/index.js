@@ -1,170 +1,95 @@
 'use strict'
 import React, { Component } from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  ListView
-} from 'react-native';
 
-import {StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
-import Dimensions from 'Dimensions';
+import {ListItem, Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
+import {
+  StyleSheet,
+  Navigator,
+  Text,
+  View,
+} from 'react-native';
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
+import Swipeout from 'react-native-swipeout'
+
+
+import Language from '../../../language.json'
 
 class Categories extends Component {
   constructor(props) {
     super(props);
-    var animals = this.props.animals
     this.state = {
-      animals: animals,
-    };
+      categories: []
+    }
   }
-
-  navigate(routeName, selectedCategory){
+  componentWillMount(){
+    //get Kategories from api
+    var categories = ["A1", "A2", "Rinder", "Mittwochkühe"]
+    this.setState({
+      categories:categories
+    })
+  }
+  navigate(routeName){
     this.props.navigator.push({
-      name: routeName,
-      selectedCategory: selectedCategory
+      name:routeName
     });
   }
-
-  back(){
+  pop(){
     this.props.navigator.pop()
   }
 
-  close(){
-    var routes = this.props.navigator.state.routeStack;
-    for (var i = routes.length - 1; i >= 0; i--) {
-      if(routes[i].name === "Dashboard"){
-        var destinationRoute = this.props.navigator.getCurrentRoutes()[i]
-        this.props.navigator.popToRoute(destinationRoute);
-      }
-    }
-  }
-
-  openCategory(message){
-    console.log(message)
-    this.navigate.bind("SelectCows")
-
-  }
-
-  finish(){
-    console.log(this.props.totalTime, this.props.animals)
-  }
-
-  categoryButtonStyle(selected){
-    if(selected){
-      var backgroundColor = 'rgba(255, 255, 255, 0.3)'
-      var borderColor = 'rgba(255, 255, 255, 0.05)'
-    }
-    else{
-      var backgroundColor = 'rgba(255, 255, 255, 0)'
-      var borderColor = 'white'
-    }
-    return {
-      width: (Dimensions.get('window').width-50)/2,
-      height: 100,
-      borderWidth: 2,
-      borderRadius: 5,
-      borderColor: borderColor,
-      margin: 10,
-      backgroundColor: backgroundColor
-    }
-  }
-
   render() {
-    return (
-      <StyleProvider style={getTheme(platform)}>
-        <View style={styles.wrapper}>
-          <Header>
-            <Left>
-              <Button transparent onPress={this.back.bind(this)}>
-                <Icon name={'arrow-back'}/>
-              </Button>
-            </Left>
-            <Body>
-              {/* <Button transparent onPress={this.back.bind(this)}> */}
-                <Title>Kategorien</Title>
-                {/* <Subtitle>Lern more</Subtitle>
-
-                <Icon name={'information-circle'}/>
-              </Button> */}
-            </Body>
-            <Right>
-              <Button transparent onPress={this.close.bind(this)}>
-                <Text>Abbrechen</Text>
-              </Button>
-            </Right>
-          </Header>
-
-          <View style={styles.container}>
-            <View style={styles.list}>
-              {this.state.animals.map((category) => {return(
-                <TouchableHighlight
-                  style={this.categoryButtonStyle.bind(this)(category.selected)}
-                  key={category.category}
-                  onPress={this.navigate.bind(this, "SelectCows", category.category)}>
-                  <View style={styles.container2}>
-                    <Text style={styles.title}>
-                      {category.category}
-                    </Text>
-                    {category.selected &&
-                      <Text
-                        style={styles.numSelectedCows}>
-                        {category.numSelectedCows}/{category.cows.length}
-                      </Text>
-                    }
-
-                  </View>
-                </TouchableHighlight>)})}
-              </View>
-            </View>
-
-            <Footer>
-              <FooterTab>
-                <Button full onPress={this.finish.bind(this)}>
-                  <Text>Fertig</Text>
-                </Button>
-              </FooterTab>
-            </Footer>
-          </View>
-        </StyleProvider>
-      );
-    }
+    var swipeoutBtns = [
+  {
+    text: 'Delete',
+    backgroundColor:'red',
+    color:'white'
   }
+]
+    return (
+      <Container style={{backgroundColor:'white'}}>
+        <Header provider>
+          <Left>
+            <Button transparent onPress={this.pop.bind(this)}>
+              <Icon name='arrow-back'/>
+            </Button>
+          </Left>
+          <Body>
+            <Title>Kategorien</Title>
+          </Body>
+          <Right>
+            <Button transparent onPress={this.navigate.bind(this, "CreateCategory")}>
+              <Icon name='add'/>
+            </Button>
+          </Right>
+        </Header>
 
-  const styles = StyleSheet.create({
-    wrapper:{
-      flex:1,
-      backgroundColor: 'white',
-    },
-    container:{
-      backgroundColor: 'rgba(0, 77, 0, 0.6)',
-      flex:1,
-      flexDirection: 'column',
-      padding:5
+          <Content>
+            {this.state.categories.map(category =>
+              <Swipeout right={swipeoutBtns} backgroundColor='white'>
+                <View>
+                  <ListItem >
+                    <View style={{flex: 1}}>
+                      <Text style={{width:100}}>{category}</Text>
+                    </View>
+                  </ListItem>
+                </View>
+              </Swipeout>
+            )}
+          </Content>
+      </Container>
+    );
+  }
+}
 
-    },
+const styles = StyleSheet.create({
+  wrapper: {
+    flex:1,
+    backgroundColor: 'white',
+  },
+  container: {
+    backgroundColor: 'rgba(0, 77, 0, 0.6)',
+  },
+});
 
-    container2: {
-      flex: 1,
-      justifyContent: 'center',
-    },
-
-    title: {
-      fontSize: 36,
-      textAlign: 'center',
-      color: '#fff',
-    },
-    numSelectedCows:{
-      color: '#fff',
-      textAlign: 'center',
-    },
-    list: {
-      flexDirection: 'row',
-      flexWrap: 'wrap'
-    },
-  });
-
-  module.exports = Categories;
+module.exports = Categories;

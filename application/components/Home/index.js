@@ -41,7 +41,7 @@ class Dashboard extends Component {
       <StyleProvider style={getTheme(platform)}>
         <Drawer
           ref={(ref) => { this.drawer = ref; }}
-          content={<MenuDrawer closeDrawer={this.closeDrawer.bind(this)}/>}
+          content={<MenuDrawer navigator={this.props.navigator} closeDrawer={this.closeDrawer.bind(this)}/>}
           onClose={() => this.closeDrawer.bind(this)}
           >
           <Container >
@@ -63,7 +63,7 @@ class Dashboard extends Component {
             <Fab
               position="bottomRight"
               style={{ backgroundColor: '#006622' }}
-              onPress={this.navigate.bind(this, "Categories")}>
+              onPress={this.navigate.bind(this, "SelectCategories")}>
               <Icon name="md-add" />
             </Fab>
           </Container>

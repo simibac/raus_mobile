@@ -37,7 +37,7 @@ class SelectCows extends Component {
       if(newRelevantCows[i].tvd === tvd){
         newRelevantCows[i].selected = !newRelevantCows[i].selected
         this.setState({
-          relevantCows:newRelevantCows
+          relevantCows: newRelevantCows
         })
       }
     }
@@ -107,12 +107,6 @@ class SelectCows extends Component {
                   <Switch value={cow.selected} onChange={this.switch.bind(this, cow.tvd)}/>
                 </Right>
               </ListItem>
-
-              // <ListItem icon key={cow.tvd}>
-              //   <CheckBox checked={cow.selected} onChange={this.switch.bind(this, cow.tvd)}/>
-              //
-              //   <Text>{cow.tvd}</Text>
-              // </ListItem>
             )}
             <Text>{this.state.relevantCows[0].selected}</Text>
 

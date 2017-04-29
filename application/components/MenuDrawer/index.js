@@ -17,6 +17,12 @@ import {
 
 class MenuDrawer extends Component {
 
+  navigate(routeName){
+    this.props.navigator.push({
+      name:routeName
+    });
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -46,7 +52,7 @@ class MenuDrawer extends Component {
             </Right>
           </ListItem>
 
-          <ListItem last icon button>
+          <ListItem last icon onPress={this.navigate.bind(this, "Categories")}>
             <Left>
               <Icon name="ios-pricetags-outline" />
             </Left>
