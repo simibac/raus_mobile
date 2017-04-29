@@ -9,11 +9,10 @@ import {
   View,
 } from 'react-native';
 
-import Settings from '../Settings'
-import Dashboard from './Dashboard.js'
-import Time from './AddJournalEntry/Time'
-import Categories from './AddJournalEntry/Categories'
-import SelectCows from './AddJournalEntry/Categories/SelectCows.js'
+import Settings from './components/Settings'
+import Dashboard from './components/Home'
+import Categories from './components/Categories'
+import SelectCows from './components/SelectCows'
 
 
 class Home extends Component {
@@ -187,14 +186,7 @@ class Home extends Component {
         }
       }
     }
-
-
-  setTotalTime(time){
-    this.setState({
-      totalTime: time
-    })
-  }
-
+    
   renderScene(route, navigator) {
     if(route.name == 'Dashboard') {
       return (
@@ -211,16 +203,6 @@ class Home extends Component {
               navigator={navigator}></Settings>
           </Container>)
         }
-      if(route.name == 'AddJournalEntry'){
-        return (
-          <Container>
-            <Time
-              os={this.props.os}
-              navigator={navigator}
-              setTotalTime={this.setTotalTime.bind(this)}
-            />
-          </Container>)
-      }
       if(route.name == 'Categories'){
         return (
           <Container>

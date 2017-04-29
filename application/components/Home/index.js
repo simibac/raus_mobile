@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import { Drawer, StyleProvider,Container,Thumbnail, Icon, Switch, Header,ListItem, Left, Right, Body, Title, Button, Content, Form, Item, Input, Label, Fab, View } from 'native-base';
 import {
   StyleSheet,
-  Text
+  Text,
+  StatusBar
 } from 'react-native';
 
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
-import MenuDrawer from './MenuDrawer.js'
+import MenuDrawer from '../MenuDrawer';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -62,7 +63,7 @@ class Dashboard extends Component {
             <Fab
               position="bottomRight"
               style={{ backgroundColor: '#006622' }}
-              onPress={this.navigate.bind(this, "AddJournalEntry")}>
+              onPress={this.navigate.bind(this, "Categories")}>
               <Icon name="md-add" />
             </Fab>
           </Container>

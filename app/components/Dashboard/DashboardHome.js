@@ -1,6 +1,6 @@
 'use strict'
 import React, { Component } from 'react';
-import { Container,Thumbnail, Icon, Switch, Header,ListItem, Left, Right, Body, Title, Button, Content, Form, Item, Input, Label, Fab, View } from 'native-base';
+import { Drawer, Container,Thumbnail, Icon, Switch, Header,ListItem, Left, Right, Body, Title, Button, Content, Form, Item, Input, Label, Fab, View } from 'native-base';
 import {
   StyleSheet,
   Text
@@ -22,25 +22,35 @@ class DashboardHome extends Component {
   pop(){
     this.props.navigator.pop()
   }
+  closeDrawer = () => {
+    this.drawer.root.close()
+  };
+  openDrawer = () => {
+    this.drawer.root.open()
+  };
+
   render() {
     return (
-      <Container>
-        <Header>
-          <Left/>
-          <Body>
-            <Title>Dashboard</Title>
-          </Body>
-          <Right />
-        </Header>
+
+
         <Container>
-          <Text style={styles.title}>{this.props.os}</Text>
-          <Fab
-            position="bottomRight"
-            onPress={this.navigate.bind(this, "AddJournal")}>
+          <Header>
+            <Left/>
+            <Body>
+              <Title>Dashboard</Title>
+            </Body>
+            <Right />
+          </Header>
+          <Container>
+            <Text style={styles.title}>{this.props.os}</Text>
+            <Fab
+              position="bottomRight"
+              onPress={this.navigate.bind(this, "AddJournal")}>
               <Icon name="md-add" />
             </Fab>
           </Container>
         </Container>
+      </Drawer>
     );
   }
 }

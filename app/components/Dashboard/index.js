@@ -27,35 +27,37 @@ class Dashboard extends Component {
       return (
         <Container>
           <DashboardHome os={this.props.os}
-            navigator={navigator}></DashboardHome>
-        </Container>)
-      }
-      if(route.name == 'AddJournal') {
-        return (
-          <Container>
-            <AddJournal os={this.props.os}
-              navigator={navigator}></AddJournal>
+            navigator={navigator}
+          />
           </Container>)
         }
-      }
+        if(route.name == 'AddJournal') {
+          return (
+            <Container>
+              <AddJournal os={this.props.os}
+                navigator={navigator}
+              />
+              </Container>)
+            }
+          }
 
-      render() {
-        return (
-          <Container>
-            <Navigator
-              initialRoute={{name: 'DashboardHome'}}
-              renderScene={this.renderScene.bind(this)}
-          />
-          </Container>
-          );
-        }
-      }
+          render() {
+            return (
+              <Container>
+                <Navigator
+                  initialRoute={{name: 'DashboardHome'}}
+                  renderScene={this.renderScene.bind(this)}
+                />
+                </Container>
+              );
+            }
+          }
 
-      const styles = StyleSheet.create({
-        title: {
-          paddingTop: 30,
-          fontSize: 20
-        }
-      });
+          const styles = StyleSheet.create({
+            title: {
+              paddingTop: 30,
+              fontSize: 20
+            }
+          });
 
-      module.exports = Dashboard;
+          module.exports = Dashboard;

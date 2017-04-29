@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 
 import Svg, { G, Path } from 'react-native-svg';
-import {StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
+import {Segment, StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
 
 import getTheme from '../../../../../native-base-theme/components';
 import platform from '../../../../../native-base-theme/variables/platform';
@@ -137,6 +137,7 @@ const WAKE_ICON = (
               </Right>
             </Header>
 
+
             <ListItem icon>
               <Body>
                 <Text>Den ganzen Tag auf der Weide verbracht</Text>
@@ -181,7 +182,7 @@ const WAKE_ICON = (
                       startAngle={startAngle}
                       angleLength={angleLength}
                       onUpdate={this.onUpdate}
-                      segments={30}
+                      segments={5}
                       strokeWidth={40}
                       radius={(windowWidth-90)/2}
                       gradientColorFrom={reincolor}

@@ -16,7 +16,7 @@ var api = {
       console.log('There has been a problem with your fetch operation: ' + error.message);
       throw error;
     });
-  }
+  },
 }
 
 module.exports = api;

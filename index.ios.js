@@ -11,10 +11,9 @@ import {
   Text,
   View
 } from 'react-native';
-import Api from './app/utilities/api';
 //import Entry from './app/components/index.js';
 //import Skeleton from './app/components'
-import Home from './app/Screens/Home'
+import Home from './application/navigator.js'
 
 
 export default class raus_mobile extends Component {

@@ -7,8 +7,8 @@ import {
   TouchableHighlight
 } from 'react-native';
 import {CheckBox, StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
-import getTheme from '../../../../../native-base-theme/components';
-import platform from '../../../../../native-base-theme/variables/platform';
+import getTheme from '../../../native-base-theme/components';
+import platform from '../../../native-base-theme/variables/platform';
 
 
 class SelectCows extends Component {

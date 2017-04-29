@@ -11,7 +11,7 @@ import {
   Text,
   View
 } from 'react-native';
-import Home from './app/Screens/Home'
+import Home from './application/navigator.js'
 
 export default class raus_mobile extends Component {
   constructor(props) {
