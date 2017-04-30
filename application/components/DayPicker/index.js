@@ -124,7 +124,9 @@ class DayPicker extends Component {
   }
 
   changeDate(date){
-    return this.state.date.getFullYear() + '-' + (this.state.date.getMonth() + 1) + '-' +(this.state.date.getDate())
+    console.log( this.state.date.getFullYear() + '-' + this.state.date.getMonth() + '-' +this.state.date.getDate())
+
+    return this.state.date.getFullYear() + '-' + (this.state.date.getMonth()-1) + '-' +this.state.date.getDate()
 }
 
   render() {
@@ -183,7 +185,7 @@ class DayPicker extends Component {
               (date) => {
                 var dateArray = date.split('-')
                 var d = new Date()
-                d.setFullYear(dateArray[0], dateArray[1], dateArray[2])
+                d.setFullYear(dateArray[0], dateArray[1]-1, dateArray[2])
                 this.setState({date: d})
               }}
             showIcon={false}
