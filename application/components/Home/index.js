@@ -55,17 +55,17 @@ class Dashboard extends Component {
                 <Title>Dashboard</Title>
               </Body>
               <Right>
-                <Button transparent onPress={this.navigate.bind(this, "Settings")}>
-                  <Icon name='settings' />
+                <Button transparent onPress={this.navigate.bind(this, "DayPicker")}>
+                  <Icon name='ios-create-outline' />
                 </Button>
               </Right>
             </Header>
-            <Fab
+            {/* <Fab
               position="bottomRight"
               style={{ backgroundColor: '#006622' }}
               onPress={this.navigate.bind(this, "SelectCategories")}>
               <Icon name="md-add" />
-            </Fab>
+            </Fab> */}
           </Container>
         </Drawer>
       </StyleProvider>

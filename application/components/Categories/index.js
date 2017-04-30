@@ -66,7 +66,7 @@ class Categories extends Component {
 
           <Content>
             {this.state.categories.map(category =>
-              <Swipeout right={swipeoutBtns} backgroundColor='white'>
+              <Swipeout right={swipeoutBtns} backgroundColor='white' autoClose={true}>
                 <View>
                   <ListItem >
                     <View style={{flex: 1}}>

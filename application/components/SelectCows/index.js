@@ -68,7 +68,6 @@ class SelectCows extends Component {
   next(){
     this.props.updateCategory(this.props.selectedCategory, this.state.numSelectedCows, this.state.relevantCows)
     this.props.navigator.pop()
-
   }
 
   render() {

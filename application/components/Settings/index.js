@@ -42,11 +42,11 @@ class Settings extends Component {
 
   render() {
     return (
-      <Container >
+      <Container style={{backgroundColor:'white'}}>
         <Header>
           <Left>
             <Button transparent onPress={this.close.bind(this)}>
-                <Icon name='close' />
+                <Icon name='arrow-back' />
             </Button>
           </Left>
           <Body>

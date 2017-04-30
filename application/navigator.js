@@ -15,6 +15,9 @@ import SelectCategories from './components/SelectCategories'
 import SelectCows from './components/SelectCows'
 import Categories from './components/Categories'
 import CreateCategory from './components/CreateCategory'
+import Language from './components/Language'
+import DayPicker from './components/DayPicker'
+
 
 
 class Home extends Component {
@@ -256,6 +259,8 @@ class Home extends Component {
       case 'SelectCows': return <SelectCows navigator={navigator} animals={this.state.animals} selectedCategory={route.selectedCategory} updateCategory={this.updateCategory.bind(this)}/>
       case 'Categories': return <Categories navigator={navigator} cows={this.state.cows}/>
       case 'CreateCategory': return <CreateCategory navigator={navigator} cows={this.state.cows}/>
+      case 'Language': return <Language navigator={navigator}/>
+      case 'DayPicker': return <DayPicker navigator={navigator}/>
     }
   }
 

@@ -40,7 +40,7 @@ class MenuDrawer extends Component {
 
         <List>
           <Separator bordered/>
-          <ListItem icon button>
+          <ListItem icon button  onPress={this.navigate.bind(this, "Settings")}>
             <Left>
               <Icon name="ios-person-outline" />
             </Left>
@@ -68,7 +68,7 @@ class MenuDrawer extends Component {
 
           <Separator bordered/>
 
-          <ListItem last icon button>
+          <ListItem last icon onPress={this.navigate.bind(this, "Language")}>
             <Left>
               <Icon name="ios-globe-outline" />
             </Left>
