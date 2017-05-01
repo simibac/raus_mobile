@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Navigator,
   View,
+  AsyncStorage,
 } from 'react-native';
 
 import Settings from './components/Settings'
@@ -17,7 +18,7 @@ import Categories from './components/Categories'
 import CreateCategory from './components/CreateCategory'
 import Language from './components/Language'
 import DayPicker from './components/DayPicker'
-
+import Login from './components/Login'
 
 
 class Home extends Component {
@@ -25,6 +26,9 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      user:{},
+      journalEntry:{},
+      animals:{},
       totalTime : 600,
       day: 1,
       month: "Januar",
@@ -233,6 +237,24 @@ class Home extends Component {
     }
   }
 
+  setUser(user){
+    this.setState({
+      user: user
+    })
+  }
+
+  setJournalEntry(journalEntry){
+    this.setState({
+      journalEntry: journalEntry
+    })
+  }
+
+  setAnimals(animals){
+    this.setState({
+      animals: animals
+    })
+  }
+
   updateCategory(category, numSelectedCows, cows){
     var newAnimals = this.state.animals
     for (var i = newAnimals.length - 1; i >= 0; i--) {
@@ -243,6 +265,23 @@ class Home extends Component {
       }
     }
   }
+
+  async getUser(){
+    try{
+      return await AsyncStorage.getItem("user")
+    }catch(error){
+      console.log(error);
+      return null
+    }
+  }
+
+  checkInitialRoute(){
+    var user = this.getUser()
+    //console.log(user)
+    if (user != null){return {name: 'Login'}}
+    else {return {name: 'Login'}}
+  }
+
   configureScene(route){
     if (route.name == 'SelectCows' || route.name=='CreateCategory') {
       return Navigator.SceneConfigs.FloatFromBottom;
@@ -253,7 +292,7 @@ class Home extends Component {
 
   renderScene(route, navigator) {
     switch(route.name){
-      case 'Dashboard': return <Dashboard navigator={navigator}/>
+      case 'Dashboard': return <Dashboard navigator={navigator} user={this.state.user} setUser={this.setUser.bind(this)}/>
       case 'Settings': return <Settings navigator={navigator}/>
       case 'SelectCategories': return <SelectCategories navigator={navigator} animals={this.state.animals} totalTime={this.state.totalTime}/>
       case 'SelectCows': return <SelectCows navigator={navigator} animals={this.state.animals} selectedCategory={route.selectedCategory} updateCategory={this.updateCategory.bind(this)}/>
@@ -261,16 +300,17 @@ class Home extends Component {
       case 'CreateCategory': return <CreateCategory navigator={navigator} cows={this.state.cows}/>
       case 'Language': return <Language navigator={navigator}/>
       case 'DayPicker': return <DayPicker navigator={navigator}/>
+      case 'Login': return <Login navigator={navigator}/>
     }
   }
 
 
   render() {
-    console.log(this.state);
+    //console.log(this.state);
     return (
       <Container>
         <Navigator
-          initialRoute={{name: 'Dashboard'}}
+          initialRoute={this.checkInitialRoute.bind(this)()}
           renderScene={this.renderScene.bind(this)}
           configureScene={this.configureScene.bind(this)}
         />

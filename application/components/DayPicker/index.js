@@ -124,13 +124,10 @@ class DayPicker extends Component {
   }
 
   changeDate(date){
-    console.log( this.state.date.getFullYear() + '-' + this.state.date.getMonth() + '-' +this.state.date.getDate())
-
     return this.state.date.getFullYear() + '-' + (this.state.date.getMonth()-1) + '-' +this.state.date.getDate()
 }
 
   render() {
-    console.log(this.state.date)
     return (
       <StyleProvider style={getTheme(platform)}>
         <Container>
@@ -146,11 +143,11 @@ class DayPicker extends Component {
             </Right>
           </Header>
           <View style={styles.wrapper}>
-            <View style={styles.dateBox}>
+            <TouchableHighlight style={styles.dateBox} onPress={() => {this.datePicker.onPressDate()}}>
               <Text style={styles.date}>
-                {getDay(this.state.date.getDay())} {this.state.date.getDate()}{getDayEnding(this.state.date.getDate())} {getMonth(this.state.date.getMonth())} {this.state.date.getFullYear()}
+                {getDay(this.state.date.getDay())}, {this.state.date.getDate()}{getDayEnding(this.state.date.getDate())} {getMonth(this.state.date.getMonth())} {this.state.date.getFullYear()}
               </Text>
-            </View>
+            </TouchableHighlight>
             <View style={styles.dayPickerBox}>
               <Grid>
                 <Col>
@@ -201,8 +198,6 @@ class DayPicker extends Component {
               }
             }}
             />
-
-
             <Footer>
               <FooterTab>
                 <Button full onPress={this.navigate.bind(this, "SelectCategories")}>
@@ -220,12 +215,14 @@ class DayPicker extends Component {
     wrapper: {
       flex:1,
       backgroundColor: 'rgba(0, 77, 0, 0.6)',
+      // alignItems:'center',
+      // justifyContent:'center'
     },
     dateBox: {
       borderBottomWidth: 1,
       marginLeft:15,
       marginRight:15,
-      paddingTop: 50,
+      paddingTop: 80,
       borderColor: 'white'
     },
     date:{

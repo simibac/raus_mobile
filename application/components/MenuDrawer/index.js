@@ -16,31 +16,45 @@ import {
 
 
 class MenuDrawer extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      user:{}
+    }
+  }
+
+  componentWillMount(){
+    //get user from api
+    var user = {
+      id:"28",
+      email:"siiimiiii",
+      role:"farmer",
+      farmId:"halllo",
+      lastName:"bachmann",
+      firstName:"simon",
+      laguage:"de",
+      token:"123"
+    }
+    this.props.setUser(user)
+  }
 
   navigate(routeName){
     this.props.navigator.push({
       name:routeName
     });
-  }
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      index: 0
-    }
-  }
+  }  
 
   render() {
     return (
       <Container style={{backgroundColor:'white'}}>
         {Platform.OS === 'ios' && <View style={{height:20}}/>}
         <Text style={styles.loggedIn}>Sie sind eingeloggt als:</Text>
-        <Text style={styles.username}>Simon Bachmann</Text>
-        <Text style={styles.farmId}>#1234287467</Text>
+        <Text style={styles.username}>{this.props.user.firstName} {this.props.user.lastName}</Text>
+        <Text style={styles.farmId}>{this.props.user.farmId}</Text>
 
         <List>
           <Separator bordered/>
-          <ListItem icon button  onPress={this.navigate.bind(this, "Settings")}>
+          <ListItem icon button onPress={this.navigate.bind(this, "Settings")}>
             <Left>
               <Icon name="ios-person-outline" />
             </Left>

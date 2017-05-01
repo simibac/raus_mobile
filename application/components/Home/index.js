@@ -41,7 +41,7 @@ class Dashboard extends Component {
       <StyleProvider style={getTheme(platform)}>
         <Drawer
           ref={(ref) => { this.drawer = ref; }}
-          content={<MenuDrawer navigator={this.props.navigator} closeDrawer={this.closeDrawer.bind(this)}/>}
+          content={<MenuDrawer setUser = {this.props.setUser} user = {this.props.user} navigator={this.props.navigator} closeDrawer={this.closeDrawer.bind(this)}/>}
           onClose={() => this.closeDrawer.bind(this)}
           >
           <Container >
