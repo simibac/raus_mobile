@@ -44,8 +44,8 @@ function getMonth(day){
 
 function getDayEnding(day){
   switch(day){
-    case 0: return "st"
-    case 1: return "nd"
+    case 1: return "st"
+    case 2: return "nd"
     default: return "th"
   }
 }

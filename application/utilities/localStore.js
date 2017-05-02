@@ -22,7 +22,16 @@ var localStore = {
     catch(error){
       console.log(error)
     }
-  }
+  },
+
+  async deleteToken(token){
+    try{
+      await AsyncStorage.removeItem("token")
+    }
+    catch(error){
+      console.log(error)
+    }
+  },
 }
 
 module.exports = localStore;

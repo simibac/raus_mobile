@@ -1,7 +1,7 @@
 'use strict'
 import React, { Component } from 'react';
 
-import {Separator, Left, Right, Body, List, ListItem, Icon, FooterTab, Button, Title, Header, Footer, Container, Content, InputGroup, Input } from 'native-base';
+import {Spinner,Separator, Left, Right, Body, List, ListItem, Icon, FooterTab, Button, Title, Header, Footer, Container, Content, InputGroup, Input } from 'native-base';
 
 import {
   StyleSheet,
@@ -13,44 +13,66 @@ import {
 
 } from 'react-native';
 
+import localStore from '../../utilities/localStore'
+import api from '../../utilities/api'
 
 
 class MenuDrawer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      user:{}
+      ready:false,
+      user:{},
+      token: '',
     }
   }
 
   componentWillMount(){
-    //get user from api
-    var user = {
-      id:"28",
-      email:"siiimiiii",
-      role:"farmer",
-      farmId:"halllo",
-      lastName:"bachmann",
-      firstName:"simon",
-      laguage:"de",
-      token:"123"
-    }
-    this.props.setUser(user)
+    localStore.getToken().then((res)=>{
+      this.setState({token:res})
+      api.getUser(res).then((res) => {
+            console.log(res);
+            this.setState({user:res.user})
+            this.setState({ready:true})
+          });
+    })
+    // var user = {
+    //   id:"28",
+    //   email:"siiimiiii",
+    //   role:"farmer",
+    //   farmId:"halllo",
+    //   lastName:"bachmann",
+    //   firstName:"simon",
+    //   laguage:"de",
+    //   token:"123"
+    // }
+    // this.props.setUser(user)
   }
 
   navigate(routeName){
     this.props.navigator.push({
-      name:routeName
-    });
-  }  
+      name:routeName,
+      passProps: {
+        user: this.state.user
+      }
+    })
+  }
+
+  logout(){
+    localStore.deleteToken()
+    this.navigate("Login")
+  }
 
   render() {
+    while (!this.state.ready){
+      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+    }
     return (
       <Container style={{backgroundColor:'white'}}>
         {Platform.OS === 'ios' && <View style={{height:20}}/>}
         <Text style={styles.loggedIn}>Sie sind eingeloggt als:</Text>
-        <Text style={styles.username}>{this.props.user.firstName} {this.props.user.lastName}</Text>
-        <Text style={styles.farmId}>{this.props.user.farmId}</Text>
+        <Text style={styles.username}>{this.state.user.First_name} {this.state.user.Last_name}</Text>
+        <Text style={styles.farmId}>{this.state.user.Farm_id}</Text>
 
         <List>
           <Separator bordered/>
@@ -78,8 +100,6 @@ class MenuDrawer extends Component {
             </Right>
           </ListItem>
 
-
-
           <Separator bordered/>
 
           <ListItem last icon onPress={this.navigate.bind(this, "Language")}>
@@ -94,8 +114,8 @@ class MenuDrawer extends Component {
             </Right>
           </ListItem>
 
-          <Separator bordered/>
-          <ListItem last icon button>
+          <Separator bordered />
+          <ListItem last icon onPress={this.logout.bind(this)}>
             <Text style={styles.logOut}>Logout</Text>
           </ListItem>
         </List>

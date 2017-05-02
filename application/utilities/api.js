@@ -18,7 +18,7 @@ var api = {
     });
   },
   login(email, password){
-    return fetch('http://127.0.0.1:3333/get-token', {
+    return fetch('http://192.168.57.1:3333/get-token', {
       method: 'POST',
 
       body: JSON.stringify({
@@ -29,6 +29,32 @@ var api = {
       console.log('There has been a problem with your fetch operation: ' + error.message);
       throw error;
     });
+  },
+  getUser(token){
+    return fetch('http://192.168.57.1:3333/api/me', {
+      method: 'GET',
+
+      headers:{
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+      }
+    })
+    .then((res) => checkStatus(res))
+    .then((res) => res.json())
+    .catch(e => e)
+  }
+}
+
+
+// Helper Functions
+
+function checkStatus(res){
+  if (res.status >= 200 && res.status < 300) {
+    return res;
+  } else {
+    let error = new Error("Error Code: " + res.status);
+    error.res = res;
+    throw error;
   }
 }
 

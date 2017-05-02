@@ -28,10 +28,9 @@ class Login extends Component {
     }
   }
 
-  navigate(routeName, selectedCategory){
+  navigate(routeName){
     this.props.navigator.push({
       name: routeName,
-      selectedCategory: selectedCategory
     });
   }
 
@@ -50,6 +49,7 @@ class Login extends Component {
           localStore.setToken(res.token)
           this.setState({errorMessage:''})
           this.setState({token:res.token})
+          this.navigate("Dashboard")
         }
         else{
           this.setState({errorMessage:res.message})
@@ -64,7 +64,7 @@ class Login extends Component {
 
   render() {
     return (
-      <Container>
+      <Container style={{backgroundColor:'white'}}>
 
         <Header provider>
           <Body>
@@ -91,12 +91,9 @@ class Login extends Component {
         </Button>
         <Text>{this.state.errorMessage}</Text>
 
-        <Text>Email {this.state.email}</Text>
+        {/* <Text>Email {this.state.email}</Text>
         <Text>Password {this.state.password}</Text>
-        <Text>Token {this.state.token}</Text>
-
-
-
+        <Text>Token {this.state.token}</Text> */}
 
       </Container>
     );

@@ -11,6 +11,7 @@
     "password":"Passowrd",
     "farm-id": "Farm ID",
     "about-raus":"About RAUS",
-    "version":"version"
+    "version":"version",
+    "joined":"joined"
   }
 }

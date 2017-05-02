@@ -44,7 +44,7 @@ class Dashboard extends Component {
           content={<MenuDrawer setUser = {this.props.setUser} user = {this.props.user} navigator={this.props.navigator} closeDrawer={this.closeDrawer.bind(this)}/>}
           onClose={() => this.closeDrawer.bind(this)}
           >
-          <Container >
+          <Container style={{backgroundColor:'white'}}>
             <Header provider>
               <Left>
                 <Button transparent onPress={this.openDrawer.bind(this)}>

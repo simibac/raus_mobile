@@ -1,7 +1,7 @@
 'use strict'
 import React, { Component } from 'react';
 
-import { Header, Left, Right, Button, Icon, Body, Title, Subtitle, Container, Content, ListItem, Text, CheckBox } from 'native-base';
+import { Spinner, Header, Left, Right, Button, Icon, Body, Title, Subtitle, Container, Content, ListItem, Text, CheckBox } from 'native-base';
 
 import {
   StyleSheet,
@@ -9,6 +9,8 @@ import {
   View,
   AsyncStorage,
 } from 'react-native';
+
+import localStore from './utilities/localStore'
 
 import Settings from './components/Settings'
 import Dashboard from './components/Home'
@@ -26,6 +28,9 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      token:'',
+      initialRoute: {name: "Login"},
+      ready:false,
       user:{},
       journalEntry:{},
       animals:{},
@@ -275,48 +280,52 @@ class Home extends Component {
     }
   }
 
-  checkInitialRoute(){
-    var user = this.getUser()
-    //console.log(user)
-    if (user != null){return {name: 'Login'}}
-    else {return {name: 'Login'}}
+  componentWillMount(){
+    AsyncStorage.getItem("token").then((res) => {
+      if(res != null){
+        this.setState({initialRoute: {name: "Dashboard"}})
+      }
+      this.setState({ready: true})
+
+    })
   }
 
-  configureScene(route){
-    if (route.name == 'SelectCows' || route.name=='CreateCategory') {
-      return Navigator.SceneConfigs.FloatFromBottom;
-    } else {
-      return Navigator.SceneConfigs.PushFromRight;
+    configureScene(route){
+      if (route.name == 'SelectCows' || route.name=='CreateCategory') {
+        return Navigator.SceneConfigs.FloatFromBottom;
+      } else {
+        return Navigator.SceneConfigs.PushFromRight;
+      }
+    }
+
+    renderScene(route, navigator) {
+      switch(route.name){
+        case 'Dashboard': return <Dashboard navigator={navigator} {...route.passProps} user={this.state.user} setUser={this.setUser.bind(this)}/>
+        case 'Settings': return <Settings navigator={navigator} {...route.passProps}/>
+        case 'SelectCategories': return <SelectCategories navigator={navigator} {...route.passProps} animals={this.state.animals} totalTime={this.state.totalTime}/>
+        case 'SelectCows': return <SelectCows navigator={navigator} {...route.passProps} animals={this.state.animals} selectedCategory={route.selectedCategory} updateCategory={this.updateCategory.bind(this)}/>
+        case 'Categories': return <Categories navigator={navigator} {...route.passProps} cows={this.state.cows}/>
+        case 'CreateCategory': return <CreateCategory navigator={navigator} {...route.passProps} cows={this.state.cows}/>
+        case 'Language': return <Language navigator={navigator} {...route.passProps} />
+        case 'DayPicker': return <DayPicker navigator={navigator} {...route.passProps} />
+        case 'Login': return <Login navigator={navigator} {...route.passProps} />
+      }
+    }
+
+    render() {
+      while (!this.state.ready){
+        return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+      }
+      return (
+        <Container>
+          <Navigator
+            initialRoute={this.state.initialRoute}
+            renderScene={this.renderScene.bind(this)}
+            configureScene={this.configureScene.bind(this)}
+          />
+        </Container>
+      )
     }
   }
 
-  renderScene(route, navigator) {
-    switch(route.name){
-      case 'Dashboard': return <Dashboard navigator={navigator} user={this.state.user} setUser={this.setUser.bind(this)}/>
-      case 'Settings': return <Settings navigator={navigator}/>
-      case 'SelectCategories': return <SelectCategories navigator={navigator} animals={this.state.animals} totalTime={this.state.totalTime}/>
-      case 'SelectCows': return <SelectCows navigator={navigator} animals={this.state.animals} selectedCategory={route.selectedCategory} updateCategory={this.updateCategory.bind(this)}/>
-      case 'Categories': return <Categories navigator={navigator} cows={this.state.cows}/>
-      case 'CreateCategory': return <CreateCategory navigator={navigator} cows={this.state.cows}/>
-      case 'Language': return <Language navigator={navigator}/>
-      case 'DayPicker': return <DayPicker navigator={navigator}/>
-      case 'Login': return <Login navigator={navigator}/>
-    }
-  }
-
-
-  render() {
-    //console.log(this.state);
-    return (
-      <Container>
-        <Navigator
-          initialRoute={this.checkInitialRoute.bind(this)()}
-          renderScene={this.renderScene.bind(this)}
-          configureScene={this.configureScene.bind(this)}
-        />
-      </Container>
-    )
-  }
-}
-
-module.exports = Home;
+  module.exports = Home;

@@ -41,6 +41,7 @@ class Settings extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <Container style={{backgroundColor:'white'}}>
         <Header>
@@ -63,7 +64,7 @@ class Settings extends Component {
               <Body>
                 <Grid>
                   <Col><Text>{Language[this.state.user.language]["first-name-beginning"]}</Text></Col>
-                  <Col><Text style={{ textAlign:'right'}}>{this.state.user.firstName}</Text></Col>
+                  <Col><Text style={{ textAlign:'right'}}>{this.props.user.First_name}</Text></Col>
                 </Grid>
               </Body>
             </CardItem>
@@ -71,7 +72,7 @@ class Settings extends Component {
               <Body>
                 <Grid>
                   <Col><Text>{Language[this.state.user.language]["last-name-beginning"]}</Text></Col>
-                  <Col><Text style={{ textAlign:'right'}}>{this.state.user.lastName}</Text></Col>
+                  <Col><Text style={{ textAlign:'right'}}>{this.props.user.Last_name}</Text></Col>
                 </Grid>
               </Body>
             </CardItem>
@@ -79,7 +80,7 @@ class Settings extends Component {
               <Body>
                 <Grid>
                   <Col style={{width: 50}}><Text>{Language[this.state.user.language]["email"]}</Text></Col>
-                  <Col><Text style={{ textAlign:'right'}}>{this.state.user.email}</Text></Col>
+                  <Col><Text style={{ textAlign:'right'}}>{this.props.user.Email}</Text></Col>
                 </Grid>
               </Body>
             </CardItem>
@@ -87,7 +88,7 @@ class Settings extends Component {
               <Body>
                 <Grid>
                   <Col><Text>{Language[this.state.user.language]["language"]}</Text></Col>
-                  <Col><Text style={{ textAlign:'right'}}>{this.state.user.language}</Text></Col>
+                  <Col><Text style={{ textAlign:'right'}}>{this.props.user.Language}</Text></Col>
                 </Grid>
               </Body>
             </CardItem>
@@ -96,6 +97,14 @@ class Settings extends Component {
                 <Grid>
                   <Col><Text secureTextEntry>{Language[this.state.user.language]["password"]}</Text></Col>
                   <Col><Text style={{ textAlign:'right'}}>********</Text></Col>
+                </Grid>
+              </Body>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Grid>
+                  <Col><Text secureTextEntry>{Language[this.state.user.language]["joined"]}</Text></Col>
+                  <Col><Text style={{ textAlign:'right'}}>{this.props.user.Created}</Text></Col>
                 </Grid>
               </Body>
             </CardItem>
@@ -110,7 +119,7 @@ class Settings extends Component {
               <Body>
                 <Grid>
                   <Col><Text secureTextEntry>{Language[this.state.user.language]["farm-id"]}</Text></Col>
-                  <Col><Text style={{ textAlign:'right'}}>{this.state.user.farmId}</Text></Col>
+                  <Col><Text style={{ textAlign:'right'}}>{this.props.user.Farm_id}</Text></Col>
                 </Grid>
               </Body>
             </CardItem>
