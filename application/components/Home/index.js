@@ -1,12 +1,13 @@
 'use strict'
 import React, { Component } from 'react';
-import { Drawer, StyleProvider,Container,Thumbnail, Icon, Switch, Header,ListItem, Left, Right, Body, Title, Button, Content, Form, Item, Input, Label, Fab, View } from 'native-base';
+import { Spinner, Drawer, StyleProvider,Container,Thumbnail, Icon, Switch, Header,ListItem, Left, Right, Body, Title, Button, Content, Form, Item, Input, Label, Fab, View } from 'native-base';
 import {
   StyleSheet,
   Text,
   StatusBar
 } from 'react-native';
 
+import localStore from '../../utilities/localStore'
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 import MenuDrawer from '../MenuDrawer';
@@ -15,9 +16,17 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: 'true'
+      ready: false
     };
   }
+  componentWillMount(){
+    localStore.getToken().then((res)=>{
+      this.setState({token:res})
+      this.setState({ready:true})
+
+    })
+  }
+
   navigate(routeName){
     this.props.navigator.push({
       name:routeName
@@ -36,6 +45,9 @@ class Dashboard extends Component {
   };
 
   render() {
+    while (!this.state.ready){
+      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+    }
 
     return (
       <StyleProvider style={getTheme(platform)}>
@@ -60,6 +72,9 @@ class Dashboard extends Component {
                 </Button>
               </Right>
             </Header>
+            <Content>
+              <Text>{this.state.token}</Text>
+            </Content>
             {/* <Fab
               position="bottomRight"
               style={{ backgroundColor: '#006622' }}

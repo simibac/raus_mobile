@@ -13,42 +13,10 @@ import DatePicker from 'react-native-datepicker'
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 import Dimensions from 'Dimensions';
+import DateConverter from '../../utilities/dateConverter.js'
 
-function getDay(day){
-  switch(day){
-    case 0: return "Sunday"
-    case 1: return "Monday"
-    case 2: return "Tuesday"
-    case 3: return "Wednesday"
-    case 4: return "Thursday"
-    case 5: return "Friday"
-    case 6: return "Saturday"
-  }
-}
-function getMonth(day){
-  switch(day){
-    case 0: return "Jan"
-    case 1: return "Feb"
-    case 2: return "Mar"
-    case 3: return "Apr"
-    case 4: return "May"
-    case 5: return "Jun"
-    case 6: return "Jul"
-    case 7: return "Aug"
-    case 8: return "Sep"
-    case 9: return "Okt"
-    case 10: return "Nov"
-    case 11: return "Dez"
-  }
-}
 
-function getDayEnding(day){
-  switch(day){
-    case 1: return "st"
-    case 2: return "nd"
-    default: return "th"
-  }
-}
+
 
 class DayPicker extends Component {
   constructor(props) {
@@ -57,7 +25,7 @@ class DayPicker extends Component {
       date: new Date(),
       today: true,
       yesterday: false,
-      other:false,
+      other: false,
     }
   }
 
@@ -71,10 +39,12 @@ class DayPicker extends Component {
     }
   }
 
-  navigate(routeName, selectedCategory){
+  navigate(routeName, date){
     this.props.navigator.push({
       name: routeName,
-      selectedCategory: selectedCategory
+      passProps:{
+        date:this.state.date
+      }
     });
   }
 
@@ -130,7 +100,7 @@ class DayPicker extends Component {
   render() {
     return (
       <StyleProvider style={getTheme(platform)}>
-        <Container>
+        <Container style={{backgroundColor:'white'}}>
           <Header>
             <Left/>
             <Body>
@@ -145,7 +115,7 @@ class DayPicker extends Component {
           <View style={styles.wrapper}>
             <TouchableHighlight style={styles.dateBox} onPress={() => {this.datePicker.onPressDate()}}>
               <Text style={styles.date}>
-                {getDay(this.state.date.getDay())}, {this.state.date.getDate()}{getDayEnding(this.state.date.getDate())} {getMonth(this.state.date.getMonth())} {this.state.date.getFullYear()}
+                {DateConverter.getDay(this.state.date.getDay())}, {this.state.date.getDate()}{DateConverter.getDayEnding(this.state.date.getDate())} {DateConverter.getMonth(this.state.date.getMonth())} {this.state.date.getFullYear()}
               </Text>
             </TouchableHighlight>
             <View style={styles.dayPickerBox}>

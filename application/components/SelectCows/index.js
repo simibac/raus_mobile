@@ -10,7 +10,6 @@ import {CheckBox, StyleProvider, Footer, FooterTab, Button, Header, Title, Subti
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 
-
 class SelectCows extends Component {
   constructor(props) {
     super(props);

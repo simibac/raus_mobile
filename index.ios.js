@@ -15,6 +15,8 @@ import {
 //import Skeleton from './app/components'
 import Home from './application/navigator.js'
 
+// XMLHttpRequest = GLOBAL.originalXMLHttpRequest ?
+//   GLOBAL.originalXMLHttpRequest : GLOBAL.XMLHttpRequest;
 
 export default class raus_mobile extends Component {
   constructor(props) {

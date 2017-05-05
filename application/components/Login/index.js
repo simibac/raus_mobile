@@ -46,6 +46,7 @@ class Login extends Component {
     else{
       api.login(this.state.email, this.state.password).then((res) => {
         if (typeof res.token != 'undefined'){
+          localStore.deleteToken()
           localStore.setToken(res.token)
           this.setState({errorMessage:''})
           this.setState({token:res.token})
@@ -86,7 +87,7 @@ class Login extends Component {
           <Text style={{color:'white', fontSize:17}}>Login</Text>
         </Button>
 
-        <Button full success>
+        <Button full success onPress={this.navigate.bind(this, "CreateAccount")}>
           <Text style={{color:'white', fontSize:17}}>Create an account</Text>
         </Button>
         <Text>{this.state.errorMessage}</Text>

@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 
 import localStore from './utilities/localStore'
+import api from './utilities/api'
+
 
 import Settings from './components/Settings'
 import Dashboard from './components/Home'
@@ -21,6 +23,7 @@ import CreateCategory from './components/CreateCategory'
 import Language from './components/Language'
 import DayPicker from './components/DayPicker'
 import Login from './components/Login'
+import CreateAccount from './components/CreateAccount'
 
 
 class Home extends Component {
@@ -283,7 +286,10 @@ class Home extends Component {
   componentWillMount(){
     AsyncStorage.getItem("token").then((res) => {
       if(res != null){
-        this.setState({initialRoute: {name: "Dashboard"}})
+        api.getUser(res).then((res2) => {
+              console.log(res2);
+              this.setState({initialRoute: {name: "Dashboard"}})
+            });
       }
       this.setState({ready: true})
 
@@ -309,10 +315,12 @@ class Home extends Component {
         case 'Language': return <Language navigator={navigator} {...route.passProps} />
         case 'DayPicker': return <DayPicker navigator={navigator} {...route.passProps} />
         case 'Login': return <Login navigator={navigator} {...route.passProps} />
+        case 'CreateAccount': return  <CreateAccount navigator={navigator} {...route.passProps} />
       }
     }
 
     render() {
+      localStore.deleteToken()
       while (!this.state.ready){
         return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
       }

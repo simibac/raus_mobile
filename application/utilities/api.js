@@ -1,6 +1,6 @@
 var api = {
-  addUser(email, firstName, lastName, farmId, password, role, language){
-    return fetch('http://10.0.3.2:3333/sign-up', {
+  signup(firstName, lastName, email, farmId, language, password){
+    return fetch('http://192.168.57.1:3333/sign-up', {
       method: 'POST',
 
       body: JSON.stringify({
@@ -9,13 +9,14 @@ var api = {
         "last_name": lastName,
         "farm_id": farmId,
         "password": password,
-        "role": role,
-        "language": language
+        "language": language,
+        "created": "12.12.2012",//new Date(),
+        "role": "farmer"
       })
-    }).then((res) => res.json()).catch(function(error) {
-      console.log('There has been a problem with your fetch operation: ' + error.message);
-      throw error;
-    });
+    })
+    .then((res) => checkStatus(res))
+    .then((res) => res.json())
+    .catch(e => e)
   },
   login(email, password){
     return fetch('http://192.168.57.1:3333/get-token', {
@@ -25,10 +26,10 @@ var api = {
         "email": email,
         "password": password
       })
-    }).then((res) => res.json()).catch(function(error) {
-      console.log('There has been a problem with your fetch operation: ' + error.message);
-      throw error;
-    });
+    })
+    .then((res) => checkStatus(res))
+    .then((res) => res.json())
+    .catch(e => e)
   },
   getUser(token){
     return fetch('http://192.168.57.1:3333/api/me', {
@@ -36,7 +37,19 @@ var api = {
 
       headers:{
         "Authorization": "Bearer " + token,
-        "Content-Type": "application/json"
+      }
+    })
+    .then((res) => checkStatus(res))
+    .then((res) => res.json())
+    .catch(e => e)
+  },
+  
+  getCows(token, farmId){
+    return fetch('http://192.168.57.1:3333/api/cows', {
+      method: 'GET',
+
+      headers:{
+        "Authorization": "Bearer " + token,
       }
     })
     .then((res) => checkStatus(res))
@@ -54,7 +67,7 @@ function checkStatus(res){
   } else {
     let error = new Error("Error Code: " + res.status);
     error.res = res;
-    throw error;
+    return res
   }
 }
 

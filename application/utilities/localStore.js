@@ -24,7 +24,7 @@ var localStore = {
     }
   },
 
-  async deleteToken(token){
+  async deleteToken(){
     try{
       await AsyncStorage.removeItem("token")
     }

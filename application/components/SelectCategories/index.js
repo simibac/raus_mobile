@@ -12,6 +12,7 @@ import {StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Conta
 import Dimensions from 'Dimensions';
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
+import DateConverter from '../../utilities/dateConverter.js'
 
 class SelectCategories extends Component {
   constructor(props) {
@@ -99,6 +100,10 @@ class SelectCategories extends Component {
           </Header>
 
           <View style={styles.container}>
+            <Text style={styles.date}>
+              {DateConverter.getDay(this.props.date.getDay())}, {this.props.date.getDate()}{DateConverter.getDayEnding(this.props.date.getDate())} {DateConverter.getMonth(this.props.date.getMonth())} {this.props.date.getFullYear()}
+            </Text>
+            <Content>
             <View style={styles.list}>
               {this.state.animals.map((category) => {return(
                 <TouchableHighlight
@@ -119,6 +124,7 @@ class SelectCategories extends Component {
                   </View>
                 </TouchableHighlight>)})}
               </View>
+            </Content>
             </View>
 
             <Footer>
@@ -164,6 +170,12 @@ class SelectCategories extends Component {
     list: {
       flexDirection: 'row',
       flexWrap: 'wrap'
+    },
+    date:{
+      color:'white',
+      textAlign:'center',
+      fontSize: 20,
+      paddingBottom:10
     },
   });
 

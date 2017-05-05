@@ -13,6 +13,13 @@ import {
 } from 'react-native';
 import Home from './application/navigator.js'
 
+const _XHR = GLOBAL.originalXMLHttpRequest ?
+    GLOBAL.originalXMLHttpRequest :
+    GLOBAL.XMLHttpRequest
+
+XMLHttpRequest = _XHR
+
+
 export default class raus_mobile extends Component {
   constructor(props) {
     super(props);

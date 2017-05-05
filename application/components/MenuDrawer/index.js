@@ -16,13 +16,19 @@ import {
 import localStore from '../../utilities/localStore'
 import api from '../../utilities/api'
 
+import Navigation from '../../navigator.js'
+
 
 class MenuDrawer extends Component {
   constructor(props) {
     super(props)
     this.state = {
       ready:false,
-      user:{},
+      user:{
+        First_name:'',
+        Last_name:'',
+        Farm_id:''
+      },
       token: '',
     }
   }
@@ -30,23 +36,14 @@ class MenuDrawer extends Component {
   componentWillMount(){
     localStore.getToken().then((res)=>{
       this.setState({token:res})
+      console.log(res);
       api.getUser(res).then((res) => {
+
             console.log(res);
             this.setState({user:res.user})
             this.setState({ready:true})
           });
     })
-    // var user = {
-    //   id:"28",
-    //   email:"siiimiiii",
-    //   role:"farmer",
-    //   farmId:"halllo",
-    //   lastName:"bachmann",
-    //   firstName:"simon",
-    //   laguage:"de",
-    //   token:"123"
-    // }
-    // this.props.setUser(user)
   }
 
   navigate(routeName){
@@ -60,7 +57,9 @@ class MenuDrawer extends Component {
 
   logout(){
     localStore.deleteToken()
-    this.navigate("Login")
+    this.props.navigator.resetTo({
+      name:"Login"
+    })
   }
 
   render() {
