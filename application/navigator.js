@@ -24,6 +24,7 @@ import Language from './components/Language'
 import DayPicker from './components/DayPicker'
 import Login from './components/Login'
 import CreateAccount from './components/CreateAccount'
+import CategoryDetailed from './components/CategoryDetailed'
 
 
 class Home extends Component {
@@ -263,17 +264,6 @@ class Home extends Component {
     })
   }
 
-  updateCategory(category, numSelectedCows, cows){
-    var newAnimals = this.state.animals
-    for (var i = newAnimals.length - 1; i >= 0; i--) {
-      if(newAnimals[i].category === category){
-        newAnimals[i].cows = cows
-        newAnimals[i].numSelectedCows = numSelectedCows
-        newAnimals[i].selected = true
-      }
-    }
-  }
-
   async getUser(){
     try{
       return await AsyncStorage.getItem("user")
@@ -285,55 +275,66 @@ class Home extends Component {
 
   componentWillMount(){
     AsyncStorage.getItem("token").then((res) => {
+      // console.log(res);
       if(res != null){
         api.getUser(res).then((res2) => {
-              console.log(res2);
-              this.setState({initialRoute: {name: "Dashboard"}})
-            });
+          console.log(res2);
+          if(typeof res2.error === 'undefined'){
+            this.setState({initialRoute: {name: "Dashboard"}})
+            this.setState({ready: true})
+          }
+          else{
+            this.setState({initialRoute: {name: "Login"}})
+            this.setState({ready: true})
+          }
+        });
       }
-      this.setState({ready: true})
-
+      else{
+        this.setState({ready: true})
+      }
     })
   }
 
-    configureScene(route){
-      if (route.name == 'SelectCows' || route.name=='CreateCategory') {
-        return Navigator.SceneConfigs.FloatFromBottom;
-      } else {
-        return Navigator.SceneConfigs.PushFromRight;
-      }
-    }
-
-    renderScene(route, navigator) {
-      switch(route.name){
-        case 'Dashboard': return <Dashboard navigator={navigator} {...route.passProps} user={this.state.user} setUser={this.setUser.bind(this)}/>
-        case 'Settings': return <Settings navigator={navigator} {...route.passProps}/>
-        case 'SelectCategories': return <SelectCategories navigator={navigator} {...route.passProps} animals={this.state.animals} totalTime={this.state.totalTime}/>
-        case 'SelectCows': return <SelectCows navigator={navigator} {...route.passProps} animals={this.state.animals} selectedCategory={route.selectedCategory} updateCategory={this.updateCategory.bind(this)}/>
-        case 'Categories': return <Categories navigator={navigator} {...route.passProps} cows={this.state.cows}/>
-        case 'CreateCategory': return <CreateCategory navigator={navigator} {...route.passProps} cows={this.state.cows}/>
-        case 'Language': return <Language navigator={navigator} {...route.passProps} />
-        case 'DayPicker': return <DayPicker navigator={navigator} {...route.passProps} />
-        case 'Login': return <Login navigator={navigator} {...route.passProps} />
-        case 'CreateAccount': return  <CreateAccount navigator={navigator} {...route.passProps} />
-      }
-    }
-
-    render() {
-      localStore.deleteToken()
-      while (!this.state.ready){
-        return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
-      }
-      return (
-        <Container>
-          <Navigator
-            initialRoute={this.state.initialRoute}
-            renderScene={this.renderScene.bind(this)}
-            configureScene={this.configureScene.bind(this)}
-          />
-        </Container>
-      )
+  configureScene(route){
+    if (route.name == 'SelectCows' || route.name=='CreateCategory') {
+      return Navigator.SceneConfigs.FloatFromBottom;
+    } else {
+      return Navigator.SceneConfigs.PushFromRight;
     }
   }
 
-  module.exports = Home;
+  renderScene(route, navigator) {
+    switch(route.name){
+      case 'Dashboard': return <Dashboard navigator={navigator} {...route.passProps} user={this.state.user} setUser={this.setUser.bind(this)}/>
+      case 'Settings': return <Settings navigator={navigator} {...route.passProps}/>
+      case 'SelectCategories': return <SelectCategories navigator={navigator} {...route.passProps} />
+      case 'SelectCows': return <SelectCows navigator={navigator} {...route.passProps} />
+      case 'Categories': return <Categories navigator={navigator} {...route.passProps} cows={this.state.cows}/>
+      case 'CreateCategory': return <CreateCategory navigator={navigator} {...route.passProps} cows={this.state.cows}/>
+      case 'Language': return <Language navigator={navigator} {...route.passProps} />
+      case 'DayPicker': return <DayPicker navigator={navigator} {...route.passProps} />
+      case 'Login': return <Login navigator={navigator} {...route.passProps} />
+      case 'CreateAccount': return  <CreateAccount navigator={navigator} {...route.passProps} />
+      case 'CategoryDetailed': return  <CategoryDetailed navigator={navigator} {...route.passProps} />
+
+    }
+  }
+
+  render() {
+    //localStore.deleteToken()
+    while (!this.state.ready){
+      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+    }
+    return (
+      <Container>
+        <Navigator
+          initialRoute={this.state.initialRoute}
+          renderScene={this.renderScene.bind(this)}
+          configureScene={this.configureScene.bind(this)}
+        />
+      </Container>
+    )
+  }
+}
+
+module.exports = Home;

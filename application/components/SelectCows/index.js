@@ -13,19 +13,27 @@ import platform from '../../../native-base-theme/variables/platform';
 class SelectCows extends Component {
   constructor(props) {
     super(props);
-    let animals = this.props.animals
+    this.state = {
+      ready:false
+    }
+  }
+
+  componentWillMount(){
+    let categories = this.props.categories
     let relevantCows = []
-    for (var i = animals.length - 1; i >= 0; i--) {
-      if(animals[i].category === this.props.selectedCategory){
-        relevantCows = animals[i].cows
+    for (var i = categories.length - 1; i >= 0; i--) {
+      if(categories[i].category === this.props.selectedCategory){
+        relevantCows = categories[i].cows
       }
     }
     this.state = {
       relevantCows: relevantCows,
-      numSelectedCows: 0,
-      numTotalCows: relevantCows.length
+      numSelectedCows: relevantCows.length,
+      numTotalCows: relevantCows.length,
+      ready:true,
     };
   }
+
   back(){
     this.props.navigator.pop()
   }
@@ -34,42 +42,47 @@ class SelectCows extends Component {
     let newRelevantCows = this.state.relevantCows
     for (var i = newRelevantCows.length - 1; i >= 0; i--) {
       if(newRelevantCows[i].tvd === tvd){
-        newRelevantCows[i].selected = !newRelevantCows[i].selected
-        this.setState({
-          relevantCows: newRelevantCows
-        })
+        newRelevantCows[i].isSelected = !newRelevantCows[i].isSelected
       }
     }
+    this.setState({relevantCows: newRelevantCows})
     this.countSelectedCows.bind(this)(this)
   }
+
+
   countSelectedCows(){
     let counter = 0
     for (var i = this.state.relevantCows.length - 1; i >= 0; i--) {
-      var toCompare = this.state.relevantCows[i].selected
-      if(toCompare == true){
+      var toCompare = this.state.relevantCows[i].isSelected
+      if(toCompare === true){
         counter = counter + 1
       }
     }
-    this.setState({
-      numSelectedCows:counter
-    })
+    this.setState({numSelectedCows:counter})
   }
+
+  //if option === true all cows are set to be selected, if option === false all cows are set to be disselected
   selectAll(option){
     let newRelevantCows = this.state.relevantCows
     for (var i = newRelevantCows.length - 1; i >= 0; i--) {
-      newRelevantCows[i].selected = option
-      this.setState({
-        relevantCows: newRelevantCows
-      })
+      newRelevantCows[i].isSelected = option
     }
+    this.setState({
+      relevantCows: newRelevantCows
+    })
     this.countSelectedCows.bind(this)(this)
   }
+
   next(){
-    this.props.updateCategory(this.props.selectedCategory, this.state.numSelectedCows, this.state.relevantCows)
+    this.props.updateCategory(this.state.numSelectedCows, this.state.relevantCows)
     this.props.navigator.pop()
   }
 
   render() {
+    while (!this.state.ready){
+      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+    }
+    //console.log(this.state.relevantCows)
     return (
       <StyleProvider style={getTheme(platform)}>
         <Container style={{backgroundColor:'white'}}>
@@ -102,12 +115,10 @@ class SelectCows extends Component {
                   <Text>{cow.tvd}</Text>
                 </Body>
                 <Right>
-                  <Switch value={cow.selected} onChange={this.switch.bind(this, cow.tvd)}/>
+                  <Switch value={cow.isSelected} onChange={this.switch.bind(this, cow.tvd)}/>
                 </Right>
               </ListItem>
             )}
-            <Text>{this.state.relevantCows[0].selected}</Text>
-
           </Content>
 
           <Footer>

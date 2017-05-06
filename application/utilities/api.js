@@ -10,7 +10,6 @@ var api = {
         "farm_id": farmId,
         "password": password,
         "language": language,
-        "created": "12.12.2012",//new Date(),
         "role": "farmer"
       })
     })
@@ -43,7 +42,7 @@ var api = {
     .then((res) => res.json())
     .catch(e => e)
   },
-  
+
   getCows(token, farmId){
     return fetch('http://192.168.57.1:3333/api/cows', {
       method: 'GET',
@@ -55,7 +54,55 @@ var api = {
     .then((res) => checkStatus(res))
     .then((res) => res.json())
     .catch(e => e)
-  }
+  },
+
+  getCowsByCategory(token, farmId){
+    return fetch('http://192.168.57.1:3333/api/cows-by-category', {
+      method: 'GET',
+
+      headers:{
+        "Authorization": "Bearer " + token,
+      }
+    })
+    .then((res) => checkStatus(res))
+    .then((res) => res.json())
+    .catch(e => e)
+  },
+
+  addJournalEntry(token, tvds, year, month, day, minutesOutside){
+    return fetch('http://192.168.57.1:3333/api/journal', {
+      method: 'POST',
+      headers:{
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({
+        "tvds": tvds,
+      	"year" : year,
+      	"month": month,
+      	"day" : day,
+      	"minutes_outside": minutesOutside
+      })
+    })
+    .then((res) => checkStatus(res))
+    .then((res) => res.json())
+    .catch(e => e)
+  },
+
+  addCategory(token, tvds, name){
+    return fetch('http://192.168.57.1:3333/api/categories', {
+      method: 'POST',
+      headers:{
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({
+        "tvds": tvds,
+        "name" : name
+      })
+    })
+    .then((res) => checkStatus(res))
+    .then((res) => res.json())
+    .catch(e => e)
+  },
 }
 
 

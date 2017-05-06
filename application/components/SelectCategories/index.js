@@ -8,11 +8,42 @@ import {
   ListView
 } from 'react-native';
 
-import {StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
+import {Spinner, StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
 import Dimensions from 'Dimensions';
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 import DateConverter from '../../utilities/dateConverter.js'
+import api from '../../utilities/api.js'
+import localStore from '../../utilities/localStore'
+
+
+// needed for adding the isSelected field for each category and each cow
+function prepareData(categories){
+  var newCategories = []
+  for (var i = categories.categories.length - 1; i >= 0; i--) {
+    var newCows = []
+    for (var j = categories.categories[i].cows.length -1; j >= 0; j--){
+      var newCow = {
+        tvd:categories.categories[i].cows[j].tvd,
+        journal:categories.categories[i].cows[j].journal,
+        added:categories.categories[i].cows[j].added,
+        isSelected:true,
+      }
+      newCows.push(newCow)
+    }
+    var newCategory = {
+      category: categories.categories[i].category,
+      isSelected: true,
+      numSelectedCows: 0,
+      cows: newCows,
+      numSelectedCows: categories.categories[i].cows.length
+    }
+    newCategories.push(newCategory)
+  }
+  return newCategories
+}
+
+
 
 class SelectCategories extends Component {
   constructor(props) {
@@ -20,13 +51,32 @@ class SelectCategories extends Component {
     var animals = this.props.animals
     this.state = {
       animals: animals,
+      ready: false,
+      selectedCategory:""
     };
   }
 
+  componentWillMount(){
+    localStore.getToken().then((res)=>{
+      this.setState({token:res})
+      api.getCowsByCategory(res).then((res) => {
+        var newCategories = prepareData(res)
+        this.setState({categories:newCategories})
+        this.setState({ready:true})
+      });
+    })
+  }
+
+
   navigate(routeName, selectedCategory){
+    this.setState({selectedCategory:selectedCategory})
     this.props.navigator.push({
       name: routeName,
-      selectedCategory: selectedCategory
+      passProps:{
+        selectedCategory: selectedCategory,
+        categories: this.state.categories,
+        updateCategory:this.updateCategory.bind(this)
+      }
     });
   }
 
@@ -51,7 +101,37 @@ class SelectCategories extends Component {
   }
 
   finish(){
-    console.log(this.props.totalTime, this.props.animals)
+    console.log(this.props.date.getFullYear(), this.state.categories, this.state.token)
+
+    var selectedCows = new Set()
+
+    for (var i = this.state.categories.length - 1; i >= 0; i--) {
+      for (var j = this.state.categories[i].cows.length - 1; j >= 0; j--) {
+        if (this.state.categories[i].cows[j].isSelected){
+          selectedCows.add(this.state.categories[i].cows[j].tvd)
+        }
+      }
+    }
+    //console.log(this.props.date.getFullYear(),Array.from(selectedCows), this.state.token)
+    api.addJournalEntry(this.state.token, Array.from(selectedCows), this.props.date.getFullYear(), this.props.date.getMonth(), this.props.date.getDate(), 1440).then((res) => {console.log(res)});
+  }
+
+  updateCategory(numSelectedCows, cows){
+    console.log(this.state.selectedCategory)
+    var newCategories = this.state.categories
+    for (var i = newCategories.length - 1; i >= 0; i--) {
+      if(this.state.selectedCategory === newCategories[i].category){
+        newCategories[i].cows = cows
+        newCategories[i].isSelected = true
+        newCategories[i].numSelectedCows = numSelectedCows
+        console.log(newCategories[i]);
+      }
+
+    }
+    console.log("newCategories");
+
+    console.log(newCategories);
+    this.setState({categories:newCategories})
   }
 
   categoryButtonStyle(selected){
@@ -75,6 +155,10 @@ class SelectCategories extends Component {
   }
 
   render() {
+    while (!this.state.ready){
+      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+    }
+    console.log(this.state.categories);
     return (
       <StyleProvider style={getTheme(platform)}>
         <View style={styles.wrapper}>
@@ -86,8 +170,8 @@ class SelectCategories extends Component {
             </Left>
             <Body>
               {/* <Button transparent onPress={this.back.bind(this)}> */}
-                <Title>Kategorien</Title>
-                {/* <Subtitle>Lern more</Subtitle>
+              <Title>Kategorien</Title>
+              {/* <Subtitle>Lern more</Subtitle>
 
                 <Icon name={'information-circle'}/>
               </Button> */}
@@ -104,27 +188,26 @@ class SelectCategories extends Component {
               {DateConverter.getDay(this.props.date.getDay())}, {this.props.date.getDate()}{DateConverter.getDayEnding(this.props.date.getDate())} {DateConverter.getMonth(this.props.date.getMonth())} {this.props.date.getFullYear()}
             </Text>
             <Content>
-            <View style={styles.list}>
-              {this.state.animals.map((category) => {return(
-                <TouchableHighlight
-                  style={this.categoryButtonStyle.bind(this)(category.selected)}
-                  key={category.category}
-                  onPress={this.navigate.bind(this, "SelectCows", category.category)}>
-                  <View style={styles.container2}>
-                    <Text style={styles.title}>
-                      {category.category}
-                    </Text>
-                    {category.selected &&
-                      <Text
-                        style={styles.numSelectedCows}>
-                        {category.numSelectedCows}/{category.cows.length}
+              <View style={styles.list}>
+                {this.state.categories.map((category) => {return(
+                  <TouchableHighlight
+                    style={this.categoryButtonStyle.bind(this)(category.isSelected)}
+                    key={category.category }
+                    onPress={this.navigate.bind(this, "SelectCows", category.category)}>
+                    <View style={styles.container2}>
+                      <Text style={styles.title}>
+                        {category.category}
                       </Text>
-                    }
-
-                  </View>
-                </TouchableHighlight>)})}
-              </View>
-            </Content>
+                      {category.isSelected &&
+                        <Text
+                          style={styles.numSelectedCows}>
+                          {category.numSelectedCows}/{category.cows.length}
+                        </Text>
+                      }
+                    </View>
+                  </TouchableHighlight>)})}
+                </View>
+              </Content>
             </View>
 
             <Footer>

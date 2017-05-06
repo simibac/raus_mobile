@@ -1,7 +1,7 @@
 'use strict'
 import React, { Component } from 'react';
 
-import {Switch, CheckBox, Separator, Form, List, Item, ListItem, Label,  Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
+import {Spinner, Switch, CheckBox, Separator, Form, List, Item, ListItem, Label,  Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
 import {
   StyleSheet,
   Navigator,
@@ -10,8 +10,12 @@ import {
 } from 'react-native';
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
+import localStore from '../../utilities/localStore'
+import api from '../../utilities/api'
 
 import Language from '../../../language.json'
+
+
 
 class Categories extends Component {
   constructor(props) {
@@ -19,7 +23,9 @@ class Categories extends Component {
     this.state = {
       categoryName: "",
       animals:[],
-      numSelected:0
+      numSelected:0,
+      ready:false,
+      errorText:''
     }
   }
   navigate(routeName){
@@ -28,26 +34,39 @@ class Categories extends Component {
     });
   }
 
+  pop(){
+    this.props.navigator.pop()
+  }
 
-    pop(){
-      this.props.navigator.pop()
-    }
   componentWillMount(){
-    // get cows from api
-    var cows = this.props.cows
-    var newCows = []
-    for (var i = cows.length - 1; i >= 0; i--) {
-      var newCow = {
-        tvd:cows[i].tvd,
-        categories:cows[i].categories,
-        selected:false,
-      }
-      newCows.push(newCow)
-    }
-    this.setState({
-      animals:newCows
+    var cows = []
+    localStore.getToken().then((res)=>{
+      this.setState({token:res})
+      api.getCows(res).then((res) => {
+        console.log(res);
+        if(typeof res.error != 'undefined'){
+          console.log(res.error);
+        }else{
+          cows = res.cows
+          var newCows = []
+          for (var i = cows.length - 1; i >= 0; i--) {
+            var newCow = {
+              tvd: cows[i].tvd,
+              categories: cows[i].categories,
+              selected: false,
+            }
+            newCows.push(newCow)
+          }
+          this.setState({
+            animals:newCows,
+            ready:true,
+            errorText:""
+          })
+        }
+      });
     })
   }
+
   countSelectedCows(){
     let counter = 0
     for (var i = this.state.animals.length - 1; i >= 0; i--) {
@@ -60,6 +79,7 @@ class Categories extends Component {
       numSelected:counter
     })
   }
+
   selectAll(option){
     let newRelevantCows = this.state.relevantCows
     for (var i = newRelevantCows.length - 1; i >= 0; i--) {
@@ -70,7 +90,6 @@ class Categories extends Component {
     }
     this.countSelectedCows.bind(this)(this)
   }
-
 
   selectCow(tvd){
     var cows = this.state.animals
@@ -85,7 +104,52 @@ class Categories extends Component {
     this.countSelectedCows.bind(this)(this)
   }
 
+  finish(){
+    var selectedTvds = []
+    for(var i = 0; i < this.state.animals.length; i++){
+      if(this.state.animals[i].selected)
+        selectedTvds.push(this.state.animals[i].tvd)
+    }
+    if(this.state.categoryName.length === 0){
+      this.setState({errorText:"Please set a category name."})
+    }
+    else if(selectedTvds.length === 0){
+      this.setState({errorText:"Please select at least one animal."})
+    }
+    else{
+      console.log(this.state.token, selectedTvds, this.state.categoryName)
+      api.addCategory(this.state.token, selectedTvds, this.state.categoryName).then((res) => {
+        if(typeof res.error === 'undefined'){
+          this.pop()
+          this.setState({errorText:""})
+          this.props.rerender()()
+        }else{
+          this.setState({errorText:"This category name already exists"})
+        }
+      });
+    }
+  }
+
+  createString(categories){
+    var string = ''
+    for(var i = 0; i<categories.length; i++){
+      string = string.concat(categories[i].category)
+      if(string.length > 20){
+        string = string.concat("...")
+        break
+      }
+      else if(i != categories.length-1){
+        string = string.concat(", ")
+      }
+    }
+    console.log();
+    return string
+  }
+
   render() {
+    while (!this.state.ready){
+      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+    }
     return (
       <Container style={{backgroundColor:'white'}}>
         <Header provider>
@@ -98,7 +162,7 @@ class Categories extends Component {
             <Title>Kat. erstellen</Title>
           </Body>
           <Right>
-            <Button transparent onPress={this.navigate.bind(this, "CreateCategory")}>
+            <Button transparent onPress={this.finish.bind(this)}>
               <Text>Fertig</Text>
             </Button>
           </Right>
@@ -110,6 +174,7 @@ class Categories extends Component {
             <Input onChangeText={(text) => this.setState({categoryName:text})}/>
           </Item>
         </Form>
+        <Text style={styles.error}>{this.state.errorText}</Text>
         <View style={styles.separator}>
           <Text style={styles.separatorText}>KÜHE: {this.state.numSelected}/{this.state.animals.length}</Text>
         </View>
@@ -123,6 +188,7 @@ class Categories extends Component {
               <Body>
                 <Text>  {cow.tvd}</Text>
               </Body>
+              <Right><Text style={styles.textOtherCategories}>{this.createString.bind(this)(cow.categories)}</Text></Right>
             </ListItem>
           )}
         </Content>
@@ -133,7 +199,7 @@ class Categories extends Component {
 
 const styles = StyleSheet.create({
   separator: {
-    marginTop:20,
+    marginTop:0,
     backgroundColor: 'rgb(242, 242, 242)',
     height:40,
     paddingLeft:15,
@@ -142,6 +208,14 @@ const styles = StyleSheet.create({
   separatorText: {
     color: 'rgb(140, 140, 140)',
   },
+  textOtherCategories:{
+    color:'rgb(128, 128, 128)',
+    fontStyle:'italic'
+  },
+  error:{
+    color:'red',
+    paddingLeft:15
+  }
 });
 
 module.exports = Categories;

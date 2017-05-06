@@ -36,10 +36,10 @@ class MenuDrawer extends Component {
   componentWillMount(){
     localStore.getToken().then((res)=>{
       this.setState({token:res})
-      console.log(res);
+      // console.log("MenuDrawer");
+      // console.log(res);
       api.getUser(res).then((res) => {
-
-            console.log(res);
+            // console.log(res);
             this.setState({user:res.user})
             this.setState({ready:true})
           });

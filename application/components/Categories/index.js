@@ -1,7 +1,7 @@
 'use strict'
 import React, { Component } from 'react';
 
-import {ListItem, Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
+import {Spinner, ListItem, Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
 import {
   StyleSheet,
   Navigator,
@@ -11,42 +11,71 @@ import {
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 import Swipeout from 'react-native-swipeout'
-
-
+import localStore from '../../utilities/localStore'
+import api from '../../utilities/api.js'
 import Language from '../../../language.json'
 
 class Categories extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: []
+      categories: [],
+      ready:false
     }
   }
   componentWillMount(){
     //get Kategories from api
-    var categories = ["A1", "A2", "Rinder", "Mittwochkühe"]
-    this.setState({
-      categories:categories
+    localStore.getToken().then((res)=>{
+      this.setState({token:res})
+      api.getCowsByCategory(res).then((res) => {
+        console.log(res);
+        this.setState({categories:res.categories})
+        this.setState({ready:true})
+      });
     })
   }
-  navigate(routeName){
+
+  navigate(routeName, selectedCategory){
     this.props.navigator.push({
-      name:routeName
+      name:routeName,
+      passProps:{
+        categories:this.state.categories,
+        selectedCategory:selectedCategory,
+        rerender:this.rerender.bind(this)
+      }
     });
   }
+
   pop(){
     this.props.navigator.pop()
   }
 
+  addCategory(categoryName, cows){
+    var newCategories = this.state.categories
+    newCategories.push(cows)
+    this.setState({categories:newCategories})
+  }
+  rerender(){
+    api.getCowsByCategory(this.state.token).then((res) => {
+      console.log(res);
+      this.setState({categories:res.categories})
+      this.setState({ready:true})
+    });
+  }
+
   render() {
     var swipeoutBtns = [
-  {
-    text: 'Delete',
-    backgroundColor:'red',
-    color:'white'
-  }
-]
+      {
+        text: 'Delete',
+        backgroundColor:'red',
+        color:'white'
+      }
+    ]
+    while (!this.state.ready){
+      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+    }
     return (
+
       <Container style={{backgroundColor:'white'}}>
         <Header provider>
           <Left>
@@ -64,19 +93,19 @@ class Categories extends Component {
           </Right>
         </Header>
 
-          <Content>
-            {this.state.categories.map(category =>
-              <Swipeout right={swipeoutBtns} backgroundColor='white' autoClose={true}>
-                <View>
-                  <ListItem >
-                    <View style={{flex: 1}}>
-                      <Text style={{width:100}}>{category}</Text>
-                    </View>
-                  </ListItem>
-                </View>
-              </Swipeout>
-            )}
-          </Content>
+        <Content>
+          {this.state.categories.map(category =>
+            <Swipeout key={category.category} right={swipeoutBtns} backgroundColor='white' autoClose={true}>
+              <View>
+                <ListItem onPress={this.navigate.bind(this, "CategoryDetailed", category.category)}>
+                  <View style={{flex: 1}}>
+                    <Text style={{width:100}}>{category.category}</Text>
+                  </View>
+                </ListItem>
+              </View>
+            </Swipeout>
+          )}
+        </Content>
       </Container>
     );
   }
