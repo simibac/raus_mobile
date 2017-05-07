@@ -101,7 +101,7 @@ class SelectCategories extends Component {
   }
 
   finish(){
-    console.log(this.props.date.getFullYear(), this.state.categories, this.state.token)
+    console.log(this.props.date.getMonth(), this.props.date.getDate(), this.state.categories, this.state.token)
 
     var selectedCows = new Set()
 
@@ -112,8 +112,11 @@ class SelectCategories extends Component {
         }
       }
     }
-    //console.log(this.props.date.getFullYear(),Array.from(selectedCows), this.state.token)
-    api.addJournalEntry(this.state.token, Array.from(selectedCows), this.props.date.getFullYear(), this.props.date.getMonth(), this.props.date.getDate(), 1440).then((res) => {console.log(res)});
+    api.addJournalEntry(this.state.token, Array.from(selectedCows), this.props.date.getFullYear(), this.props.date.getMonth() + 1, this.props.date.getDate(), 1440).then((res) => {
+      if (typeof res.error === 'undefined'){
+        this.close.bind(this)()
+      }
+    });
   }
 
   updateCategory(numSelectedCows, cows){

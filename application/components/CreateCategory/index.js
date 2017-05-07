@@ -43,7 +43,7 @@ class Categories extends Component {
     localStore.getToken().then((res)=>{
       this.setState({token:res})
       api.getCows(res).then((res) => {
-        console.log(res);
+        //console.log(res);
         if(typeof res.error != 'undefined'){
           console.log(res.error);
         }else{
@@ -122,7 +122,7 @@ class Categories extends Component {
         if(typeof res.error === 'undefined'){
           this.pop()
           this.setState({errorText:""})
-          this.props.rerender()()
+          this.props.rerender()
         }else{
           this.setState({errorText:"This category name already exists"})
         }
@@ -132,21 +132,23 @@ class Categories extends Component {
 
   createString(categories){
     var string = ''
-    for(var i = 0; i<categories.length; i++){
-      string = string.concat(categories[i].category)
-      if(string.length > 20){
-        string = string.concat("...")
-        break
-      }
-      else if(i != categories.length-1){
-        string = string.concat(", ")
+    if(typeof categories != 'undefined'){
+      for(var i = 0; i < categories.length; i++){
+        string = string.concat(categories[i].category)
+        if(string.length > 20){
+          string = string.concat("...")
+          break
+        }
+        else if(i != categories.length-1){
+          string = string.concat(", ")
+        }
       }
     }
-    console.log();
     return string
   }
 
   render() {
+    console.log(this.props);
     while (!this.state.ready){
       return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
     }

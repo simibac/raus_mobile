@@ -275,7 +275,6 @@ class Home extends Component {
 
   componentWillMount(){
     AsyncStorage.getItem("token").then((res) => {
-      // console.log(res);
       if(res != null){
         api.getUser(res).then((res2) => {
           console.log(res2);

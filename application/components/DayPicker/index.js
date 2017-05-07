@@ -98,6 +98,7 @@ class DayPicker extends Component {
 }
 
   render() {
+    console.log(this.state.date);
     return (
       <StyleProvider style={getTheme(platform)}>
         <Container style={{backgroundColor:'white'}}>
