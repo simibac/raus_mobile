@@ -1,6 +1,8 @@
+baseUrl = 'http://192.168.1.104:3333/' //http://192.168.57.1:3333/
+
 var api = {
   signup(firstName, lastName, email, farmId, language, password){
-    return fetch('http://192.168.57.1:3333/sign-up', {
+    return fetch(baseUrl + 'sign-up', {
       method: 'POST',
 
       body: JSON.stringify({
@@ -18,7 +20,7 @@ var api = {
     .catch(e => e)
   },
   login(email, password){
-    return fetch('http://192.168.57.1:3333/get-token', {
+    return fetch(baseUrl + 'get-token', {
       method: 'POST',
 
       body: JSON.stringify({
@@ -31,7 +33,7 @@ var api = {
     .catch(e => e)
   },
   getUser(token){
-    return fetch('http://192.168.57.1:3333/api/me', {
+    return fetch(baseUrl + 'api/me', {
       method: 'GET',
 
       headers:{
@@ -44,7 +46,7 @@ var api = {
   },
 
   getCows(token, farmId){
-    return fetch('http://192.168.57.1:3333/api/cows', {
+    return fetch(baseUrl + 'api/cows', {
       method: 'GET',
 
       headers:{
@@ -57,7 +59,7 @@ var api = {
   },
 
   getCowsByCategory(token, farmId){
-    return fetch('http://192.168.57.1:3333/api/cows-by-category', {
+    return fetch(baseUrl + 'api/cows-by-category', {
       method: 'GET',
 
       headers:{
@@ -70,7 +72,7 @@ var api = {
   },
 
   addJournalEntry(token, tvds, year, month, day, minutesOutside){
-    return fetch('http://192.168.57.1:3333/api/journal', {
+    return fetch(baseUrl + 'api/journal', {
       method: 'POST',
       headers:{
         "Authorization": "Bearer " + token
@@ -89,7 +91,7 @@ var api = {
   },
 
   addCategory(token, tvds, name){
-    return fetch('http://192.168.57.1:3333/api/categories', {
+    return fetch(baseUrl + 'api/categories', {
       method: 'POST',
       headers:{
         "Authorization": "Bearer " + token
@@ -103,6 +105,22 @@ var api = {
     .then((res) => res.json())
     .catch(e => e)
   },
+
+  deleteCategory(token, name, tvds){
+    return fetch(baseUrl + 'api/categories', {
+      method: 'DELETE',
+      headers:{
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({
+        "name": name,
+        "tvds": tvds,
+      })
+    })
+    .then((res) => checkStatus(res))
+    .then((res) => res.json())
+    .catch(e => e)
+  }
 }
 
 

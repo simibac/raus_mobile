@@ -8,9 +8,9 @@ import {
   Text,
   View,
 } from 'react-native';
+
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
-import Swipeout from 'react-native-swipeout'
 import localStore from '../../utilities/localStore'
 import api from '../../utilities/api.js'
 import Language from '../../../language.json'
@@ -49,24 +49,6 @@ class Categories extends Component {
     this.props.navigator.pop()
   }
 
-  addCategory(categoryName, cows){
-    var newCategories = this.state.categories
-    newCategories.push(cows)
-    this.setState({categories:newCategories})
-  }
-
-  deleteCategory(categoryName){
-    localStore.getToken().then((res)=>{
-      if (res != null){
-        api.deleteCategory(res, categoryName).then((res) => {
-          if(typeof res.error == 'undefined'){
-            this.rerender.bind(this)()
-          }
-        });
-      }
-    })
-  }
-
   rerender(){
     api.getCowsByCategory(this.state.token).then((res) => {
       console.log(res);
@@ -97,32 +79,7 @@ class Categories extends Component {
             </Button>
           </Right>
         </Header>
-
         <Content>
-          {this.state.categories.map(category =>
-            <Swipeout
-              key={category.category}
-              right={[
-                {
-                  text: 'Delete',
-                  backgroundColor: 'red',
-                  color: 'white',
-                  onPress: this.deleteCategory.bind(this, category.category),
-                  type:'primary'
-                }
-              ]}
-              backgroundColor='white'
-              autoClose={true}
-              >
-              <View>
-                <ListItem onPress={this.navigate.bind(this, "CategoryDetailed", category.category)}>
-                  <View style={{flex: 1}}>
-                    <Text style={{width:100}}>{category.category}</Text>
-                  </View>
-                </ListItem>
-              </View>
-            </Swipeout>
-          )}
         </Content>
       </Container>
     );
@@ -133,10 +90,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex:1,
     backgroundColor: 'white',
-  },
-  container: {
-    backgroundColor: 'rgba(0, 77, 0, 0.6)',
-  },
+  }
 });
 
 module.exports = Categories;

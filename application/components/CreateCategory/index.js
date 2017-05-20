@@ -1,11 +1,10 @@
 'use strict'
 import React, { Component } from 'react';
 
-import {Spinner, Switch, CheckBox, Separator, Form, List, Item, ListItem, Label,  Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
+import {Spinner,  Text, Switch, CheckBox, Separator, Form, List, Item, ListItem, Label,  Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
 import {
   StyleSheet,
   Navigator,
-  Text,
   View,
 } from 'react-native';
 import getTheme from '../../../native-base-theme/components';
@@ -183,14 +182,12 @@ class Categories extends Component {
 
         <Content>
           {this.state.animals.map(cow =>
-            <ListItem icon key={cow.tvd}>
-              <Left>
-                <CheckBox checked={cow.selected} onPress={this.selectCow.bind(this, cow.tvd)}/>
-              </Left>
+            <ListItem key={cow.tvd}>
+              <CheckBox checked={cow.selected} onPress={this.selectCow.bind(this, cow.tvd)} />
               <Body>
-                <Text>  {cow.tvd}</Text>
+                <Text>{cow.tvd}</Text>
+                <Text note>{this.createString.bind(this)(cow.categories)}</Text>
               </Body>
-              <Right><Text style={styles.textOtherCategories}>{this.createString.bind(this)(cow.categories)}</Text></Right>
             </ListItem>
           )}
         </Content>

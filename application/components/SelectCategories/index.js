@@ -131,9 +131,6 @@ class SelectCategories extends Component {
       }
 
     }
-    console.log("newCategories");
-
-    console.log(newCategories);
     this.setState({categories:newCategories})
   }
 
@@ -157,6 +154,16 @@ class SelectCategories extends Component {
     }
   }
 
+  categoryNameStyle(name){
+    var width = (Dimensions.get('window').width-50)/2
+    console.log(width);
+    var fontSize = width/4.5 - (0.9*name.length)
+    return {
+      fontSize: fontSize,
+      textAlign: 'center',
+      color: '#fff',
+    }
+  }
   render() {
     while (!this.state.ready){
       return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
@@ -198,7 +205,7 @@ class SelectCategories extends Component {
                     key={category.category }
                     onPress={this.navigate.bind(this, "SelectCows", category.category)}>
                     <View style={styles.container2}>
-                      <Text style={styles.title}>
+                      <Text style={this.categoryNameStyle.bind(this)(category.category)}>
                         {category.category}
                       </Text>
                       {category.isSelected &&
@@ -242,12 +249,6 @@ class SelectCategories extends Component {
     container2: {
       flex: 1,
       justifyContent: 'center',
-    },
-
-    title: {
-      fontSize: 36,
-      textAlign: 'center',
-      color: '#fff',
     },
     numSelectedCows:{
       color: '#fff',
