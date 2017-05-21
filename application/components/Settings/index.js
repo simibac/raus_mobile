@@ -1,7 +1,7 @@
 'use strict'
 import React, { Component } from 'react';
 
-import { Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
+import { StyleProvider, Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
 import {
   StyleSheet,
   Navigator,
@@ -43,6 +43,7 @@ class Settings extends Component {
   render() {
     console.log(this.props);
     return (
+      <StyleProvider style={getTheme(platform)}>
       <Container style={{backgroundColor:'white'}}>
         <Header>
           <Left>
@@ -149,6 +150,8 @@ class Settings extends Component {
           </Content>
 
         </Container>
+      </StyleProvider>
+
       );
     }
   }

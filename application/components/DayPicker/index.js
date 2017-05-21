@@ -7,6 +7,7 @@ import {
   Navigator,
   Text,
   View,
+  Platform,
   TouchableHighlight,
 } from 'react-native';
 import DatePicker from 'react-native-datepicker'
@@ -94,11 +95,11 @@ class DayPicker extends Component {
   }
 
   changeDate(date){
-    return this.state.date.getFullYear() + '-' + (this.state.date.getMonth()-1) + '-' +this.state.date.getDate()
-}
+    return this.state.date.getFullYear() + '-' + (this.state.date.getMonth()+1) + '-' +this.state.date.getDate()
+  }
 
   render() {
-    console.log(this.state.date);
+    //console.log(this.state.date);
     return (
       <StyleProvider style={getTheme(platform)}>
         <Container style={{backgroundColor:'white'}}>
@@ -109,7 +110,7 @@ class DayPicker extends Component {
             </Body>
             <Right>
               <Button transparent onPress={this.close.bind(this)}>
-                <Text>Abbrechen</Text>
+                <Text style={styles.headerText}>Abbrechen</Text>
               </Button>
             </Right>
           </Header>
@@ -171,7 +172,7 @@ class DayPicker extends Component {
             />
             <Footer>
               <FooterTab>
-                <Button full onPress={this.navigate.bind(this, "SelectCategories")}>
+                <Button full light onPress={this.navigate.bind(this, "SelectCategories")}>
                   <Text>Weiter</Text>
                 </Button>
               </FooterTab>
@@ -219,6 +220,10 @@ class DayPicker extends Component {
       height:60,
       textAlign:'center'
     },
+    headerText:{
+      color: (Platform.OS === 'ios') ? '#007aff':'#fff',
+      fontSize: 15
+    }
   });
 
   module.exports = DayPicker;

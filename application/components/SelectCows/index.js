@@ -4,7 +4,8 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableHighlight
+  TouchableHighlight,
+  Platform
 } from 'react-native';
 import {CheckBox, StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
 import getTheme from '../../../native-base-theme/components';
@@ -94,7 +95,7 @@ class SelectCows extends Component {
             </Left>
             <Body>
               <Title>{this.props.selectedCategory}</Title>
-              <Subtitle>{this.state.numSelectedCows}/{this.state.numTotalCows}</Subtitle>
+              <Text style={styles.subtitle}>{this.state.numSelectedCows}/{this.state.numTotalCows}</Text>
             </Body>
             <Right/>
           </Header>
@@ -123,7 +124,7 @@ class SelectCows extends Component {
 
           <Footer>
             <FooterTab>
-              <Button full onPress={this.next.bind(this)}>
+              <Button full light onPress={this.next.bind(this)}>
                 <Text>Übernehmen</Text>
               </Button>
             </FooterTab>
@@ -149,7 +150,11 @@ const styles = StyleSheet.create({
   },
   textBelowHeader:{
     textAlign: 'center',
-    color:'blue'
+    color: (Platform.OS === 'ios') ? '#007aff':'black',
+  },
+  subtitle:{
+    color: (Platform.OS === 'ios') ? 'black':'#fff',
+    fontSize: 15
   }
 });
 

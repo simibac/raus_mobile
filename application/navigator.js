@@ -25,6 +25,7 @@ import DayPicker from './components/DayPicker'
 import Login from './components/Login'
 import CreateAccount from './components/CreateAccount'
 import CategoryDetailed from './components/CategoryDetailed'
+import AddAnimalToCategory from './components/AddAnimalToCategory'
 
 
 class Home extends Component {
@@ -37,212 +38,10 @@ class Home extends Component {
       ready:false,
       user:{},
       journalEntry:{},
-      animals:{},
       totalTime : 600,
       day: 1,
       month: "Januar",
-      year: 1993,
-      animals: [
-        {
-          category: "A1",
-          selected: false,
-          numSelectedCows:0,
-          cows:[
-            {
-              tvd: "111",
-              selected: false,
-            },
-            {
-              tvd: "123",
-              selected: false,
-            },
-            {
-              tvd: "234",
-              selected: false,
-            },
-            {
-              tvd: "345",
-              selected: false,
-            }
-          ]
-        },
-        {
-          category: "A2",
-          selected: false,
-          numSelectedCows:0,
-          cows:[
-            {
-              tvd: "222",
-              categories:[1,2,3],
-              selected: false,
-            },
-            {
-              tvd: "123",
-              selected: false,
-            },
-            {
-              tvd: "234",
-              selected: false,
-            },
-            {
-              tvd: "345",
-              selected: false,
-            },
-            {
-              tvd: "456",
-              selected: false,
-            }
-          ]
-        },
-        {
-          category: "A4",
-          selected: false,
-          numSelectedCows:0,
-          cows:[
-            {
-              tvd: "444",
-              selected: false,
-            },
-            {
-              tvd: "123",
-              selected: false,
-            },
-            {
-              tvd: "234",
-              selected: false,
-            },
-            {
-              tvd: "345",
-              selected: false,
-            },
-            {
-              tvd: "456",
-              selected: false,
-            },
-            {
-              tvd: "5768",
-              selected: false,
-            },
-            {
-              tvd: "455676",
-              selected: false,
-            },
-            {
-              tvd: "45676",
-              selected: false,
-            }
-          ]
-        },
-        {
-          category: "A9",
-          selected: false,
-          numSelectedCows:0,
-          cows:[
-            {
-              tvd: "000",
-              selected: false,
-            },
-            {
-              tvd: "123",
-              selected: false,
-            },
-            {
-              tvd: "234",
-              selected: false,
-            },
-            {
-              tvd: "345",
-              selected: false,
-            },
-            {
-              tvd: "456",
-              selected: false,
-            },
-            {
-              tvd: "456",
-              selected: false,
-            },
-            {
-              tvd: "456",
-              selected: false,
-            },
-            {
-              tvd: "456",
-              selected: false,
-            }
-          ]
-        },
-        {
-          category: "A11",
-          selected: false,
-          numSelectedCows:0,
-          cows:[
-            {
-              tvd: "011",
-              selected: false,
-            },
-            {
-              tvd: "123",
-              selected: false,
-            },
-            {
-              tvd: "234",
-              selected: false,
-            }
-          ]
-        },
-      ],
-      cows:[
-        {
-          tvd:"#dkejr633jf",
-          categories:[
-            "A1",
-            "Custom1",
-            "Custom2"
-          ]
-        },
-        {
-          tvd:"#kpdpk436",
-          categories:[
-            "A1",
-            "Custom1",
-            "Custom2"
-          ]
-        },
-        {
-          tvd:"#ase34dfdf",
-          categories:[
-            "A1",
-            "Custom1",
-            "Custom2"
-          ]
-        },
-        {
-          tvd:"#67ztugfg",
-          categories:[
-            "A1",
-            "Custom1",
-            "Custom2"
-          ]
-        },
-        {
-          tvd:"#234fgdfsrer",
-          categories:[
-            "A1",
-            "Custom1",
-            "Custom2"
-          ]
-        },
-        {
-          tvd:"#00tgjk4ooi",
-          categories:[
-            "A1",
-            "Custom1",
-            "Custom2"
-          ]
-        }
-      ]
-
+      year: 1993
     }
   }
 
@@ -296,7 +95,7 @@ class Home extends Component {
   }
 
   configureScene(route){
-    if (route.name == 'SelectCows' || route.name=='CreateCategory') {
+    if (route.name == 'SelectCows' || route.name == 'CreateCategory' || route.name == 'AddAnimalToCategory' || route.name == 'DayPicker') {
       return Navigator.SceneConfigs.FloatFromBottom;
     } else {
       return Navigator.SceneConfigs.PushFromRight;
@@ -316,7 +115,7 @@ class Home extends Component {
       case 'Login': return <Login navigator={navigator} {...route.passProps} />
       case 'CreateAccount': return  <CreateAccount navigator={navigator} {...route.passProps} />
       case 'CategoryDetailed': return  <CategoryDetailed navigator={navigator} {...route.passProps} />
-
+      case 'AddAnimalToCategory': return <AddAnimalToCategory navigator={navigator} {...route.passProps} />
     }
   }
 

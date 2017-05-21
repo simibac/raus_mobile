@@ -23,7 +23,6 @@ class Dashboard extends Component {
     localStore.getToken().then((res)=>{
       this.setState({token:res})
       this.setState({ready:true})
-
     })
   }
 

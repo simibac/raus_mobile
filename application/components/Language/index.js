@@ -48,8 +48,12 @@ class Language extends Component {
 
           <Content>
             <ListItem>
-              <Text>Deutsch</Text>
-              <Radio selected={false} />
+              <Left>
+                <Text>Deutsch</Text>
+              </Left>
+              <Right>
+                <Radio selected={false} />
+              </Right>
             </ListItem>
             <ListItem>
               <Left>

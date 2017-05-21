@@ -1,8 +1,9 @@
 'use strict'
 import React, { Component } from 'react';
 
-import {CheckBox, Text, Spinner, ListItem, Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
+import {CheckBox, Spinner, ListItem, Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
 import {
+  Text,
   StyleSheet,
   Navigator,
   View,
@@ -58,27 +59,33 @@ class Categories extends Component {
 
   render() {
     var added = new Date(this.props.added);
-      return(
-          <ListItem>
-            {this.props.editing &&
-              <CheckBox checked={this.props.selected} onPress={() => this.props.selectCow(this.props.tvd)} />}
-                <Body>
-                  <Text>{this.props.tvd}</Text>
-                  <Text note>Hinzugefügt: {added.getDate()}-{added.getMonth()}-{added.getFullYear()}</Text>
-                </Body>
-          </ListItem>)
+    console.log(added);
+    return(
+      <ListItem>
+        {this.props.editing &&
+          <CheckBox checked={this.props.selected} onPress={() => this.props.selectCow(this.props.tvd)} />}
+          <Body>
+            <Text >{this.props.tvd}</Text>
+            <Text style={styles.addedText}>Hinzugefügt: {this.props.added.slice(0,10)}</Text>
+          </Body>
+        </ListItem>)
       }
-  }
+    }
 
-  const styles = StyleSheet.create({
-    wrapper: {
-      flex:1,
-      backgroundColor: 'white',
-    },
-    textAdded:{
-      color:'rgb(128, 128, 128)',
-      fontStyle:'italic',
-    },
-  });
+    const styles = StyleSheet.create({
+      wrapper: {
+        flex:1,
+        backgroundColor: 'white',
+      },
+      textAdded:{
+        color:'rgb(128, 128, 128)',
+        fontStyle:'italic',
+      },
+      addedText:{
+        color:'rgb(128, 128, 128)',
+        fontStyle:'italic'
+      }
+      
+    });
 
-  module.exports = Categories;
+    module.exports = Categories;

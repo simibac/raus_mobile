@@ -5,7 +5,9 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
-  ListView
+  ListView,
+  Platform,
+
 } from 'react-native';
 
 import {Spinner, StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
@@ -34,7 +36,6 @@ function prepareData(categories){
     var newCategory = {
       category: categories.categories[i].category,
       isSelected: true,
-      numSelectedCows: 0,
       cows: newCows,
       numSelectedCows: categories.categories[i].cows.length
     }
@@ -188,7 +189,7 @@ class SelectCategories extends Component {
             </Body>
             <Right>
               <Button transparent onPress={this.close.bind(this)}>
-                <Text>Abbrechen</Text>
+                <Text style={styles.headerText}>Abbrechen</Text>
               </Button>
             </Right>
           </Header>
@@ -222,7 +223,7 @@ class SelectCategories extends Component {
 
             <Footer>
               <FooterTab>
-                <Button full onPress={this.finish.bind(this)}>
+                <Button full light onPress={this.finish.bind(this)}>
                   <Text>Fertig</Text>
                 </Button>
               </FooterTab>
@@ -262,8 +263,13 @@ class SelectCategories extends Component {
       color:'white',
       textAlign:'center',
       fontSize: 20,
-      paddingBottom:10
+      paddingBottom:10,
+      paddingTop:10
     },
+    headerText:{
+      color: (Platform.OS === 'ios') ? '#007aff':'#fff',
+      fontSize: 15
+    }
   });
 
   module.exports = SelectCategories;

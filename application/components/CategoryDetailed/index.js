@@ -1,12 +1,13 @@
 'use strict'
 import React, { Component } from 'react';
 
-import {Footer, FooterTab, Switch, CheckBox, Separator, Form, List, Item, ListItem, Label,  Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
+import {StyleProvider,Footer, FooterTab, Switch, CheckBox, Separator, Form, List, Item, ListItem, Label,  Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
 import {
   StyleSheet,
   Navigator,
   View,
-  Text
+  Text,
+  Platform
 } from 'react-native';
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
@@ -28,7 +29,11 @@ class CategoryDetailed extends Component {
   }
   navigate(routeName){
     this.props.navigator.push({
-      name:routeName
+      name:routeName,
+      passProps:{
+        selectedCategory:this.props.selectedCategory,
+        rerender:this.props.rerender
+      }
     });
   }
 
@@ -118,45 +123,50 @@ class CategoryDetailed extends Component {
     })
   }
 
+
   render() {
+    console.log(this.props);
     return (
-      <Container style={{backgroundColor:'white'}}>
-        <Header provider>
-          <Left>
-            {!this.state.editing &&
-              <Button transparent onPress={this.pop.bind(this)}>
-                <Icon name='arrow-back'/>
-              </Button>}
-            </Left>
-            <Body>
-              <Title>{this.props.selectedCategory}</Title>
-            </Body>
-            <Right>
-              <Button transparent onPress={this.editing.bind(this)}>
-                <Text>{this.getText.bind(this)()}</Text>
-              </Button>
-            </Right>
-          </Header>
-          {this.state.editing &&
-            <Button full light>
-              <Icon name='add'/>
-              <Text>Tier hinzufügen</Text>
-            </Button>
-          }
-          <Content>
-            {this.state.cows.map(cow =>
-              <EditableListItem key={cow.tvd} editing={this.state.editing} selected={cow.selected} tvd={cow.tvd} added={cow.added} selectCow={this.selectCow.bind(this)}/>
-            )}
-          </Content>
-          {this.state.editing &&
-            <Footer>
-              <FooterTab>
-                <Button full primary disabled={this.state.numSelected === 0} onPress={this.deleteCows.bind(this)}>
-                  <Text style={{color:'white'}}>Löschen</Text>
+      <StyleProvider style={getTheme(platform)}>
+        <Container style={{backgroundColor:'white'}}>
+          <Header provider>
+            <Left>
+              {!this.state.editing &&
+                <Button transparent onPress={this.pop.bind(this)}>
+                  <Icon name='arrow-back'/>
+                </Button>}
+              </Left>
+              <Body>
+                <Title>{this.props.selectedCategory}</Title>
+              </Body>
+              <Right>
+                <Button transparent onPress={this.editing.bind(this)}>
+                  <Text style={styles.headerText}>{this.getText.bind(this)()}</Text>
                 </Button>
-              </FooterTab>
-            </Footer>}
-          </Container>
+              </Right>
+            </Header>
+            {this.state.editing &&
+              <Button full light onPress={this.navigate.bind(this, "AddAnimalToCategory")} >
+                <Icon name='add'/>
+                <Text>Tier hinzufügen</Text>
+              </Button>
+            }
+            <Content>
+              {this.state.cows.map(cow =>
+                <EditableListItem key={cow.tvd} editing={this.state.editing} selected={cow.selected} tvd={cow.tvd} added={cow.added} selectCow={this.selectCow.bind(this)}/>
+              )}
+            </Content>
+            {this.state.editing &&
+              <Footer>
+                <FooterTab>
+                  <Button full primary disabled={this.state.numSelected === 0} onPress={this.deleteCows.bind(this)}>
+                    <Text style={{color:'white'}}>Löschen</Text>
+                  </Button>
+                </FooterTab>
+              </Footer>}
+            </Container>
+          </StyleProvider>
+
         );
       }
     }
@@ -172,7 +182,10 @@ class CategoryDetailed extends Component {
       separatorText: {
         color: 'rgb(140, 140, 140)',
       },
-
+      headerText:{
+        color: (Platform.OS === 'ios') ? '#007aff':'#fff',
+        fontSize: 15
+      }
     });
 
     module.exports = CategoryDetailed;

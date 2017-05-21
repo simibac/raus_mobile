@@ -36,13 +36,20 @@ class MenuDrawer extends Component {
   componentWillMount(){
     localStore.getToken().then((res)=>{
       this.setState({token:res})
-      // console.log("MenuDrawer");
-      // console.log(res);
-      api.getUser(res).then((res) => {
-            // console.log(res);
-            this.setState({user:res.user})
-            this.setState({ready:true})
-          });
+      console.log(res);
+      api.getUser(res).then((res2) => {
+        console.log(res2);
+        this.setState({user:res2.user})
+        this.setState({ready:true})
+        console.log(this.state.user);
+        if(typeof this.state.user === 'undefined'){
+          localStore.deleteToken()
+          this.props.navigator.resetTo({
+            name:"Login"
+          })
+        }
+
+      });
     })
   }
 
@@ -65,6 +72,9 @@ class MenuDrawer extends Component {
   render() {
     while (!this.state.ready){
       return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+    }
+    if(typeof this.state.user === 'undefined'){
+      this.logout.bind(this)()
     }
     return (
       <Container style={{backgroundColor:'white'}}>

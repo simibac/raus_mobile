@@ -1,11 +1,13 @@
 'use strict'
 import React, { Component } from 'react';
 
-import {Spinner,  Text, Switch, CheckBox, Separator, Form, List, Item, ListItem, Label,  Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
+import {StyleProvider, Spinner, Switch, CheckBox, Separator, Form, List, Item, ListItem, Label,  Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
 import {
+  Text,
   StyleSheet,
   Navigator,
   View,
+  Platform,
 } from 'react-native';
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
@@ -152,6 +154,7 @@ class Categories extends Component {
       return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
     }
     return (
+      <StyleProvider style={getTheme(platform)}>
       <Container style={{backgroundColor:'white'}}>
         <Header provider>
           <Left>
@@ -164,7 +167,7 @@ class Categories extends Component {
           </Body>
           <Right>
             <Button transparent onPress={this.finish.bind(this)}>
-              <Text>Fertig</Text>
+              <Text style={styles.headerText}>Fertig</Text>
             </Button>
           </Right>
         </Header>
@@ -185,13 +188,15 @@ class Categories extends Component {
             <ListItem key={cow.tvd}>
               <CheckBox checked={cow.selected} onPress={this.selectCow.bind(this, cow.tvd)} />
               <Body>
-                <Text>{cow.tvd}</Text>
-                <Text note>{this.createString.bind(this)(cow.categories)}</Text>
+                <Text>  {cow.tvd}</Text>
+                <Text style={styles.textOtherCategories}>  {this.createString.bind(this)(cow.categories)}</Text>
               </Body>
             </ListItem>
           )}
         </Content>
       </Container>
+    </StyleProvider>
+
     );
   }
 }
@@ -214,6 +219,10 @@ const styles = StyleSheet.create({
   error:{
     color:'red',
     paddingLeft:15
+  },
+  headerText:{
+    color: (Platform.OS === 'ios') ? '#007aff':'#fff',
+    fontSize: 15
   }
 });
 
