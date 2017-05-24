@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableHighlight,
 } from 'react-native';
+var ScrollingMenu = require('react-native-scrolling-menu');
 import DatePicker from 'react-native-datepicker'
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';

@@ -35,22 +35,21 @@ class MenuDrawer extends Component {
 
   componentWillMount(){
     localStore.getToken().then((res)=>{
-      this.setState({token:res})
-      console.log(res);
-      api.getUser(res).then((res2) => {
-        console.log(res2);
-        this.setState({user:res2.user})
-        this.setState({ready:true})
-        console.log(this.state.user);
-        if(typeof this.state.user === 'undefined'){
-          localStore.deleteToken()
-          this.props.navigator.resetTo({
-            name:"Login"
-          })
-        }
-
-      });
-    })
+       this.setState({token:res})
+       console.log(res);
+       api.getUser(res).then((res2) => {
+         console.log(res2);
+         this.setState({user:res2.user})
+         this.setState({ready:true})
+         console.log(this.state.user);
+         if(typeof this.state.user === 'undefined'){
+           localStore.deleteToken()
+           this.props.navigator.resetTo({
+             name:"Login"
+           })
+         }
+       });
+     })
   }
 
   navigate(routeName){

@@ -6,23 +6,38 @@ import {
   Text,
   StatusBar
 } from 'react-native';
+import ScrollingMenu from '../ScrollingMenu';
 
 import localStore from '../../utilities/localStore'
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 import MenuDrawer from '../MenuDrawer';
+import DefaultCategoryItem from '../DefaultCategoryItem';
+import DateConverter from '../../utilities/dateConverter.js'
+
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ready: false
+      ready: false,
+      recentMonths:[]
     };
   }
   componentWillMount(){
     localStore.getToken().then((res)=>{
       this.setState({token:res})
       this.setState({ready:true})
+    })
+
+    var recentMonths = []
+    for(var i = 0; i < 13; i++){
+      var x = new Date();
+      x.setMonth(x.getMonth()-i);
+      recentMonths.push(DateConverter.getMonth(x.getMonth())+' '+x.getFullYear())
+    }
+    this.setState({
+      recentMonths:recentMonths
     })
   }
 
@@ -41,12 +56,21 @@ class Dashboard extends Component {
 
   openDrawer(){
     this.drawer._root.open()
-  };
+  }
+
+  onClick(itemIndex) {
+    console.log("Selected");
+  }
 
   render() {
     while (!this.state.ready){
       return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
     }
+    var categories =[
+      {categoryName:"A1", categoryDescription: "Milchkühe", numOfAnimals:14, lowest:15, highest:19, max:28},
+      {categoryName:"A2", categoryDescription: "Weibliche Tiere, bis 160 Tage alt", numOfAnimals:11, lowest:1, highest:4, max:28},
+      {categoryName:"A11", categoryDescription: "Männliche Tiere, über 160 Tage alt", numOfAnimals:23, lowest:28, highest:28, max:28},
+    ]
 
     return (
       <StyleProvider style={getTheme(platform)}>
@@ -71,8 +95,29 @@ class Dashboard extends Component {
                 </Button>
               </Right>
             </Header>
+            <View style={{height:38}}>
+              <ScrollingMenu
+                items={this.state.recentMonths}
+                callback={this.onClick.bind(this)}
+                backgroundColor="#ffffff"
+                textColor="#cccccc"
+                selectedTextColor="#000000"
+                itemSpacing={20}
+                style={{height:20}}/>
+            </View>
+
             <Content>
-              <Text>{this.state.token}</Text>
+                {/* {categories.map((category) => {return(
+                  <DefaultCategoryItem
+                    key={category.categoryName}
+                    categoryName={category.categoryName}
+                    categoryDescription={category.categoryDescription}
+                    numOfAnimals={category.numOfAnimals}
+                    lowest={category.lowest}
+                    highest={category.highest}
+                    max={category.max}/>
+                )
+              })} */}
             </Content>
             {/* <Fab
               position="bottomRight"

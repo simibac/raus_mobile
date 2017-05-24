@@ -23,16 +23,16 @@ class Categories extends Component {
       ready:false
     }
   }
-  componentWillMount(){
-    //get Kategories from api
-    localStore.getToken().then((res)=>{
-      this.setState({token:res})
-      api.getCowsByCategory(res).then((res) => {
-        this.setState({categories:res.categories})
-        this.setState({ready:true})
-      });
-    })
-  }
+  // componentWillMount(){
+  //   //get Kategories from api
+  //   localStore.getToken().then((res)=>{
+  //     this.setState({token:res})
+  //     api.getCowsByCategory(res).then((res) => {
+  //       this.setState({categories:res.categories})
+  //       this.setState({ready:true})
+  //     });
+  //   })
+  // }
 
   navigate(routeName, selectedCategory){
     this.props.navigator.push({
@@ -65,8 +65,8 @@ class Categories extends Component {
         {this.props.editing &&
           <CheckBox checked={this.props.selected} onPress={() => this.props.selectCow(this.props.tvd)} />}
           <Body>
-            <Text >{this.props.tvd}</Text>
-            <Text style={styles.addedText}>Hinzugefügt: {this.props.added.slice(0,10)}</Text>
+            <Text>  {this.props.tvd}</Text>
+            <Text style={styles.addedText}>  Hinzugefügt: {this.props.added.slice(0,10)}</Text>
           </Body>
         </ListItem>)
       }
@@ -85,7 +85,7 @@ class Categories extends Component {
         color:'rgb(128, 128, 128)',
         fontStyle:'italic'
       }
-      
+
     });
 
     module.exports = Categories;

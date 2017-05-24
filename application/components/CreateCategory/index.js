@@ -124,6 +124,7 @@ class Categories extends Component {
           this.pop()
           this.setState({errorText:""})
           this.props.rerender()
+          console.log(res);
         }else{
           this.setState({errorText:"This category name already exists"})
         }
