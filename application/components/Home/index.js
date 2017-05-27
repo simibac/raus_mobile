@@ -29,7 +29,6 @@ class Dashboard extends Component {
       this.setState({token:res})
       this.setState({ready:true})
     })
-
     var recentMonths = []
     for(var i = 0; i < 13; i++){
       var x = new Date();

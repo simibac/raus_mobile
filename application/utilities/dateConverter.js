@@ -32,6 +32,9 @@ dateConverter={
       case 2: return "nd"
       default: return "th"
     }
+  },
+  getDayMonthYear(date){
+    return date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear()
   }
 }
 

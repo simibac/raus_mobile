@@ -10,7 +10,6 @@ import {
   Platform,
   TouchableHighlight,
 } from 'react-native';
-var ScrollingMenu = require('react-native-scrolling-menu');
 import DatePicker from 'react-native-datepicker'
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
@@ -96,7 +95,7 @@ class DayPicker extends Component {
   }
 
   changeDate(date){
-    return this.state.date.getFullYear() + '-' + (this.state.date.getMonth()+1) + '-' +this.state.date.getDate()
+    return this.state.date.getFullYear() + '-' + (this.state.date.getMonth() + 1) + '-' + this.state.date.getDate()
   }
 
   render() {

@@ -144,15 +144,14 @@ var api = {
 // Helper Functions
 
 function checkStatus(res){
+  console.log("Status: ", res);
   if (res.status >= 200 && res.status < 300) {
     return res;
   } else {
     let error = new Error("Error Code: " + res.status);
-    var res = {
-      error: "Network Error"
-    }
-    error.res = res;
-    return error
+    res.error = error;
+    console.log(res);
+    return res
   }
 }
 

@@ -12,7 +12,7 @@ import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 import localStore from '../../utilities/localStore'
 import api from '../../utilities/api.js'
-import Language from '../../../language.json'
+import Language from '../../utilities/language.json'
 
 class AddAnimalToCategory extends Component {
   constructor(props) {

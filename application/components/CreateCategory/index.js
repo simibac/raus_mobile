@@ -14,7 +14,7 @@ import platform from '../../../native-base-theme/variables/platform';
 import localStore from '../../utilities/localStore'
 import api from '../../utilities/api'
 
-import Language from '../../../language.json'
+import Language from '../../utilities/language.json'
 
 
 

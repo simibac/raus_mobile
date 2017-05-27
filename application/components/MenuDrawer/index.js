@@ -35,101 +35,102 @@ class MenuDrawer extends Component {
 
   componentWillMount(){
     localStore.getToken().then((res)=>{
-       this.setState({token:res})
-       console.log(res);
-       api.getUser(res).then((res2) => {
-         console.log(res2);
-         this.setState({user:res2.user})
-         this.setState({ready:true})
-         console.log(this.state.user);
-         if(typeof this.state.user === 'undefined'){
-           localStore.deleteToken()
-           this.props.navigator.resetTo({
-             name:"Login"
-           })
-         }
-       });
-     })
+      this.setState({token:res})
+      console.log(res);
+      api.getUser(res).then((res2) => {
+        console.log(res2);
+        if(typeof res2.error === 'undefined'){
+          this.setState({user:res2.user})
+          this.setState({ready:true})
+          console.log(this.state.user);
+        }
+        else{
+          localStore.deleteToken()
+          this.props.navigator.resetTo({
+            name:"Login"
+          })
+        }
+      })
+    });
   }
 
-  navigate(routeName){
-    this.props.navigator.push({
-      name:routeName,
-      passProps: {
-        user: this.state.user
-      }
-    })
-  }
 
-  logout(){
-    localStore.deleteToken()
-    this.props.navigator.resetTo({
-      name:"Login"
-    })
-  }
 
-  render() {
-    while (!this.state.ready){
-      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+navigate(routeName){
+  this.props.navigator.push({
+    name:routeName,
+    passProps: {
+      user: this.state.user
     }
-    if(typeof this.state.user === 'undefined'){
-      this.logout.bind(this)()
-    }
-    return (
-      <Container style={{backgroundColor:'white'}}>
-        {Platform.OS === 'ios' && <View style={{height:20}}/>}
-        <Text style={styles.loggedIn}>Sie sind eingeloggt als:</Text>
-        <Text style={styles.username}>{this.state.user.First_name} {this.state.user.Last_name}</Text>
-        <Text style={styles.farmId}>{this.state.user.Farm_id}</Text>
+  })
+}
 
-        <List>
-          <Separator bordered/>
-          <ListItem icon button onPress={this.navigate.bind(this, "Settings")}>
-            <Left>
-              <Icon name="ios-person-outline" />
-            </Left>
-            <Body>
-              <Text>Mein Profil</Text>
-            </Body>
-            <Right>
-              <Icon name="arrow-forward" />
-            </Right>
-          </ListItem>
+logout(){
+  localStore.deleteToken()
+  this.props.navigator.resetTo({
+    name:"Login"
+  })
+}
 
-          <ListItem last icon onPress={this.navigate.bind(this, "Categories")}>
-            <Left>
-              <Icon name="ios-pricetags-outline" />
-            </Left>
-            <Body>
-              <Text>Meine Kategorien</Text>
-            </Body>
-            <Right>
-              <Icon name="arrow-forward" />
-            </Right>
-          </ListItem>
-
-          <Separator bordered/>
-
-          <ListItem last icon onPress={this.navigate.bind(this, "Language")}>
-            <Left>
-              <Icon name="ios-globe-outline" />
-            </Left>
-            <Body>
-              <Text>Sprache</Text>
-            </Body>
-            <Right>
-              <Icon name="arrow-forward" />
-            </Right>
-          </ListItem>
-
-          <Separator bordered />
-          <ListItem last icon onPress={this.logout.bind(this)}>
-            <Text style={styles.logOut}>Logout</Text>
-          </ListItem>
-        </List>
-      </Container>
-    )
+render() {
+  while (!this.state.ready){
+    return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
   }
+  return (
+    <Container style={{backgroundColor:'white'}}>
+      {Platform.OS === 'ios' && <View style={{height:20}}/>}
+      <Text style={styles.loggedIn}>Sie sind eingeloggt als:</Text>
+      <Text style={styles.username}>{this.state.user.agateDetails.postAddress.firstName} {this.state.user.agateDetails.postAddress.lastName}</Text>
+      <Text style={styles.farmId}>Agate-Nummer: {this.state.user.agateNumber}</Text>
+
+      <List>
+        <Separator bordered/>
+        <ListItem icon button onPress={this.navigate.bind(this, "Settings")}>
+          <Left>
+            <Icon name="ios-person-outline" />
+          </Left>
+          <Body>
+            <Text>Mein Profil</Text>
+          </Body>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </ListItem>
+
+        <ListItem last icon onPress={this.navigate.bind(this, "Categories")}>
+          <Left>
+            <Icon name="ios-pricetags-outline" />
+          </Left>
+          <Body>
+            <Text>Meine Kategorien</Text>
+          </Body>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </ListItem>
+
+        <Separator bordered/>
+
+        <ListItem last icon onPress={this.navigate.bind(this, "Language")}>
+          <Left>
+            <Icon name="ios-globe-outline" />
+          </Left>
+          <Body>
+            <Text>Sprache</Text>
+          </Body>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </ListItem>
+
+        <Separator bordered />
+        <ListItem last icon onPress={this.logout.bind(this)}>
+          <Text style={styles.logOut}>Logout</Text>
+        </ListItem>
+      </List>
+    </Container>
+  )
+}
 }
 
 const styles = StyleSheet.create({

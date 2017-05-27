@@ -13,7 +13,7 @@ import platform from '../../../native-base-theme/variables/platform';
 import Swipeout from 'react-native-swipeout'
 import localStore from '../../utilities/localStore'
 import api from '../../utilities/api.js'
-import Language from '../../../language.json'
+import Language from '../../utilities/language.json'
 
 class Categories extends Component {
   constructor(props) {
@@ -68,6 +68,7 @@ class Categories extends Component {
   }
 
   rerender(){
+    this.setState({ready:false})
     api.getCowsByCategory(this.state.token).then((res) => {
       console.log(res);
       this.setState({categories:res.categories})
