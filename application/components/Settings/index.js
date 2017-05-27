@@ -35,7 +35,7 @@ class Settings extends Component {
     var joinedRausDate = new Date(this.props.user.created)
     return (
       <StyleProvider style={getTheme(platform)}>
-        <Container style={{backgroundColor:'white', flex:1}}>
+        <Container style={{backgroundColor:'#f0eff5', flex:1}}>
 
           <Header>
             <Left>

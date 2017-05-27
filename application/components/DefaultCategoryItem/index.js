@@ -86,7 +86,6 @@ class Categories extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <TouchableHighlight style={styles.container} onPress={this.goToCategory.bind(this, "selectedCategory")}>
         <View style={styles.wrapper}>

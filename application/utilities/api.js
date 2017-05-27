@@ -138,13 +138,23 @@ var api = {
     .then((res) => res.json())
     .catch(e => e)
   },
+  getMonthlyStats(token, month, year){
+    return fetch(baseUrl + 'api/stats?year=' + year + '&month=' + month, {
+      method: 'GET',
+      headers:{
+        "Authorization": "Bearer " + token,
+      }
+    })
+    .then((res) => checkStatus(res))
+    .then((res) => res.json())
+    .catch(e => e)
+  },
 }
 
 
 // Helper Functions
 
 function checkStatus(res){
-  console.log("Status: ", res);
   if (res.status >= 200 && res.status < 300) {
     return res;
   } else {
