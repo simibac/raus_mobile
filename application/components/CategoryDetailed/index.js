@@ -65,6 +65,7 @@ class CategoryDetailed extends Component {
             added: this.props.categories[i].cows[j].added,
             journal: this.props.categories[i].cows[j].journal,
             tvd: this.props.categories[i].cows[j].tvd,
+            name: this.props.categories[i].cows[j].name,
             selected: false
           }
           cows.push(cow)
@@ -141,7 +142,9 @@ class CategoryDetailed extends Component {
               </Body>
               <Right>
                 <Button transparent onPress={this.editing.bind(this)}>
+                {this.props.isEditable &&
                   <Text style={styles.headerText}>{this.getText.bind(this)()}</Text>
+                }
                 </Button>
               </Right>
             </Header>
@@ -153,7 +156,7 @@ class CategoryDetailed extends Component {
             }
             <Content>
               {this.state.cows.map(cow =>
-                <EditableListItem key={cow.tvd} editing={this.state.editing} selected={cow.selected} tvd={cow.tvd} added={cow.added} selectCow={this.selectCow.bind(this)}/>
+                <EditableListItem key={cow.tvd} editing={this.state.editing} selected={cow.selected} tvd={cow.tvd} added={cow.added} name={cow.name} selectCow={this.selectCow.bind(this)}/>
               )}
             </Content>
             {this.state.editing &&

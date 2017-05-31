@@ -16,7 +16,14 @@ import api from '../../utilities/api'
 
 import Language from '../../utilities/language.json'
 
-
+function getName(name, tvd){
+  if(name != ""){
+    return name
+  }
+  else{
+    return tvd
+  }
+}
 
 class Categories extends Component {
   constructor(props) {
@@ -35,7 +42,7 @@ class Categories extends Component {
     });
   }
 
-  pop(){
+  pop = () =>{
     this.props.navigator.pop()
   }
 
@@ -53,6 +60,7 @@ class Categories extends Component {
           for (var i = cows.length - 1; i >= 0; i--) {
             var newCow = {
               tvd: cows[i].tvd,
+              name: cows[i].name,
               categories: cows[i].categories,
               selected: false,
             }
@@ -81,18 +89,7 @@ class Categories extends Component {
     })
   }
 
-  selectAll(option){
-    let newRelevantCows = this.state.relevantCows
-    for (var i = newRelevantCows.length - 1; i >= 0; i--) {
-      newRelevantCows[i].selected = option
-      this.setState({
-        relevantCows: newRelevantCows
-      })
-    }
-    this.countSelectedCows.bind(this)(this)
-  }
-
-  selectCow(tvd){
+  selectCow = (tvd) => {
     var cows = this.state.animals
     for (var i = cows.length - 1; i >= 0; i--) {
       if(cows[i].tvd === tvd){
@@ -105,7 +102,7 @@ class Categories extends Component {
     this.countSelectedCows.bind(this)(this)
   }
 
-  finish(){
+  finish = () => {
     var selectedTvds = []
     for(var i = 0; i < this.state.animals.length; i++){
       if(this.state.animals[i].selected)
@@ -132,7 +129,7 @@ class Categories extends Component {
     }
   }
 
-  createString(categories){
+  createString = (categories) => {
     var string = ''
     if(typeof categories != 'undefined'){
       for(var i = 0; i < categories.length; i++){
@@ -149,8 +146,11 @@ class Categories extends Component {
     return string
   }
 
+  updateText = (text) => {
+    this.setState({categoryName:text})
+  }
+
   render() {
-    console.log(this.props);
     while (!this.state.ready){
       return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
     }
@@ -159,7 +159,7 @@ class Categories extends Component {
       <Container style={{backgroundColor:'white'}}>
         <Header provider>
           <Left>
-            <Button transparent onPress={this.pop.bind(this)}>
+            <Button transparent onPress={() => this.pop()}>
               <Icon name='arrow-back'/>
             </Button>
           </Left>
@@ -167,7 +167,7 @@ class Categories extends Component {
             <Title>Kat. erstellen</Title>
           </Body>
           <Right>
-            <Button transparent onPress={this.finish.bind(this)}>
+            <Button transparent onPress={this.finish}>
               <Text style={styles.headerText}>Fertig</Text>
             </Button>
           </Right>
@@ -176,7 +176,7 @@ class Categories extends Component {
         <Form>
           <Item floatingLabel last >
             <Label>Kategorienamen</Label>
-            <Input onChangeText={(text) => this.setState({categoryName:text})}/>
+            <Input onChangeText={(text) => this.updateText(text)}/>
           </Item>
         </Form>
         <Text style={styles.error}>{this.state.errorText}</Text>
@@ -187,17 +187,16 @@ class Categories extends Component {
         <Content>
           {this.state.animals.map(cow =>
             <ListItem key={cow.tvd}>
-              <CheckBox checked={cow.selected} onPress={this.selectCow.bind(this, cow.tvd)} />
+              <CheckBox checked={cow.selected} onPress={() => this.selectCow(cow.tvd)} />
               <Body>
-                <Text>  {cow.tvd}</Text>
-                <Text style={styles.textOtherCategories}>  {this.createString.bind(this)(cow.categories)}</Text>
+                <Text>  {getName(cow.name, cow.tvd)}</Text>
+                <Text style={styles.textOtherCategories}>  Kategorien: {this.createString(cow.categories)}</Text>
               </Body>
             </ListItem>
           )}
         </Content>
       </Container>
     </StyleProvider>
-
     );
   }
 }

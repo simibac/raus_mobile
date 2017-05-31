@@ -13,6 +13,7 @@
     "react": "16.0.0-alpha.6",
     "react-native": "0.43.2",
     "react-native-datepicker": "^1.4.7",
+    "react-native-material-initials": "0.0.11",
     "react-native-popup-dialog": "^0.7.22",
     "react-native-scrolling-menu": "^0.1.1",
     "react-native-svg": "^5.1.7",

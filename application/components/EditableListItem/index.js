@@ -15,6 +15,15 @@ import localStore from '../../utilities/localStore'
 import api from '../../utilities/api.js'
 import Language from '../../utilities/language.json'
 
+function getName(name, tvd){
+  if (name != ""){
+    return name
+  }
+  else{
+    return tvd
+  }
+}
+
 class Categories extends Component {
   constructor(props) {
     super(props);
@@ -59,13 +68,12 @@ class Categories extends Component {
 
   render() {
     var added = new Date(this.props.added);
-    console.log(added);
     return(
       <ListItem>
         {this.props.editing &&
           <CheckBox checked={this.props.selected} onPress={() => this.props.selectCow(this.props.tvd)} />}
           <Body>
-            <Text>  {this.props.tvd}</Text>
+            <Text>  {getName(this.props.name, this.props.tvd)}</Text>
             <Text style={styles.addedText}>  Hinzugefügt: {this.props.added.slice(0,10)}</Text>
           </Body>
         </ListItem>)
@@ -85,7 +93,6 @@ class Categories extends Component {
         color:'rgb(128, 128, 128)',
         fontStyle:'italic'
       }
-
     });
 
     module.exports = Categories;

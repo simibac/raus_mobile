@@ -26,6 +26,7 @@ import Login from './components/Login'
 import CreateAccount from './components/CreateAccount'
 import CategoryDetailed from './components/CategoryDetailed'
 import AddAnimalToCategory from './components/AddAnimalToCategory'
+import DashboardDetailed from './components/DashboardDetailed'
 
 
 class Home extends Component {
@@ -116,6 +117,7 @@ class Home extends Component {
       case 'CreateAccount': return  <CreateAccount navigator={navigator} {...route.passProps} />
       case 'CategoryDetailed': return  <CategoryDetailed navigator={navigator} {...route.passProps} />
       case 'AddAnimalToCategory': return <AddAnimalToCategory navigator={navigator} {...route.passProps} />
+      case 'DashboardDetailed': return <DashboardDetailed navigator={navigator} {...route.passProps} />
     }
   }
 

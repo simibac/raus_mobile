@@ -55,9 +55,7 @@ class Dashboard extends Component {
   }
 
   getMonthlyStats(token, month, year){
-    this.setState({
-      ready:false
-    })
+
     api.getMonthlyStats(token, month, year).then((res) => {
       if(typeof res.error === 'undefined'){
         this.setState({
@@ -98,16 +96,23 @@ class Dashboard extends Component {
     this.getMonthlyStats.bind(this)(this.state.token, dateConverter.getMonthNumber(date[0]), date[1])
   }
 
+  goToCategory(selectedCategory){
+    this.props.navigator.push({
+      name:"DashboardDetailed",
+      passProps:{
+        monthlyStats:this.state.monthlyStats,
+        selectedCategory:selectedCategory,
+        selectedMonth: this.state.month,
+        selectedYear: this.state.year,
+        //rerender:this.rerender.bind(this)
+      }
+    });
+  }
+
   render() {
     while (!this.state.ready){
       return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
     }
-    var categories =[
-      {categoryName:"A1", categoryDescription: "Milchkühe", numOfAnimals:14, lowest:15, highest:19, max:28},
-      {categoryName:"A2", categoryDescription: "Weibliche Tiere, bis 160 Tage alt", numOfAnimals:11, lowest:1, highest:4, max:28},
-      {categoryName:"A11", categoryDescription: "Männliche Tiere, über 160 Tage alt", numOfAnimals:23, lowest:28, highest:28, max:28},
-    ]
-    console.log(this.state);
 
     return (
       <StyleProvider style={getTheme(platform)}>
@@ -142,7 +147,6 @@ class Dashboard extends Component {
                   itemSpacing={20}
                   style={{height:20}}/>
                 </View>
-
                 <Content>
                   {this.state.monthlyStats.category_stats.map((category) => {return(
                     <DefaultCategoryItem
@@ -152,16 +156,11 @@ class Dashboard extends Component {
                     numOfAnimals={category.number_of_animals}
                     lowest={category.lowest_days}
                     highest={category.maximum_days}
-                    max={category.number_of_days_required}/>
+                    max={category.number_of_days_required}
+                    goToCategory={this.goToCategory.bind(this)}/>
                   )
                 })}
               </Content>
-              {/* <Fab
-                position="bottomRight"
-                style={{ backgroundColor: '#006622' }}
-                onPress={this.navigate.bind(this, "SelectCategories")}>
-                <Icon name="md-add" />
-              </Fab> */}
             </Container>
           </Drawer>
         </StyleProvider>

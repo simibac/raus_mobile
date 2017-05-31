@@ -86,8 +86,7 @@ class ScrollingMenu extends Component {
         <TouchableOpacity
           key={i}
           style={styles.button}
-          onPress={() => { this.scroll(i) }}
-        >
+          onPress={() => { this.scroll(i) }}>
           <Text style={[i === 0 ? styles.scrollBarFirstItem : null, styles.scrollBarItem, this.state.selected === i ? styles.scrollBarSelectedItem : null]}
                 onLayout={(object) => {
                   let {width} = object.nativeEvent.layout
