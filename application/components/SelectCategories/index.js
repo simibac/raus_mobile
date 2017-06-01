@@ -21,6 +21,7 @@ import localStore from '../../utilities/localStore'
 
 // needed for adding the isSelected field for each category and each cow
 function prepareData(categories){
+  var tvds = new Set()
   var newCategories = []
   for (var i = categories.categories.length - 1; i >= 0; i--) {
     var newCows = []
@@ -34,6 +35,7 @@ function prepareData(categories){
 
       }
       newCows.push(newCow)
+      tvds.add(newCow.tvd)
     }
     var newCategory = {
       category: categories.categories[i].category,
@@ -43,7 +45,7 @@ function prepareData(categories){
     }
     newCategories.push(newCategory)
   }
-  return newCategories
+  return [newCategories, tvds.size]
 }
 
 
@@ -55,7 +57,10 @@ class SelectCategories extends Component {
     this.state = {
       animals: animals,
       ready: false,
-      selectedCategory:""
+      selectedCategory:"",
+      categories:[],
+      numOfSeletedCows:0,
+      numOfTotalCows:1
     };
   }
 
@@ -63,13 +68,17 @@ class SelectCategories extends Component {
     localStore.getToken().then((res)=>{
       this.setState({token:res})
       api.getCowsByCategory(res).then((res) => {
-        var newCategories = prepareData(res)
-        this.setState({categories:newCategories})
-        this.setState({ready:true})
+        var preparedData = prepareData(res)
+        this.setState({
+          categories:preparedData[0],
+          ready:true,
+          numOfTotalCows:preparedData[1],
+          numSelectedCows:preparedData[1],
+        })
+        this.countSelectedCows()
       });
     })
   }
-
 
   navigate(routeName, selectedCategory){
     this.setState({selectedCategory:selectedCategory})
@@ -78,7 +87,8 @@ class SelectCategories extends Component {
       passProps:{
         selectedCategory: selectedCategory,
         categories: this.state.categories,
-        updateCategory:this.updateCategory.bind(this)
+        updateCategory:this.updateCategory.bind(this),
+        countSelectedCows:() => this.countSelectedCows()
       }
     });
   }
@@ -98,13 +108,13 @@ class SelectCategories extends Component {
   }
 
   openCategory(message){
-    console.log(message)
+    //console.log(message)
     this.navigate.bind("SelectCows")
 
   }
 
   finish(){
-    console.log(this.props.date.getMonth(), this.props.date.getDate(), this.state.categories, this.state.token)
+    //console.log(this.props.date.getMonth(), this.props.date.getDate(), this.state.categories, this.state.token)
 
     var selectedCows = new Set()
 
@@ -123,57 +133,65 @@ class SelectCategories extends Component {
   }
 
   updateCategory(numSelectedCows, cows){
-    console.log(this.state.selectedCategory)
     var newCategories = this.state.categories
     for (var i = newCategories.length - 1; i >= 0; i--) {
       if(this.state.selectedCategory === newCategories[i].category){
         newCategories[i].cows = cows
         newCategories[i].isSelected = true
         newCategories[i].numSelectedCows = numSelectedCows
-        console.log(newCategories[i]);
       }
     }
     this.setState({categories:newCategories})
   }
 
-  categoryButtonStyle(selected){
-    if(selected){
-      var backgroundColor = 'rgba(255, 255, 255, 0.3)'
-      var borderColor = 'rgba(255, 255, 255, 0.05)'
+  switch = (categoryName) => {
+    var newCategories = this.state.categories
+    for(var i = 0; i < newCategories.length; i++){
+      if(newCategories[i].category === categoryName){
+        newCategories[i].isSelected = !newCategories[i].isSelected
+        for(var j = 0; j < newCategories[i].cows.length; j++){
+          if(newCategories[i].isSelected){
+            newCategories[i].cows[j].isSelected = true
+          }
+          else{
+            newCategories[i].cows[j].isSelected = false
+          }
+        }
+        this.setState({
+          categories:newCategories
+        })
+      }
     }
-    else{
-      var backgroundColor = 'rgba(255, 255, 255, 0)'
-      var borderColor = 'white'
-    }
-    return {
-      width: (Dimensions.get('window').width-50)/2,
-      height: 100,
-      borderWidth: 2,
-      borderRadius: 5,
-      borderColor: borderColor,
-      margin: 10,
-      backgroundColor: backgroundColor
-    }
+    this.countSelectedCows()
   }
 
-  categoryNameStyle(name){
-    var width = (Dimensions.get('window').width-50)/2
-    console.log(width);
-    var fontSize = width/4.5 - (0.9*name.length)
-    return {
-      fontSize: fontSize,
-      textAlign: 'center',
-      color: '#fff',
+  countSelectedCows = () => {
+    var c = new Set()
+    var newCategories = this.state.categories
+    for(var i = 0; i < newCategories.length; i++){
+      var categoryCounter = 0
+      for(var j = 0; j < newCategories[i].cows.length; j++){
+        if(newCategories[i].cows[j].isSelected){
+          c.add(newCategories[i].cows[j].tvd)
+          categoryCounter++
+        }
+      }
+      newCategories[i].numSelectedCows = categoryCounter
     }
+    this.setState({
+      numOfSeletedCows:c.size,
+      categories:newCategories
+    })
   }
+
   render() {
     while (!this.state.ready){
-      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+      return <View style={{flex:1, alignItems:'center', justifyContent:'center', backgroundColor:'white'}}><Spinner color='green' /></View>
     }
-    console.log(this.state.categories);
+    //console.log(this.state.categories);
     return (
       <StyleProvider style={getTheme(platform)}>
-        <View style={styles.wrapper}>
+        <Container style={{backgroundColor:'white'}}>
           <Header>
             <Left>
               <Button transparent onPress={this.back.bind(this)}>
@@ -181,12 +199,7 @@ class SelectCategories extends Component {
               </Button>
             </Left>
             <Body>
-              {/* <Button transparent onPress={this.back.bind(this)}> */}
               <Title>Kategorien</Title>
-              {/* <Subtitle>Lern more</Subtitle>
-
-                <Icon name={'information-circle'}/>
-              </Button> */}
             </Body>
             <Right>
               <Button transparent onPress={this.close.bind(this)}>
@@ -194,7 +207,6 @@ class SelectCategories extends Component {
               </Button>
             </Right>
           </Header>
-
           <View style={styles.container}>
             <Text style={styles.date}>
               {DateConverter.getDay(this.props.date.getDay())}, {this.props.date.getDate()}{DateConverter.getDayEnding(this.props.date.getDate())} {DateConverter.getMonth(this.props.date.getMonth())} {this.props.date.getFullYear()}
@@ -202,78 +214,98 @@ class SelectCategories extends Component {
             <Text style={styles.date}>
               {this.props.typeOfLairage}
             </Text>
-            <Content>
-              <View style={styles.list}>
-                {this.state.categories.map((category) => {return(
-                  <TouchableHighlight
-                    style={this.categoryButtonStyle.bind(this)(category.isSelected)}
-                    key={category.category }
-                    onPress={this.navigate.bind(this, "SelectCows", category.category)}>
-                    <View style={styles.container2}>
-                      <Text style={this.categoryNameStyle.bind(this)(category.category)}>
-                        {category.category}
-                      </Text>
-                      {category.isSelected &&
-                        <Text
-                          style={styles.numSelectedCows}>
-                          {category.numSelectedCows}/{category.cows.length}
-                        </Text>
-                      }
-                    </View>
-                  </TouchableHighlight>)})}
-                </View>
-              </Content>
-            </View>
-
-            <Footer>
-              <FooterTab>
-                <Button full light onPress={this.finish.bind(this)}>
-                  <Text>Fertig</Text>
-                </Button>
-              </FooterTab>
-            </Footer>
+            <Text style={styles.numOfCows}>
+              {this.state.numOfSeletedCows} von {this.state.numOfTotalCows} Kühe
+            </Text>
           </View>
-        </StyleProvider>
-      );
-    }
+
+          <Content>
+            <List>
+              {this.state.categories.map((category) => {return(
+                <ListItem
+                  key={category.category}
+                  onPress={this.navigate.bind(this, "SelectCows", category.category)}>
+                  <Body>
+                    <Text style={styles.categoryName}>{category.category}</Text>
+                    <Text style={styles.categoryCounter}>
+                      {category.numSelectedCows} von {category.cows.length} Kühe
+                    </Text>
+                  </Body>
+                  <Right>
+                    <Switch
+                      value={category.isSelected}
+                      onChange={() => this.switch(category.category)}
+                    />
+                  </Right>
+
+                </ListItem>
+              )})}
+            </List>
+          </Content>
+
+          <Footer>
+            <FooterTab>
+              <Button full light onPress={this.finish.bind(this)}>
+                <Text>Fertig</Text>
+              </Button>
+            </FooterTab>
+          </Footer>
+        </Container>
+      </StyleProvider>
+    );
   }
+}
 
-  const styles = StyleSheet.create({
-    wrapper:{
-      flex:1,
-      backgroundColor: 'white',
-    },
-    container:{
-      backgroundColor: 'rgba(0, 77, 0, 0.6)',
-      flex:1,
-      flexDirection: 'column',
-      padding:5
+const styles = StyleSheet.create({
+  wrapper:{
+    backgroundColor: 'white',
+    flex:1
+  },
+  container:{
+    backgroundColor: 'rgba(0, 77, 0, 0.6)',
+    height:73
+  },
+  container2: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  numSelectedCows:{
+    color: 'black',
+    textAlign: 'center',
+  },
+  list: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  date:{
+    color:'white',
+    textAlign:'center',
+    fontSize: 17,
+    paddingBottom:1,
+    paddingTop:3,
+    fontWeight:'bold'
 
-    },
+  },
+  numOfCows:{
+    color:'white',
+    textAlign:'center',
+    fontSize: 15,
+    paddingBottom:1,
+    paddingTop:2,
+    fontStyle:'italic'
+  },
+  headerText:{
+    color: (Platform.OS === 'ios') ? '#007aff':'#fff',
+    fontSize: 15
+  },
+  categoryName:{
+    fontSize: 16,
+  },
+  categoryCounter:{
+    fontSize: 15,
+    color:'rgb(128, 128, 128)',
+    fontStyle:'italic',
+  }
+});
 
-    container2: {
-      flex: 1,
-      justifyContent: 'center',
-    },
-    numSelectedCows:{
-      color: '#fff',
-      textAlign: 'center',
-    },
-    list: {
-      flexDirection: 'row',
-      flexWrap: 'wrap'
-    },
-    date:{
-      color:'white',
-      textAlign:'center',
-      fontSize: 20,
-      paddingBottom:3,
-      paddingTop:3
-    },
-    headerText:{
-      color: (Platform.OS === 'ios') ? '#007aff':'#fff',
-      fontSize: 15
-    }
-  });
-
-  module.exports = SelectCategories;
+module.exports = SelectCategories;

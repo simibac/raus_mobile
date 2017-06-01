@@ -146,11 +146,11 @@ class LairagePicker extends Component {
               </Grid>
             </View>
             <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-              <TouchableHighlight style={styles.dateBox} onPress={() => {this.datePicker.onPressDate()}}>
+              <View style={styles.dateBox}>
                 <Text style={styles.date}>
                   {this.state.typeOfLairage}
                 </Text>
-              </TouchableHighlight>
+              </View>
             </View>
           </View>
             <Footer>

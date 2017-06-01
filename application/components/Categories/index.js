@@ -96,7 +96,7 @@ class Categories extends Component {
 
   render() {
     while (!this.state.ready){
-      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+      return <View style={{flex:1, alignItems:'center', justifyContent:'center', backgroundColor:'white'}}><Spinner color='green' /></View>
     }
     //console.log(this.state.customCategories, this.state.defaultCategories);
     return (

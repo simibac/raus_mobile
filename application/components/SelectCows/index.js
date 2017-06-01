@@ -31,17 +31,23 @@ class SelectCows extends Component {
   componentWillMount(){
     let categories = this.props.categories
     let relevantCows = []
+    var c = 0
     for (var i = categories.length - 1; i >= 0; i--) {
       if(categories[i].category === this.props.selectedCategory){
         relevantCows = categories[i].cows
+        for(var j = 0; j < categories[i].cows.length; j++){
+          if (categories[i].cows.isSelected){
+            c = c + 1
+          }
+        }
       }
     }
-    this.state = {
+    this.setState({
       relevantCows: relevantCows,
-      numSelectedCows: relevantCows.length,
+      numSelectedCows: c,
       numTotalCows: relevantCows.length,
       ready:true,
-    };
+    });
   }
 
   back(){
@@ -86,13 +92,13 @@ class SelectCows extends Component {
   next(){
     this.props.updateCategory(this.state.numSelectedCows, this.state.relevantCows)
     this.props.navigator.pop()
+    this.props.countSelectedCows()
   }
 
   render() {
     while (!this.state.ready){
       return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
     }
-    //console.log(this.state.relevantCows)
     return (
       <StyleProvider style={getTheme(platform)}>
         <Container style={{backgroundColor:'white'}}>
