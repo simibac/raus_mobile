@@ -62,9 +62,9 @@ class Dashboard extends Component {
           monthlyStats:res.monthly_stats,
           ready:true,
         })
-        console.log(res);
       }
       else{
+        console.log("LOGGGING OUT!");
         localStore.deleteToken()
         this.props.navigator.resetTo({
           name:"Login"

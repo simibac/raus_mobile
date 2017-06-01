@@ -30,6 +30,8 @@ function prepareData(categories){
         journal:categories.categories[i].cows[j].journal,
         added:categories.categories[i].cows[j].added,
         isSelected:true,
+        name:categories.categories[i].cows[j].name,
+
       }
       newCows.push(newCow)
     }
@@ -113,7 +115,7 @@ class SelectCategories extends Component {
         }
       }
     }
-    api.addJournalEntry(this.state.token, Array.from(selectedCows), this.props.date.getFullYear(), this.props.date.getMonth() + 1, this.props.date.getDate(), 1440).then((res) => {
+    api.addJournalEntry(this.state.token, Array.from(selectedCows), this.props.date.getFullYear(), this.props.date.getMonth() + 1, this.props.date.getDate(), 1440, this.props.typeOfLairage).then((res) => {
       if (typeof res.error === 'undefined'){
         this.close.bind(this)()
       }
@@ -130,7 +132,6 @@ class SelectCategories extends Component {
         newCategories[i].numSelectedCows = numSelectedCows
         console.log(newCategories[i]);
       }
-
     }
     this.setState({categories:newCategories})
   }
@@ -198,6 +199,9 @@ class SelectCategories extends Component {
             <Text style={styles.date}>
               {DateConverter.getDay(this.props.date.getDay())}, {this.props.date.getDate()}{DateConverter.getDayEnding(this.props.date.getDate())} {DateConverter.getMonth(this.props.date.getMonth())} {this.props.date.getFullYear()}
             </Text>
+            <Text style={styles.date}>
+              {this.props.typeOfLairage}
+            </Text>
             <Content>
               <View style={styles.list}>
                 {this.state.categories.map((category) => {return(
@@ -263,8 +267,8 @@ class SelectCategories extends Component {
       color:'white',
       textAlign:'center',
       fontSize: 20,
-      paddingBottom:10,
-      paddingTop:10
+      paddingBottom:3,
+      paddingTop:3
     },
     headerText:{
       color: (Platform.OS === 'ios') ? '#007aff':'#fff',

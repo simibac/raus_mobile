@@ -20,11 +20,11 @@ class CreateAccount extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName:'',
-      lastName:'',
+      agateNumber:'',
+      agatePassword:'',
       email:'',
       password:'',
-      farmId:'',
+      userTvd:'',
       language:'de',
       errorMessage:'',
       token:''
@@ -42,20 +42,20 @@ class CreateAccount extends Component {
   }
 
   signup(){
-    if(this.state.firstName === ''){
-      this.setState({errorMessage:'Please enter a first name'})
+    if(this.state.agateNumber === ''){
+      this.setState({errorMessage:'Please enter an agate number.'})
       return
     }
-    else if(this.state.lastName === ''){
-      this.setState({errorMessage:'Please enter a last name'})
+    else if(this.state.agatePassword === ''){
+      this.setState({errorMessage:'Please enter an agate password'})
       return
     }
     else if(this.state.email === ''){
       this.setState({errorMessage:'Please enter a valid Email'})
       return
     }
-    else if(this.state.farmId === ''){
-      this.setState({errorMessage:'Please enter a valid FarmId'})
+    else if(this.state.userTvd === ''){
+      this.setState({errorMessage:'Please enter a user TVD'})
       return
     }
     else if(this.state.password === ''){
@@ -64,7 +64,7 @@ class CreateAccount extends Component {
     }
     else{
       this.setState({errorMessage:''})
-      api.signup(this.state.firstName, this.state.lastName, this.state.email, this.state.farmId, this.state.password, this.state.language , this.state.password).then((res) => {
+      api.signup(this.state.agateNumber, this.state.agatePassword,  parseInt(this.state.userTvd), this.state.language, this.state.email, this.state.password).then((res) => {
         console.log(res);
         if(typeof res.token != 'undefined'){
           this.setState({errorMessage:'success'})
@@ -108,22 +108,20 @@ class CreateAccount extends Component {
         </Header>
 
         <Content>
-          <Form>
+          <Form >
             <Item>
-              <Input placeholder="First Name" onChangeText={(firstName) => this.setState({firstName:firstName})}/>
+              <Input placeholder="Agate Number" onChangeText={(agateNumber) => this.setState({agateNumber:agateNumber})}/>
             </Item>
             <Item >
-              <Input placeholder="Last Name" onChangeText={(lastName) => this.setState({lastName:lastName})}/>
+              <Input secureTextEntry placeholder="Agate Password" onChangeText={(agatePassword) => this.setState({agatePassword:agatePassword})}/>
             </Item>
-            <Item>
-              <Icon active name='ios-at-outline' />
-              <Input placeholder="Email" onChangeText={(emailInput) => this.setState({email:emailInput})}/>
+            <Item last>
+              <Input placeholder='User TVD' onChangeText={(userTvd) => this.setState({userTvd:userTvd})}/>
             </Item>
-            <Item>
-              <Icon active name='ios-home-outline'/>
-              <Input placeholder='Farm ID' onChangeText={(farmId) => this.setState({farmId:farmId})}/>
-            </Item>
-          <Item >
+
+            <Item style={{height:100}}/>
+
+          <Item>
             <Left style={{flexDirection:'row', alignItems:'center'}}>
               <Icon active name='ios-globe-outline' style={{fontSize:24}}/>
               <Text style={{marginLeft:13, fontSize:17,color:'#000'}}>Language </Text>
@@ -141,9 +139,13 @@ class CreateAccount extends Component {
               </Picker>
             </Right>
           </Item>
-          <Item >
+          <Item>
+            <Icon active name='ios-at-outline' />
+            <Input placeholder="Email" onChangeText={(emailInput) => this.setState({email:emailInput})}/>
+          </Item>
+          <Item last>
             <Icon active name='ios-lock-outline' />
-            <Input placeholder="Password" onChangeText={(password) => this.setState({password:password})}/>
+            <Input secureTextEntry placeholder="Password" onChangeText={(password) => this.setState({password:password})}/>
           </Item>
           <Text>{this.state.errorMessage}</Text>
         </Form>

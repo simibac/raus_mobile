@@ -14,6 +14,15 @@ import localStore from '../../utilities/localStore'
 import api from '../../utilities/api.js'
 import Language from '../../utilities/language.json'
 
+function getName(name, tvd){
+  if(name != ""){
+    return name
+  }
+  else{
+    return tvd
+  }
+}
+
 class AddAnimalToCategory extends Component {
   constructor(props) {
     super(props);
@@ -131,7 +140,7 @@ class AddAnimalToCategory extends Component {
             <ListItem key={cow.tvd}>
               <CheckBox checked={cow.selected} onPress={this.selectCow.bind(this, cow.tvd)} />
               <Body>
-                <Text>{cow.tvd}</Text>
+                <Text>{getName(cow.name, cow.tvd)}</Text>
                 <Text note>Kategorien: {this.createString.bind(this)(cow.categories)}</Text>
               </Body>
             </ListItem>

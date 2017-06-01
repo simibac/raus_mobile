@@ -11,6 +11,15 @@ import {CheckBox, StyleProvider, Footer, FooterTab, Button, Header, Title, Subti
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 
+function getName(name, tvd){
+  if(name != ""){
+    return name
+  }
+  else{
+    return tvd
+  }
+}
+
 class SelectCows extends Component {
   constructor(props) {
     super(props);
@@ -113,7 +122,7 @@ class SelectCows extends Component {
             {this.state.relevantCows.map(cow =>
               <ListItem icon key={cow.tvd}>
                 <Body>
-                  <Text>{cow.tvd}</Text>
+                  <Text>{getName(cow.name, cow.tvd)}</Text>
                 </Body>
                 <Right>
                   <Switch value={cow.isSelected} onChange={this.switch.bind(this, cow.tvd)}/>

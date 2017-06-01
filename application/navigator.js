@@ -27,6 +27,7 @@ import CreateAccount from './components/CreateAccount'
 import CategoryDetailed from './components/CategoryDetailed'
 import AddAnimalToCategory from './components/AddAnimalToCategory'
 import DashboardDetailed from './components/DashboardDetailed'
+import LairagePicker from './components/LairagePicker'
 
 
 class Home extends Component {
@@ -74,25 +75,32 @@ class Home extends Component {
   }
 
   componentWillMount(){
-    AsyncStorage.getItem("token").then((res) => {
-      console.log(res)
-      if(res != null){
-        api.getUser(res).then((res2) => {
-          console.log(res2);
-          if(typeof res2.error === 'undefined'){
-            this.setState({initialRoute: {name: "Dashboard"}})
-            this.setState({ready: true})
-          }
-          else{
-            this.setState({initialRoute: {name: "Login"}})
-            this.setState({ready: true})
-          }
-        });
-      }
-      else{
-        this.setState({ready: true})
-      }
-    })
+    try{
+      AsyncStorage.getItem("token").then((res) => {
+        console.log(res)
+        if(res != null){
+          api.getUser(res).then((res2) => {
+            console.log(res2);
+            if(typeof res2.error === 'undefined'){
+              this.setState({initialRoute: {name: "Dashboard"}})
+              this.setState({ready: true})
+            }
+            else{
+              this.setState({initialRoute: {name: "Login"}})
+              this.setState({ready: true})
+            }
+          });
+        }
+        else{
+          this.setState({ready: true})
+        }
+      })
+    }
+    catch (e){
+      console.log(e);
+      this.setState({initialRoute: {name: "Login"}})
+      this.setState({ready: true})
+    }
   }
 
   configureScene(route){
@@ -118,6 +126,8 @@ class Home extends Component {
       case 'CategoryDetailed': return  <CategoryDetailed navigator={navigator} {...route.passProps} />
       case 'AddAnimalToCategory': return <AddAnimalToCategory navigator={navigator} {...route.passProps} />
       case 'DashboardDetailed': return <DashboardDetailed navigator={navigator} {...route.passProps} />
+      case 'LairagePicker': return <LairagePicker navigator={navigator} {...route.passProps} />
+
     }
   }
 

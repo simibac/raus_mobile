@@ -1,7 +1,7 @@
 'use strict'
 import React, { Component } from 'react';
 
-import { Footer, FooterTab, StyleProvider,Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
+import { Icon, StyleProvider, Container, Header, Left, Right, Body, Button, Col, Grid, Title, Footer, FooterTab } from 'native-base';
 import {
   StyleSheet,
   Navigator,
@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableHighlight,
 } from 'react-native';
+
 import DatePicker from 'react-native-datepicker'
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
@@ -19,14 +20,11 @@ import DateConverter from '../../utilities/dateConverter.js'
 
 
 
-class DayPicker extends Component {
+class LairagePicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: new Date(),
-      today: true,
-      yesterday: false,
-      other: false,
+      typeOfLairage:"Weide",
       weide: true,
       laufhof: false,
       sommerung: false
@@ -47,39 +45,31 @@ class DayPicker extends Component {
     this.props.navigator.push({
       name: routeName,
       passProps:{
-        date:this.state.date
+        typeOfLairage:"Weide",
+        date:this.props.date
       }
     });
   }
 
-  selectDay(day){
-    if(day === "today"){
-      this.setState({today:true, yesterday:false, other:false, date: new Date()})
-    }
-    else if(day === "yesterday"){
-      this.setState({today:false, yesterday:true, other:false, date: new Date((new Date()).valueOf() - 1000*60*60*24)})
-    }
-    else{
-      this.setState({today:false, yesterday:false, other:true})
-      this.datePicker.onPressDate()
-    }
+  back(){
+    this.props.navigator.pop()
   }
 
   selectLairage(lairage){
     if(lairage === "weide"){
-      this.setState({weide:true, laufhof:false, sommerung:false})
+      this.setState({weide:true, laufhof:false, sommerung:false, typeOfLairage:"Weide"})
     }
     else if(lairage === "laufhof"){
-      this.setState({weide:false, laufhof:true, sommerung:false})
+      this.setState({weide:false, laufhof:true, sommerung:false, typeOfLairage:"Laufhof"})
     }
     else{
-      this.setState({weide:false, laufhof:false, sommerung:true})
+      this.setState({weide:false, laufhof:false, sommerung:true, typeOfLairage:"Sömmerung"})
     }
   }
 
   getButtonStyle(selected, day){
     var borderRight = 1
-    if (day === 'other'){ borderRight = 0}
+    if (day === 'other' || day === 'sommerung'){ borderRight = 0}
     if(selected){
       var backgroundColor = 'rgba(255, 255, 255, 0.3)'
     }
@@ -105,8 +95,14 @@ class DayPicker extends Component {
     }
   }
 
-  changeDate(date){
-    return this.state.date.getFullYear() + '-' + (this.state.date.getMonth() + 1) + '-' + this.state.date.getDate()
+  getTypeOfLairage(){
+    if(this.state.weide === true){
+      this.setState({typeOfLairage:"Weide"})
+    }else if(this.state.laufhof === true){
+      this.setState({typeOfLairage:"Laufhof"})
+    }else{
+      this.setState({typeOfLairage:"Sömmerung"})
+    }
   }
 
   render() {
@@ -115,9 +111,13 @@ class DayPicker extends Component {
       <StyleProvider style={getTheme(platform)}>
         <Container style={{backgroundColor:'white'}}>
           <Header>
-            <Left/>
+            <Left>
+              <Button transparent onPress={this.back.bind(this)}>
+                <Icon name={'arrow-back'}/>
+              </Button>
+            </Left>
             <Body>
-              <Title>Datum</Title>
+              <Title>Auslauf</Title>
             </Body>
             <Right>
               <Button transparent onPress={this.close.bind(this)}>
@@ -126,21 +126,21 @@ class DayPicker extends Component {
             </Right>
           </Header>
           <View style={styles.wrapper}>
-            <View style={styles.dayPickerBox}>
+            <View style={styles.lairagePickerBox}>
               <Grid>
                 <Col>
-                  <TouchableHighlight style={this.getButtonStyle.bind(this, this.state.today, "today")()}onPress={this.selectDay.bind(this, "today")}>
-                    <Text style={this.getTextStyle.bind(this, this.state.today)()}>Today</Text>
+                  <TouchableHighlight style={this.getButtonStyle.bind(this, this.state.weide, "weide")()} onPress={this.selectLairage.bind(this, "weide")}>
+                    <Text style={this.getTextStyle.bind(this, this.state.weide)()}>W</Text>
                   </TouchableHighlight>
                 </Col>
                 <Col>
-                  <TouchableHighlight style={this.getButtonStyle.bind(this, this.state.yesterday, "yesterday")()} onPress={this.selectDay.bind(this, "yesterday")}>
-                    <Text style={this.getTextStyle.bind(this, this.state.yesterday)()}>Yesterday</Text>
+                  <TouchableHighlight style={this.getButtonStyle.bind(this, this.state.laufhof, "laufhof")()} onPress={this.selectLairage.bind(this, "laufhof")}>
+                    <Text style={this.getTextStyle.bind(this, this.state.laufhof)()}>L</Text>
                   </TouchableHighlight>
                 </Col>
                 <Col>
-                  <TouchableHighlight style={this.getButtonStyle.bind(this, this.state.other, "other")()} onPress={this.selectDay.bind(this, "other")}>
-                    <Text style={this.getTextStyle.bind(this, this.state.other)()}>Other</Text>
+                  <TouchableHighlight style={this.getButtonStyle.bind(this, this.state.sommerung, "sommerung")()} onPress={this.selectLairage.bind(this, "sommerung")}>
+                    <Text style={this.getTextStyle.bind(this, this.state.sommerung)()}>S</Text>
                   </TouchableHighlight>
                 </Col>
               </Grid>
@@ -148,43 +148,14 @@ class DayPicker extends Component {
             <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
               <TouchableHighlight style={styles.dateBox} onPress={() => {this.datePicker.onPressDate()}}>
                 <Text style={styles.date}>
-                  {DateConverter.getDay(this.state.date.getDay())}, {this.state.date.getDate()}{DateConverter.getDayEnding(this.state.date.getDate())} {DateConverter.getMonth(this.state.date.getMonth())} {this.state.date.getFullYear()}
+                  {this.state.typeOfLairage}
                 </Text>
               </TouchableHighlight>
             </View>
           </View>
-
-          <DatePicker
-            ref={(picker) => { this.datePicker = picker; }}
-            mode="date"
-            format="YYYY-MM-DD"
-            date={this.changeDate.bind(this)()}
-            maxDate= {new Date()}
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            onDateChange={
-              (date) => {
-                var dateArray = date.split('-')
-                var d = new Date()
-                d.setFullYear(dateArray[0], dateArray[1]-1, dateArray[2])
-                this.setState({date: d})
-              }}
-            showIcon={false}
-            placeholderText="Simon"
-            dateText="Simon"
-            customStyles={{
-              dateInput: {
-                marginLeft: 0,
-                height:0
-              },
-              dateTouchBody:{
-                height:0
-              }
-            }}
-            />
             <Footer>
               <FooterTab>
-                <Button full light onPress={this.navigate.bind(this, "LairagePicker")}>
+                <Button full light onPress={this.navigate.bind(this, "SelectCategories")}>
                   <Text>Weiter</Text>
                 </Button>
               </FooterTab>
@@ -199,33 +170,21 @@ class DayPicker extends Component {
     wrapper: {
       flex:1,
       backgroundColor: 'rgba(0, 77, 0, 0.6)',
-      alignItems:'center',
-      justifyContent:'center'
+      //alignItems:'center',
+      //justifyContent:'center'
     },
     dateBox: {
       borderBottomWidth: 1,
       marginLeft:15,
       marginRight:15,
-      borderColor: 'white',
-      marginBottom:40
+      marginBottom: 40,
+      borderColor: 'white'
     },
     date:{
       color:'white',
       textAlign:'center',
       fontSize: 28,
       paddingBottom:10
-    },
-    dayPickerBox:{
-      height: 60,
-      borderColor:'white',
-      borderWidth: 1,
-      alignItems:'center',
-      justifyContent:'center',
-      borderRadius: 5,
-      marginTop: 20,
-      marginLeft:15,
-      marginRight:15,
-      flexDirection:'row',
     },
     todayCol:{
       borderRightWidth:1,
@@ -236,6 +195,18 @@ class DayPicker extends Component {
       color: (Platform.OS === 'ios') ? '#007aff':'#fff',
       fontSize: 15
     },
+    lairagePickerBox:{
+      height: 60,
+      borderColor:'white',
+      borderWidth: 1,
+      alignItems:'center',
+      justifyContent:'center',
+      borderRadius: 5,
+      marginLeft:15,
+      marginRight:15,
+      marginTop:20,
+      flexDirection:'row',
+    },
   });
 
-  module.exports = DayPicker;
+  module.exports = LairagePicker;

@@ -3,15 +3,15 @@ baseUrl = 'http://192.168.178.38:3333/' //http://192.168.57.1:3333/
 //ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d\  -f2
 
 var api = {
-  signup(firstName, lastName, email, farmId, language, password){
+  signup(agateNumber, agatePassword, userTvd, language, email, password){
     return fetch(baseUrl + 'sign-up', {
       method: 'POST',
 
       body: JSON.stringify({
         "email": email,
-        "first_name": firstName,
-        "last_name": lastName,
-        "farm_id": farmId,
+        "agate_username": agateNumber,
+        "agate_password": agatePassword,
+        "user_tvd": userTvd,
         "password": password,
         "language": language,
         "role": "farmer"
@@ -73,7 +73,8 @@ var api = {
     .catch(e => e)
   },
 
-  addJournalEntry(token, tvds, year, month, day, minutesOutside){
+  addJournalEntry(token, tvds, year, month, day, minutesOutside, typeOfLairage){
+    console.log("lairage", typeOfLairage);
     return fetch(baseUrl + 'api/journal', {
       method: 'POST',
       headers:{
@@ -84,7 +85,8 @@ var api = {
       	"year" : year,
       	"month": month,
       	"day" : day,
-      	"minutes_outside": minutesOutside
+      	"minutes_outside": minutesOutside,
+        "type_of_field_lairage": typeOfLairage
       })
     })
     .then((res) => checkStatus(res))
@@ -155,12 +157,13 @@ var api = {
 // Helper Functions
 
 function checkStatus(res){
+  //console.log(res);
   if (res.status >= 200 && res.status < 300) {
     return res;
   } else {
     let error = new Error("Error Code: " + res.status);
-    res.error = error;
-    console.log(res);
+    res.error = "error";
+    //console.log(res);
     return res
   }
 }
