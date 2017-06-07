@@ -130,17 +130,17 @@ class DayPicker extends Component {
               <Grid>
                 <Col>
                   <TouchableHighlight style={this.getButtonStyle.bind(this, this.state.today, "today")()}onPress={this.selectDay.bind(this, "today")}>
-                    <Text style={this.getTextStyle.bind(this, this.state.today)()}>Today</Text>
+                    <Text style={this.getTextStyle.bind(this, this.state.today)()}>Heute</Text>
                   </TouchableHighlight>
                 </Col>
                 <Col>
                   <TouchableHighlight style={this.getButtonStyle.bind(this, this.state.yesterday, "yesterday")()} onPress={this.selectDay.bind(this, "yesterday")}>
-                    <Text style={this.getTextStyle.bind(this, this.state.yesterday)()}>Yesterday</Text>
+                    <Text style={this.getTextStyle.bind(this, this.state.yesterday)()}>Gestern</Text>
                   </TouchableHighlight>
                 </Col>
                 <Col>
                   <TouchableHighlight style={this.getButtonStyle.bind(this, this.state.other, "other")()} onPress={this.selectDay.bind(this, "other")}>
-                    <Text style={this.getTextStyle.bind(this, this.state.other)()}>Other</Text>
+                    <Text style={this.getTextStyle.bind(this, this.state.other)()}>Anderes</Text>
                   </TouchableHighlight>
                 </Col>
               </Grid>

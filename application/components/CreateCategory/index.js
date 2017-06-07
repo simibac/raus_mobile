@@ -186,7 +186,7 @@ class Categories extends Component {
 
         <Content>
           {this.state.animals.map(cow =>
-            <ListItem key={cow.tvd}>
+            <ListItem key={cow.tvd} icon>
               <CheckBox checked={cow.selected} onPress={() => this.selectCow(cow.tvd)} />
               <Body>
                 <Text>  {getName(cow.name, cow.tvd)}</Text>

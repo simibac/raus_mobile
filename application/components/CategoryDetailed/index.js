@@ -14,6 +14,7 @@ import platform from '../../../native-base-theme/variables/platform';
 import Swipeout from 'react-native-swipeout'
 import EditableListItem from '../EditableListItem'
 import api from '../../utilities/api'
+import s from '../../utilities/style.js'
 import Language from '../../utilities/language.json'
 import localStore from '../../utilities/localStore'
 

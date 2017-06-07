@@ -13,6 +13,7 @@ import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 import localStore from '../../utilities/localStore'
 import api from '../../utilities/api.js'
+import s from '../../utilities/style.js'
 import Language from '../../utilities/language.json'
 
 function getName(name, tvd){
@@ -73,8 +74,8 @@ class Categories extends Component {
         {this.props.editing &&
           <CheckBox checked={this.props.selected} onPress={() => this.props.selectCow(this.props.tvd)} />}
           <Body>
-            <Text>  {getName(this.props.name, this.props.tvd)}</Text>
-            <Text style={styles.addedText}>  Hinzugefügt: {this.props.added.slice(0,10)}</Text>
+            <Text style={s.listNormalText}>{getName(this.props.name, this.props.tvd)}</Text>
+            <Text style={s.listNote}>Hinzugefügt: {this.props.added.slice(0,10)}</Text>
           </Body>
         </ListItem>)
       }

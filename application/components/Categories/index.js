@@ -1,11 +1,11 @@
 'use strict'
 import React, { Component } from 'react';
 
-import {List, StyleProvider, Spinner, ListItem, Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
+import {  List, StyleProvider, Spinner, ListItem, Grid, Col, Card, CardItem, Subtitle, Icon, Button, Header, Left, Right, Body, Title, Container, Content, InputGroup, Input } from 'native-base';
 import {
+  Text,
   StyleSheet,
   Navigator,
-  Text,
   View,
 } from 'react-native';
 import getTheme from '../../../native-base-theme/components';
@@ -13,6 +13,7 @@ import platform from '../../../native-base-theme/variables/platform';
 import Swipeout from 'react-native-swipeout'
 import localStore from '../../utilities/localStore'
 import api from '../../utilities/api.js'
+import s from '../../utilities/style.js'
 import Language from '../../utilities/language.json'
 
 class Categories extends Component {
@@ -143,7 +144,7 @@ class Categories extends Component {
                     <View>
                       <ListItem onPress={this.navigate.bind(this, "CategoryDetailed", category.category, true)}>
                         <View style={{flex: 1}}>
-                          <Text >{category.category}</Text>
+                          <Text style={s.normalText}>{category.category}</Text>
                         </View>
                       </ListItem>
                     </View>
@@ -156,7 +157,7 @@ class Categories extends Component {
                       <View key={category.category}>
                         <ListItem onPress={this.navigate.bind(this, "CategoryDetailed", category.category, false)}>
                           <View style={{flex: 1}}>
-                            <Text style={{width:100}}>{category.category}</Text>
+                            <Text style={s.normalText}>{category.category}</Text>
                           </View>
                         </ListItem>
                       </View>

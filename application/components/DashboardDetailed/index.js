@@ -1,7 +1,7 @@
 'use strict'
 import React, { Component } from 'react';
 
-import {Subtitle, Card, CardItem, Spinner, Container, Header, Left, Right, Body, Button, Icon, Title, Content, Tabs, Tab, List, ListItem} from 'native-base';
+import {StyleProvider, Subtitle, Card, CardItem, Spinner, Container, Header, Left, Right, Body, Button, Icon, Title, Content, Tabs, Tab, List, ListItem} from 'native-base';
 import {
   StyleSheet,
   Navigator,
@@ -67,6 +67,8 @@ class DashboardDetailed extends Component {
       return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
     }
     return (
+      <StyleProvider style={getTheme(platform)}>
+
       <Container style={{backgroundColor:'white'}}>
         <Header hasTabs>
           <Left>
@@ -120,6 +122,7 @@ class DashboardDetailed extends Component {
           </Tab>
         </Tabs>
       </Container>
+    </StyleProvider>
     );
   }
 }

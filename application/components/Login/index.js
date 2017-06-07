@@ -65,6 +65,8 @@ class Login extends Component {
 
   render() {
     return (
+      <StyleProvider style={getTheme(platform)}>
+
       <Container style={{backgroundColor:'white'}}>
 
         <Header provider>
@@ -97,6 +99,7 @@ class Login extends Component {
         <Text>Token {this.state.token}</Text> */}
 
       </Container>
+    </StyleProvider>
     );
   }
 }

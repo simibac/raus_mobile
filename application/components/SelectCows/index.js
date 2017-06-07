@@ -3,13 +3,14 @@ import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
-  Text,
   TouchableHighlight,
-  Platform
+  Platform,
+  Text,
 } from 'react-native';
-import {CheckBox, StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch } from 'native-base';
+import {  CheckBox, StyleProvider, Footer, FooterTab, Button, Header, Title, Subtitle, Container, Content, List, ListItem, Icon, Badge, Left, Body, Right, Switch}  from 'native-base';
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
+import s from '../../utilities/style.js'
 
 function getName(name, tvd){
   if(name != ""){
@@ -36,7 +37,7 @@ class SelectCows extends Component {
       if(categories[i].category === this.props.selectedCategory){
         relevantCows = categories[i].cows
         for(var j = 0; j < categories[i].cows.length; j++){
-          if (categories[i].cows.isSelected){
+          if (categories[i].cows[j].isSelected){
             c = c + 1
           }
         }
@@ -44,8 +45,8 @@ class SelectCows extends Component {
     }
     this.setState({
       relevantCows: relevantCows,
-      numSelectedCows: c,
       numTotalCows: relevantCows.length,
+      numSelectedCows : c,
       ready:true,
     });
   }
@@ -99,6 +100,7 @@ class SelectCows extends Component {
     while (!this.state.ready){
       return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
     }
+    console.log(this.state.relevantCows);
     return (
       <StyleProvider style={getTheme(platform)}>
         <Container style={{backgroundColor:'white'}}>
@@ -125,16 +127,20 @@ class SelectCows extends Component {
           </View>
 
           <Content>
+            <List>
             {this.state.relevantCows.map(cow =>
-              <ListItem icon key={cow.tvd}>
+              <ListItem button key={cow.tvd} onPress={this.switch.bind(this, cow.tvd)}>
+                <CheckBox checked={cow.isSelected} onPress={this.switch.bind(this, cow.tvd)} />
                 <Body>
-                  <Text>{getName(cow.name, cow.tvd)}</Text>
+                  <Text style={styles.listItemText}>{getName(cow.name, cow.tvd)}</Text>
+                  <Text style={s.listNote}>Letzter Eintrag: {cow.latestJournalEntry.day}-{cow.latestJournalEntry.month}-{cow.latestJournalEntry.year}</Text>
                 </Body>
-                <Right>
+                {/* <Right>
                   <Switch value={cow.isSelected} onChange={this.switch.bind(this, cow.tvd)}/>
-                </Right>
+                </Right> */}
               </ListItem>
             )}
+          </List>
           </Content>
 
           <Footer>
@@ -153,7 +159,6 @@ class SelectCows extends Component {
 const styles = StyleSheet.create({
   container: {
     flexDirection:'row',
-
   },
   boxBelowHeader:{
     flex:1,
@@ -166,10 +171,18 @@ const styles = StyleSheet.create({
   textBelowHeader:{
     textAlign: 'center',
     color: (Platform.OS === 'ios') ? '#007aff':'black',
+    fontSize:16
   },
   subtitle:{
     color: (Platform.OS === 'ios') ? 'black':'#fff',
-    fontSize: 15
+    fontSize: 16,
+    marginLeft:10,
+    marginRight:10,
+  },
+  listItemText:{
+    marginLeft:10,
+    marginRight:10,
+    fontSize:16
   }
 });
 

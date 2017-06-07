@@ -16,6 +16,7 @@ import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 import DateConverter from '../../utilities/dateConverter.js'
 import api from '../../utilities/api.js'
+import s from '../../utilities/style.js'
 import localStore from '../../utilities/localStore'
 
 
@@ -32,7 +33,14 @@ function prepareData(categories){
         added:categories.categories[i].cows[j].added,
         isSelected:true,
         name:categories.categories[i].cows[j].name,
-
+        latestJournalEntry:{
+          year:categories.categories[i].cows[j].latest_journal_entry.year,
+          month:categories.categories[i].cows[j].latest_journal_entry.month,
+          day:categories.categories[i].cows[j].latest_journal_entry.day,
+          minutesOutside:categories.categories[i].cows[j].latest_journal_entry.minutes_outside,
+          category:categories.categories[i].cows[j].latest_journal_entry.category,
+          typeOfLairage:categories.categories[i].cows[j].latest_journal_entry.type_of_field_lairage,
+        }
       }
       newCows.push(newCow)
       tvds.add(newCow.tvd)
@@ -184,6 +192,20 @@ class SelectCategories extends Component {
     })
   }
 
+  selectAll = (option) => {
+    let newCategories = this.state.categories
+    for (var i = 0; i < newCategories.length; i++) {
+      newCategories[i].isSelected = option
+      for(var j = 0; j < newCategories[i].cows.length; j++){
+        newCategories[i].cows[j].isSelected = option
+      }
+    }
+    this.setState({
+      relevantCows: newCategories
+    })
+    this.countSelectedCows()
+  }
+
   render() {
     while (!this.state.ready){
       return <View style={{flex:1, alignItems:'center', justifyContent:'center', backgroundColor:'white'}}><Spinner color='green' /></View>
@@ -207,6 +229,7 @@ class SelectCategories extends Component {
               </Button>
             </Right>
           </Header>
+
           <View style={styles.container}>
             <Text style={styles.date}>
               {DateConverter.getDay(this.props.date.getDay())}, {this.props.date.getDate()}{DateConverter.getDayEnding(this.props.date.getDate())} {DateConverter.getMonth(this.props.date.getMonth())} {this.props.date.getFullYear()}
@@ -219,6 +242,19 @@ class SelectCategories extends Component {
             </Text>
           </View>
 
+          <View style={styles.wrapperBelowHeader}>
+            <TouchableHighlight style={styles.boxBelowHeader}
+              onPress={() => this.selectAll(true)}
+              >
+              <Text style={styles.textBelowHeader}>Alle auswäheln</Text>
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.boxBelowHeader}
+              onPress={() => this.selectAll(false)}
+              >
+              <Text style={styles.textBelowHeader}>Alle abwählen</Text>
+            </TouchableHighlight>
+          </View>
+
           <Content>
             <List>
               {this.state.categories.map((category) => {return(
@@ -227,7 +263,7 @@ class SelectCategories extends Component {
                   onPress={this.navigate.bind(this, "SelectCows", category.category)}>
                   <Body>
                     <Text style={styles.categoryName}>{category.category}</Text>
-                    <Text style={styles.categoryCounter}>
+                    <Text style={s.note}>
                       {category.numSelectedCows} von {category.cows.length} Kühe
                     </Text>
                   </Body>
@@ -305,7 +341,23 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color:'rgb(128, 128, 128)',
     fontStyle:'italic',
-  }
+  },
+  wrapperBelowHeader: {
+    flexDirection:'row',
+  },
+  boxBelowHeader:{
+    flex:1,
+    height:40,
+    justifyContent: 'center',
+    backgroundColor: '#F8F8F8',
+    borderColor: '#a7a6ab',
+    borderBottomWidth:0.5,
+  },
+  textBelowHeader:{
+    textAlign: 'center',
+    color: (Platform.OS === 'ios') ? '#007aff':'black',
+    fontSize:16,
+  },
 });
 
 module.exports = SelectCategories;

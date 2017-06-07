@@ -19,7 +19,7 @@ var api = {
     })
     .then((res) => checkStatus(res))
     .then((res) => res.json())
-    .catch(e => e)
+    .catch((e) => handleError(e))
   },
   login(email, password){
     return fetch(baseUrl + 'get-token', {
@@ -32,7 +32,7 @@ var api = {
     })
     .then((res) => checkStatus(res))
     .then((res) => res.json())
-    .catch(e => e)
+    .catch((e) => handleError(e))
   },
   getUser(token){
     return fetch(baseUrl + 'api/me', {
@@ -44,7 +44,7 @@ var api = {
     })
     .then((res) => checkStatus(res))
     .then((res) => res.json())
-    .catch(e => e)
+    .catch((e) => handleError(e))
   },
 
   getCows(token, farmId){
@@ -57,7 +57,7 @@ var api = {
     })
     .then((res) => checkStatus(res))
     .then((res) => res.json())
-    .catch(e => e)
+    .catch((e) => handleError(e))
   },
 
   getCowsByCategory(token, farmId){
@@ -70,7 +70,7 @@ var api = {
     })
     .then((res) => checkStatus(res))
     .then((res) => res.json())
-    .catch(e => e)
+    .catch((e) => handleError(e))
   },
 
   addJournalEntry(token, tvds, year, month, day, minutesOutside, typeOfLairage){
@@ -91,7 +91,7 @@ var api = {
     })
     .then((res) => checkStatus(res))
     .then((res) => res.json())
-    .catch(e => e)
+    .catch((e) => handleError(e))
   },
 
   addCategory(token, tvds, name){
@@ -107,7 +107,7 @@ var api = {
     })
     .then((res) => checkStatus(res))
     .then((res) => res.json())
-    .catch(e => e)
+    .catch((e) => handleError(e))
   },
 
   deleteCategory(token, name, tvds){
@@ -123,7 +123,7 @@ var api = {
     })
     .then((res) => checkStatus(res))
     .then((res) => res.json())
-    .catch(e => e)
+    .catch((e) => handleError(e))
   },
   updateCategory(token, tvds, name){
     return fetch(baseUrl + 'api/categories', {
@@ -138,7 +138,7 @@ var api = {
     })
     .then((res) => checkStatus(res))
     .then((res) => res.json())
-    .catch(e => e)
+    .catch((e) => handleError(e))
   },
   getMonthlyStats(token, month, year){
     return fetch(baseUrl + 'api/stats?year=' + year + '&month=' + month, {
@@ -149,7 +149,7 @@ var api = {
     })
     .then((res) => checkStatus(res))
     .then((res) => res.json())
-    .catch(e => e)
+    .catch((e) => handleError(e))
   },
 }
 
@@ -166,6 +166,12 @@ function checkStatus(res){
     //console.log(res);
     return res
   }
+}
+function handleError(e){
+  var res = {
+    "error": e
+  }
+  return res
 }
 
 module.exports = api;

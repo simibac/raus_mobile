@@ -75,7 +75,6 @@ class Home extends Component {
   }
 
   componentWillMount(){
-    try{
       AsyncStorage.getItem("token").then((res) => {
         console.log(res)
         if(res != null){
@@ -95,12 +94,6 @@ class Home extends Component {
           this.setState({ready: true})
         }
       })
-    }
-    catch (e){
-      console.log(e);
-      this.setState({initialRoute: {name: "Login"}})
-      this.setState({ready: true})
-    }
   }
 
   configureScene(route){
@@ -134,7 +127,7 @@ class Home extends Component {
   render() {
     //localStore.deleteToken()
     while (!this.state.ready){
-      return <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Spinner color='green' /></View>
+      return <View style={{flex:1, alignItems:'center', justifyContent:'center', backgroundColor:'white'}}><Spinner color='green' /></View>
     }
     return (
       <Container>
