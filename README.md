@@ -36,7 +36,7 @@ $ react-native run-ios
 
 #### 3. Simulate for Android
 
-*	Make sure you have an **Android emulator** installed and running. I use Genymotion Emulator.
+*	Make sure you have an **Android emulator** installed and running. I use [Genymotion Android Emulator](https://www.genymotion.com/)
 
 *	Run the following command in your terminal.
 
