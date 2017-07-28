@@ -45,3 +45,31 @@ $ react-native run-android
 ```
 
 
+## Preview
+#### Dashboard
+<p align="center">
+  <img src="/screenshots/dashboard.png" width="250" />
+</p>
+
+#### Navigation
+<p align="center">
+  <img src="/screenshots/menu_drawer.png" width="250" />
+</p>
+
+#### Profile
+<p align="center">
+  <img src="/screenshots/settings.png" width="250" />
+</p>
+
+#### Creating a New Journal Entry
+<p float="left" align="center">
+  <img src="/screenshots/date_ios.png" width="250" />
+  <img src="/screenshots/field_lairage.png" width="250" /> 
+  <img src="/screenshots/category_selection.png" width="250" />
+</p>
+
+#### Creating and Editing a Custom Categories
+<p float="left" align="center">
+  <img src="/screenshots/create_category.png" width="250" />
+  <img src="/screenshots/edit_category.png" width="250" /> 
+</p>
