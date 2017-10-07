@@ -5,7 +5,7 @@
 
 #### 1. Installation
 
-After having set up React Native correclty run on the command prompt the following commands:
+After having set up React Native correctly run on the command prompt the following commands:
 
 ```sh
 $ git clone https://github.com/simibac/raus_mobile.git
@@ -44,6 +44,8 @@ $ react-native run-ios
 $ react-native run-android
 ```
 
+## Note
+Backend is no longer running.
 
 ## Preview
 #### Dashboard
